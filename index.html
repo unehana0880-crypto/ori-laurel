@@ -96,13 +96,32 @@ input[type=text].error { border-color:var(--danger); }
       <span style="color:var(--accent);font-style:italic" data-ko="데이터로 읽습니다" data-en="Read by Data"></span>
     </h1>
     <p style="font-size:16px;color:var(--muted);max-width:480px;margin:0 auto 36px;line-height:1.8;font-style:italic" data-ko="8,000건의 실증 데이터 기반 ORI 알고리즘이<br>피부 문제의 근본 원인을 역추적합니다" data-en="ORI algorithm based on 8,000 real cases<br>traces the root cause of your skin concerns"></p>
-    <div style="margin-bottom:8px">
-      <input type="text" id="nationality-input" style="display:block;margin:0 auto;width:240px" data-placeholder-ko="국적 (필수)" data-placeholder-en="Nationality (required)">
-      <div class="error-msg" id="nationality-error" style="text-align:center">
+    <div style="max-width:360px;margin:0 auto 24px">
+      <!-- 국적 -->
+      <input type="text" id="nationality-input" style="display:block;width:100%;margin-bottom:6px" data-placeholder-ko="국적 (필수)" data-placeholder-en="Nationality (required)">
+      <div class="error-msg" id="nationality-error" style="text-align:center;margin-bottom:8px">
         <span data-ko="국적을 입력해 주세요" data-en="Please enter your nationality"></span>
       </div>
+
+      <!-- 성별 -->
+      <div style="margin-bottom:6px">
+        <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;text-align:left" data-ko="성별" data-en="Gender"></div>
+        <div style="display:flex;gap:8px" id="intro-gender"></div>
+        <div class="error-msg" id="gender-error">
+          <span data-ko="성별을 선택해 주세요" data-en="Please select gender"></span>
+        </div>
+      </div>
+
+      <!-- 연령대 -->
+      <div style="margin-top:14px">
+        <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;text-align:left" data-ko="연령대" data-en="Age Group"></div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px" id="intro-age"></div>
+        <div class="error-msg" id="age-error">
+          <span data-ko="연령대를 선택해 주세요" data-en="Please select age group"></span>
+        </div>
+      </div>
     </div>
-    <button class="btn-primary" onclick="startDiagnosis()" style="margin-top:16px">
+    <button class="btn-primary" onclick="startDiagnosis()" style="margin-top:8px">
       <span data-ko="진단 시작하기" data-en="Start Diagnosis"></span>
     </button>
     <div style="margin-top:14px;font-size:11px;color:var(--muted);letter-spacing:1px">
@@ -708,7 +727,7 @@ function determineModes(sc){
 function serializeSection(secNum){
   const sc=calcScores();
   const modes=determineModes(sc);
-  const base={case_id:caseId,section:`S${secNum}`,saved_at:new Date().toISOString(),nationality:d.nationality||"",lang:lang};
+  const base={case_id:caseId,section:`S${secNum}`,saved_at:new Date().toISOString(),nationality:d.nationality||"",gender:d.gender||"",age_group:d.ageGroup||"",lang:lang};
   const sd={
     1:{after_wash_tight:d.afterWashTight??"",easily_red:d.easilyRed??"",wind_sting:d.windSting??"",product_sting:d.productSting??"",visible_vessel:d.visibleVessel??"",thin_score:sc.thin,top3_concerns:multiState.top3.join("|")},
     2:{dry_rough:d.dryRough??"",flaky_makeup:d.flakyMakeup??"",night_itch:d.nightItch??"",cream_dry_fast:d.creamDryFast??"",slow_recovery:d.slowRecovery??"",barrier_score:sc.barrier},
@@ -760,18 +779,39 @@ function updateUI(){
 
 function startDiagnosis(){
   const nat=document.getElementById("nationality-input").value.trim();
-  const errEl=document.getElementById("nationality-error");
   const inp=document.getElementById("nationality-input");
+  let ok=true;
+
+  // 국적
   if(!nat){
     inp.classList.add("error");
-    errEl.style.display="block";
-    return;
+    document.getElementById("nationality-error").style.display="block";
+    ok=false;
+  } else {
+    inp.classList.remove("error");
+    document.getElementById("nationality-error").style.display="none";
   }
-  inp.classList.remove("error");
-  errEl.style.display="none";
+
+  // 성별
+  if(!d.gender){
+    document.getElementById("gender-error").style.display="block";
+    ok=false;
+  } else {
+    document.getElementById("gender-error").style.display="none";
+  }
+
+  // 연령
+  if(!d.ageGroup){
+    document.getElementById("age-error").style.display="block";
+    ok=false;
+  } else {
+    document.getElementById("age-error").style.display="none";
+  }
+
+  if(!ok) return;
+
   d.nationality=nat;
   caseId=makeCaseId();
-  document.getElementById("case-id-display")||null;
   step=1; initSection(1); updateUI();
 }
 
@@ -797,6 +837,9 @@ function resetApp(){
   document.getElementById("nationality-input").value="";
   document.getElementById("nationality-input").classList.remove("error");
   document.getElementById("nationality-error").style.display="none";
+  document.getElementById("gender-error").style.display="none";
+  document.getElementById("age-error").style.display="none";
+  initIntroSelectors();
   updateUI();
 }
 
@@ -1011,7 +1054,55 @@ async function saveTherapistNote(){
   }
 }
 
+
+function initIntroSelectors(){
+  // 성별
+  const genderEl=document.getElementById("intro-gender");
+  if(!genderEl) return;
+  const genders=lang==='ko'?["여성","남성","기타"]:["Female","Male","Other"];
+  genderEl.innerHTML="";
+  genders.forEach(g=>{
+    const btn=document.createElement("button");
+    btn.className="opt-btn"+(d.gender===g?" sel":"");
+    btn.textContent=g;
+    btn.style.cssText="flex:1;padding:10px 8px;border:1px solid #2A2F45;border-radius:1px;background:transparent;color:#7A8099;cursor:pointer;font-size:14px;font-family:'Cormorant Garamond',serif;transition:all 0.15s;";
+    btn.onclick=()=>{
+      d.gender=g;
+      genderEl.querySelectorAll("button").forEach(b=>{
+        b.style.borderColor="#2A2F45";b.style.background="transparent";b.style.color="#7A8099";
+      });
+      btn.style.borderColor="#C8A96E";btn.style.background="#C8A96E18";btn.style.color="#C8A96E";
+      document.getElementById("gender-error").style.display="none";
+    };
+    genderEl.appendChild(btn);
+  });
+
+  // 연령대
+  const ageEl=document.getElementById("intro-age");
+  if(!ageEl) return;
+  const ages=lang==='ko'
+    ?["19–24세","25–29세","30–34세","35–39세","40–44세","45–49세","50–54세","55세 이상"]
+    :["19–24","25–29","30–34","35–39","40–44","45–49","50–54","55+"];
+  ageEl.innerHTML="";
+  ages.forEach(a=>{
+    const btn=document.createElement("button");
+    btn.className="opt-btn"+(d.ageGroup===a?" sel":"");
+    btn.textContent=a;
+    btn.style.cssText="padding:8px 14px;border:1px solid #2A2F45;border-radius:1px;background:transparent;color:#7A8099;cursor:pointer;font-size:13px;font-family:'Cormorant Garamond',serif;transition:all 0.15s;";
+    btn.onclick=()=>{
+      d.ageGroup=a;
+      ageEl.querySelectorAll("button").forEach(b=>{
+        b.style.borderColor="#2A2F45";b.style.background="transparent";b.style.color="#7A8099";
+      });
+      btn.style.borderColor="#C8A96E";btn.style.background="#C8A96E18";btn.style.color="#C8A96E";
+      document.getElementById("age-error").style.display="none";
+    };
+    ageEl.appendChild(btn);
+  });
+}
+
 // 초기화
+initIntroSelectors();
 applyLang();
 updateUI();
 </script>

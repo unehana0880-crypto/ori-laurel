@@ -96,32 +96,55 @@ input[type=text].error { border-color:var(--danger); }
       <span style="color:var(--accent);font-style:italic" data-ko="데이터로 읽습니다" data-en="Read by Data"></span>
     </h1>
     <p style="font-size:16px;color:var(--muted);max-width:480px;margin:0 auto 36px;line-height:1.8;font-style:italic" data-ko="8,000건의 실증 데이터 기반 ORI 알고리즘이<br>피부 문제의 근본 원인을 역추적합니다" data-en="ORI algorithm based on 8,000 real cases<br>traces the root cause of your skin concerns"></p>
-    <div style="max-width:360px;margin:0 auto 24px">
+    <div style="max-width:380px;margin:0 auto 24px;text-align:left">
+
+      <!-- 이름 -->
+      <div style="margin-bottom:14px">
+        <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px" data-ko="이름 (선택)" data-en="Name (optional)"></div>
+        <input type="text" id="name-input" style="display:block;width:100%" data-placeholder-ko="홍길동" data-placeholder-en="Your name">
+      </div>
+
+      <!-- 이메일 -->
+      <div style="margin-bottom:14px">
+        <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px">
+          <span data-ko="이메일" data-en="Email"></span>
+          <span style="color:var(--danger);margin-left:4px">*</span>
+        </div>
+        <input type="email" id="email-input" style="display:block;width:100%" data-placeholder-ko="example@email.com" data-placeholder-en="example@email.com">
+        <div class="error-msg" id="email-error" style="margin-top:4px">
+          <span data-ko="이메일을 입력해 주세요" data-en="Please enter your email"></span>
+        </div>
+        <div style="margin-top:5px;font-size:11px;color:var(--muted);font-style:italic" data-ko="* 재방문 시 기록 조회에 사용됩니다" data-en="* Used to retrieve your record on future visits"></div>
+      </div>
+
       <!-- 국적 -->
-      <input type="text" id="nationality-input" style="display:block;width:100%;margin-bottom:6px" data-placeholder-ko="국적 (필수)" data-placeholder-en="Nationality (required)">
-      <div class="error-msg" id="nationality-error" style="text-align:center;margin-bottom:8px">
-        <span data-ko="국적을 입력해 주세요" data-en="Please enter your nationality"></span>
+      <div style="margin-bottom:14px">
+        <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px" data-ko="국적" data-en="Nationality"></div>
+        <input type="text" id="nationality-input" style="display:block;width:100%" data-placeholder-ko="Korean / Japanese / etc." data-placeholder-en="Korean / Japanese / etc.">
+        <div class="error-msg" id="nationality-error" style="margin-top:4px">
+          <span data-ko="국적을 입력해 주세요" data-en="Please enter your nationality"></span>
+        </div>
       </div>
 
       <!-- 성별 -->
-      <div style="margin-bottom:6px">
-        <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;text-align:left" data-ko="성별" data-en="Gender"></div>
+      <div style="margin-bottom:14px">
+        <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px" data-ko="성별" data-en="Gender"></div>
         <div style="display:flex;gap:8px" id="intro-gender"></div>
-        <div class="error-msg" id="gender-error">
+        <div class="error-msg" id="gender-error" style="margin-top:4px">
           <span data-ko="성별을 선택해 주세요" data-en="Please select gender"></span>
         </div>
       </div>
 
       <!-- 연령대 -->
-      <div style="margin-top:14px">
-        <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;text-align:left" data-ko="연령대" data-en="Age Group"></div>
+      <div>
+        <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px" data-ko="연령대" data-en="Age Group"></div>
         <div style="display:flex;flex-wrap:wrap;gap:8px" id="intro-age"></div>
-        <div class="error-msg" id="age-error">
+        <div class="error-msg" id="age-error" style="margin-top:4px">
           <span data-ko="연령대를 선택해 주세요" data-en="Please select age group"></span>
         </div>
       </div>
     </div>
-    <button class="btn-primary" onclick="startDiagnosis()" style="margin-top:8px">
+    <button class="btn-primary" onclick="startDiagnosis()" style="margin-top:16px">
       <span data-ko="진단 시작하기" data-en="Start Diagnosis"></span>
     </button>
     <div style="margin-top:14px;font-size:11px;color:var(--muted);letter-spacing:1px">
@@ -317,7 +340,7 @@ input[type=text].error { border-color:var(--danger); }
       <!-- Case ID 연결 -->
       <div style="background:#1C2030;border:1px solid #2A2F45;border-radius:2px;padding:24px 28px;margin-bottom:14px">
         <div style="font-size:16px;color:#E8E4DC;margin-bottom:14px;font-weight:500">고객 Case ID <span style="color:#C25F5F">*</span></div>
-        <div style="font-size:12px;color:#7A8099;margin-bottom:10px;font-style:italic">* 고객 진단 화면에서 확인한 Case ID를 입력하세요 (예: ORI-20260307-4821)</div>
+        <div style="font-size:12px;color:#7A8099;margin-bottom:10px;font-style:italic">* 고객 진단 결과 화면의 Case ID 또는 이메일 앞부분을 입력하세요 (예: ORI-hongildong-20260307)</div>
         <input type="text" id="tp-case-id" placeholder="ORI-YYYYMMDD-XXXX"
           style="width:100%;padding:12px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#E8E4DC;font-size:14px;font-family:'Cormorant Garamond',serif;outline:none;letter-spacing:1px;">
         <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
@@ -727,7 +750,7 @@ function determineModes(sc){
 function serializeSection(secNum){
   const sc=calcScores();
   const modes=determineModes(sc);
-  const base={case_id:caseId,section:`S${secNum}`,saved_at:new Date().toISOString(),nationality:d.nationality||"",gender:d.gender||"",age_group:d.ageGroup||"",lang:lang};
+  const base={case_id:caseId,section:`S${secNum}`,saved_at:new Date().toISOString(),email:d.email||"",client_name:d.clientName||"",nationality:d.nationality||"",gender:d.gender||"",age_group:d.ageGroup||"",lang:lang};
   const sd={
     1:{after_wash_tight:d.afterWashTight??"",easily_red:d.easilyRed??"",wind_sting:d.windSting??"",product_sting:d.productSting??"",visible_vessel:d.visibleVessel??"",thin_score:sc.thin,top3_concerns:multiState.top3.join("|")},
     2:{dry_rough:d.dryRough??"",flaky_makeup:d.flakyMakeup??"",night_itch:d.nightItch??"",cream_dry_fast:d.creamDryFast??"",slow_recovery:d.slowRecovery??"",barrier_score:sc.barrier},
@@ -779,16 +802,20 @@ function updateUI(){
 
 function startDiagnosis(){
   const nat=document.getElementById("nationality-input").value.trim();
-  const inp=document.getElementById("nationality-input");
+  const email=document.getElementById("email-input").value.trim();
+  const name=document.getElementById("name-input").value.trim();
   let ok=true;
+
+  // 이메일
+  const emailOk=email&&/^[^@]+@[^@]+[.][^@]+$/.test(email);
+  document.getElementById("email-error").style.display=emailOk?"none":"block";
+  if(!emailOk) ok=false;
 
   // 국적
   if(!nat){
-    inp.classList.add("error");
     document.getElementById("nationality-error").style.display="block";
     ok=false;
   } else {
-    inp.classList.remove("error");
     document.getElementById("nationality-error").style.display="none";
   }
 
@@ -810,8 +837,13 @@ function startDiagnosis(){
 
   if(!ok) return;
 
+  d.email=email;
+  d.clientName=name;
   d.nationality=nat;
-  caseId=makeCaseId();
+  // case_id = 이메일 앞부분 + 날짜
+  const today=new Date();
+  const dateStr=today.getFullYear()+String(today.getMonth()+1).padStart(2,"0")+String(today.getDate()).padStart(2,"0");
+  caseId="ORI-"+email.split("@")[0]+"-"+dateStr;
   step=1; initSection(1); updateUI();
 }
 
@@ -915,8 +947,11 @@ function resetApp(){
   step=0; d={}; multiState={top3:[],rednessAreas:[],cleansingMethod:[],cleanserType:[],powderMakeup:[],sunscreenType:[]};
   sectionStatus={}; caseId="";
   document.getElementById("nationality-input").value="";
+  document.getElementById("email-input").value="";
+  document.getElementById("name-input").value="";
   document.getElementById("nationality-input").classList.remove("error");
   document.getElementById("nationality-error").style.display="none";
+  document.getElementById("email-error").style.display="none";
   document.getElementById("gender-error").style.display="none";
   document.getElementById("age-error").style.display="none";
   initIntroSelectors();
@@ -926,7 +961,8 @@ function resetApp(){
 // ── 결과 ─────────────────────────────────────────────
 function buildResult(){
   const sc=calcScores(); const modes=determineModes(sc); const L=t();
-  document.getElementById("result-case-id").textContent=caseId;
+  const emailDisplay=document.getElementById("result-case-id");
+  emailDisplay.innerHTML=`<span style="color:var(--accent)">${d.email||""}</span>${d.clientName?" · "+d.clientName:""}<br><span style="font-size:10px;opacity:0.6">${caseId}</span>`;
   const row=document.getElementById("save-status-row");
   row.innerHTML=[1,2,3,4,5,6].map(n=>{
     const st=sectionStatus[n];

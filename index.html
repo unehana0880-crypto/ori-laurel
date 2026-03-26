@@ -42,7 +42,6 @@ body { background:var(--bg); color:var(--text); font-family:'Cormorant Garamond'
 .scale-hint { font-size:11px; color:var(--muted); letter-spacing:1px; margin-left:8px; font-style:italic; }
 .warn-box { padding:10px 14px; background:#E07B4F12; border:1px solid #E07B4F30; border-radius:2px; font-size:12px; color:var(--warn); margin-top:10px; }
 .info-box { padding:10px 14px; background:#4A9EAF12; border:1px solid #4A9EAF30; border-radius:2px; font-size:12px; color:var(--teal); margin-top:10px; }
-.required-mark { color:var(--danger); margin-left:4px; }
 .error-msg { font-size:12px; color:var(--danger); margin-top:8px; display:none; }
 .btn-primary { padding:14px 36px; background:var(--accent); color:#0D0F14; border:1px solid var(--accent); border-radius:1px; cursor:pointer; font-size:12px; letter-spacing:2px; text-transform:uppercase; font-family:'Cormorant Garamond',serif; font-weight:700; }
 .btn-outline { padding:12px 24px; background:transparent; color:var(--accent); border:1px solid var(--accent); border-radius:1px; cursor:pointer; font-size:12px; letter-spacing:2px; text-transform:uppercase; font-family:'Cormorant Garamond',serif; font-weight:700; }
@@ -57,6 +56,20 @@ input[type=text].error { border-color:var(--danger); }
 .footer { border-top:1px solid var(--border); padding:20px 40px; text-align:center; font-size:11px; color:var(--muted); letter-spacing:2px; }
 .hidden { display:none; }
 .text-center { text-align:center; }
+
+/* ── 전문가 팁 아코디언 ── */
+.tip-item { border-bottom:1px solid var(--border); }
+.tip-item:last-child { border-bottom:none; }
+.tip-toggle { width:100%; display:flex; align-items:center; justify-content:space-between; padding:13px 0; background:transparent; border:none; cursor:pointer; font-family:'Cormorant Garamond',serif; text-align:left; }
+.tip-toggle:hover { opacity:0.85; }
+.tip-toggle-left { display:flex; align-items:center; gap:10px; }
+.tip-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.tip-toggle-label { font-size:14px; font-weight:600; color:var(--text); }
+.tip-chevron { font-size:11px; color:var(--muted); transition:transform 0.2s; }
+.tip-body { max-height:0; overflow:hidden; transition:max-height 0.35s ease, padding 0.2s; }
+.tip-body.open { max-height:1000px; padding-bottom:16px; }
+.tip-content { font-size:14px; color:#B0A898; line-height:1.9; font-style:italic; padding-left:17px; border-left:2px solid; }
+
 @media(max-width:600px){ .grid2{grid-template-columns:1fr;} .header{padding:16px 20px;} .main{padding:24px 16px;} }
 </style>
 </head>
@@ -97,14 +110,10 @@ input[type=text].error { border-color:var(--danger); }
     </h1>
     <p style="font-size:16px;color:var(--muted);max-width:480px;margin:0 auto 36px;line-height:1.8;font-style:italic" data-ko="8,000건의 실증 데이터 기반 ORI 알고리즘이<br>피부 문제의 근본 원인을 역추적합니다" data-en="ORI algorithm based on 8,000 real cases<br>traces the root cause of your skin concerns"></p>
     <div style="max-width:380px;margin:0 auto 24px;text-align:left">
-
-      <!-- 이름 -->
       <div style="margin-bottom:14px">
         <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px" data-ko="이름 (선택)" data-en="Name (optional)"></div>
         <input type="text" id="name-input" style="display:block;width:100%" data-placeholder-ko="홍길동" data-placeholder-en="Your name">
       </div>
-
-      <!-- 이메일 -->
       <div style="margin-bottom:14px">
         <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px">
           <span data-ko="이메일" data-en="Email"></span>
@@ -116,8 +125,6 @@ input[type=text].error { border-color:var(--danger); }
         </div>
         <div style="margin-top:5px;font-size:11px;color:var(--muted);font-style:italic" data-ko="* 재방문 시 기록 조회에 사용됩니다" data-en="* Used to retrieve your record on future visits"></div>
       </div>
-
-      <!-- 국적 -->
       <div style="margin-bottom:14px">
         <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px" data-ko="국적" data-en="Nationality"></div>
         <input type="text" id="nationality-input" style="display:block;width:100%" data-placeholder-ko="Korean / Japanese / etc." data-placeholder-en="Korean / Japanese / etc.">
@@ -125,8 +132,6 @@ input[type=text].error { border-color:var(--danger); }
           <span data-ko="국적을 입력해 주세요" data-en="Please enter your nationality"></span>
         </div>
       </div>
-
-      <!-- 성별 -->
       <div style="margin-bottom:14px">
         <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px" data-ko="성별" data-en="Gender"></div>
         <div style="display:flex;gap:8px" id="intro-gender"></div>
@@ -134,8 +139,6 @@ input[type=text].error { border-color:var(--danger); }
           <span data-ko="성별을 선택해 주세요" data-en="Please select gender"></span>
         </div>
       </div>
-
-      <!-- 연령대 -->
       <div>
         <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px" data-ko="연령대" data-en="Age Group"></div>
         <div style="display:flex;flex-wrap:wrap;gap:8px" id="intro-age"></div>
@@ -153,7 +156,7 @@ input[type=text].error { border-color:var(--danger); }
   </div>
 </div>
 
-<!-- Section 1 -->
+<!-- Section 1~6 (원본 동일) -->
 <div id="page-1" class="hidden">
   <div class="sec-title" data-ko="Section 01 · 피부 민감·구조 신호" data-en="Section 01 · Skin Sensitivity Signals"></div>
   <div class="sec-desc" data-ko="피부가 얼마나 얇고 민감한지 파악합니다 — 이 점수가 높을수록 자극에 더 조심해야 합니다" data-en="Measures how thin and sensitive your skin is — higher scores require more gentle care"></div>
@@ -168,7 +171,6 @@ input[type=text].error { border-color:var(--danger); }
   </div>
 </div>
 
-<!-- Section 2 -->
 <div id="page-2" class="hidden">
   <div class="sec-title" data-ko="Section 02 · 수분 부족 & 장벽 손상" data-en="Section 02 · Moisture & Barrier Damage"></div>
   <div class="sec-desc" data-ko="피부 장벽이 얼마나 손상됐는지 파악합니다 — 대부분의 피부 문제는 여기서 시작됩니다" data-en="Measures barrier damage — most skin issues start here"></div>
@@ -179,7 +181,6 @@ input[type=text].error { border-color:var(--danger); }
   <div class="card"><div class="q-label" data-ko="자극 후 회복이 느립니다" data-en="Slow recovery after irritation"></div><div class="scale-row" id="s-slowRecovery"></div></div>
 </div>
 
-<!-- Section 3 -->
 <div id="page-3" class="hidden">
   <div class="sec-title" data-ko="Section 03 · 피지·트러블 패턴" data-en="Section 03 · Oil & Acne Pattern"></div>
   <div class="sec-desc" data-ko="피지와 여드름의 패턴을 파악합니다 — 지성처럼 보여도 실제론 건성일 수 있습니다" data-en="Identifies oil and acne patterns — oily-looking skin may actually be dehydrated"></div>
@@ -201,7 +202,6 @@ input[type=text].error { border-color:var(--danger); }
   </div>
 </div>
 
-<!-- Section 4 -->
 <div id="page-4" class="hidden">
   <div class="sec-title" data-ko="Section 04 · 홍조 & 혈관 반응" data-en="Section 04 · Redness & Vascular Response"></div>
   <div class="sec-desc" data-ko="홍조의 원인을 파악합니다 — 대부분의 홍조는 진정이 아니라 수분 회복으로 해결됩니다" data-en="Identifies redness causes — most redness resolves with hydration, not calming products"></div>
@@ -219,7 +219,6 @@ input[type=text].error { border-color:var(--danger); }
   </div>
 </div>
 
-<!-- Section 5 -->
 <div id="page-5" class="hidden">
   <div class="sec-title" data-ko="Section 05 · 루틴 & 습관" data-en="Section 05 · Routine & Habits"></div>
   <div class="sec-desc" data-ko="현재 루틴에서 피부를 악화시키는 습관을 찾아냅니다" data-en="Identifies habits in your current routine that may be harming your skin"></div>
@@ -255,7 +254,6 @@ input[type=text].error { border-color:var(--danger); }
   </div>
 </div>
 
-<!-- Section 6 -->
 <div id="page-6" class="hidden">
   <div class="sec-title" data-ko="Section 06 · 자외선 & 색소" data-en="Section 06 · UV & Pigmentation"></div>
   <div class="sec-desc" data-ko="자외선 민감도와 색소 반응을 파악합니다 — 피부가 얇을수록 자외선 영향을 더 많이 받습니다" data-en="Measures UV sensitivity and pigmentation — thinner skin is more vulnerable to UV"></div>
@@ -286,6 +284,10 @@ input[type=text].error { border-color:var(--danger); }
   <div class="card hidden" id="warn-card"></div>
   <div class="card" id="mission-card"></div>
   <div class="grid2" id="routine-grid"></div>
+
+  <!-- ✨ 전문가 팁 섹션 -->
+  <div id="expert-tips-section"></div>
+
   <div class="card" style="border-color:#C8A96E30;text-align:center;padding:32px">
     <div style="font-size:12px;letter-spacing:2px;color:var(--accent);margin-bottom:14px;text-transform:uppercase">Laurel Studio Philosophy</div>
     <p style="font-size:16px;line-height:1.9;color:var(--muted);font-style:italic;max-width:540px;margin:0 auto" data-ko="피부는 스스로 회복할 수 있는 능력이 있습니다.<br>그 능력이 작동하기 위해서는<br><span style='color:var(--text)'>피부의 수분 환경이 먼저 안정되어야 합니다.</span>" data-en="Your skin has the natural ability to heal itself.<br>But for that to happen,<br><span style='color:var(--text)'>the skin's moisture environment must be stabilized first.</span>"></p>
@@ -304,13 +306,9 @@ input[type=text].error { border-color:var(--danger); }
 
 </div>
 
-<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
 <!-- 테라피스트 전용 패널 -->
-<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
 <div id="therapist-overlay" class="hidden" style="position:fixed;inset:0;background:#0D0F14ee;z-index:100;overflow-y:auto;">
   <div style="max-width:720px;margin:0 auto;padding:40px 24px 80px">
-
-    <!-- 잠금 화면 -->
     <div id="tp-lock">
       <div style="text-align:center;padding-top:80px">
         <div style="font-size:11px;letter-spacing:4px;color:#C8A96E;margin-bottom:16px;text-transform:uppercase">Therapist Access</div>
@@ -326,8 +324,6 @@ input[type=text].error { border-color:var(--danger); }
         </div>
       </div>
     </div>
-
-    <!-- 입력 화면 -->
     <div id="tp-form" class="hidden">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px">
         <div>
@@ -336,11 +332,9 @@ input[type=text].error { border-color:var(--danger); }
         </div>
         <button onclick="closeTherapist()" style="background:transparent;border:1px solid #2A2F45;color:#7A8099;padding:8px 16px;font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:2px;cursor:pointer;border-radius:1px">✕ 닫기</button>
       </div>
-
-      <!-- Case ID 연결 -->
       <div style="background:#1C2030;border:1px solid #2A2F45;border-radius:2px;padding:24px 28px;margin-bottom:14px">
         <div style="font-size:16px;color:#E8E4DC;margin-bottom:14px;font-weight:500">고객 Case ID <span style="color:#C25F5F">*</span></div>
-        <div style="font-size:12px;color:#7A8099;margin-bottom:10px;font-style:italic">* 고객 진단 결과 화면의 Case ID 또는 이메일 앞부분을 입력하세요 (예: ORI-hongildong-20260307)</div>
+        <div style="font-size:12px;color:#7A8099;margin-bottom:10px;font-style:italic">* 고객 진단 결과 화면의 Case ID 또는 이메일 앞부분을 입력하세요</div>
         <input type="text" id="tp-case-id" placeholder="ORI-YYYYMMDD-XXXX"
           style="width:100%;padding:12px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#E8E4DC;font-size:14px;font-family:'Cormorant Garamond',serif;outline:none;letter-spacing:1px;">
         <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
@@ -349,74 +343,54 @@ input[type=text].error { border-color:var(--danger); }
             style="flex:1;padding:8px 12px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#E8E4DC;font-size:13px;font-family:'Cormorant Garamond',serif;outline:none;">
         </div>
       </div>
-
-      <!-- 케어 내용 -->
       <div style="background:#1C2030;border:1px solid #2A2F45;border-radius:2px;padding:24px 28px;margin-bottom:14px">
         <div style="font-size:11px;letter-spacing:3px;color:#C8A96E;text-transform:uppercase;margin-bottom:16px">케어 내용</div>
-
         <div style="font-size:14px;color:#E8E4DC;margin-bottom:10px;font-weight:500">시술 종류 (복수 선택)</div>
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px" id="tp-treatment-type"></div>
-
         <div style="font-size:14px;color:#E8E4DC;margin-bottom:10px;font-weight:500">사용 제품</div>
-        <textarea id="tp-products" rows="2" placeholder="예: 로레알 세럼 A, 히알루론산 앰플, 세라마이드 크림..."
+        <textarea id="tp-products" rows="2" placeholder="예: 히알루론산 앰플, 아토베리어 365 크림..."
           style="width:100%;padding:12px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#E8E4DC;font-size:14px;font-family:'Cormorant Garamond',serif;resize:vertical;outline:none;line-height:1.6;"></textarea>
-
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
           <div>
             <div style="font-size:13px;color:#7A8099;margin-bottom:8px">케어 총 시간 (분)</div>
-            <input type="number" id="tp-care-duration" placeholder="60"
-              style="width:100%;padding:10px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#E8E4DC;font-size:14px;font-family:'Cormorant Garamond',serif;outline:none;">
+            <input type="number" id="tp-care-duration" placeholder="60" style="width:100%;padding:10px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#E8E4DC;font-size:14px;font-family:'Cormorant Garamond',serif;outline:none;">
           </div>
           <div>
             <div style="font-size:13px;color:#7A8099;margin-bottom:8px">케어 날짜</div>
-            <input type="date" id="tp-care-date"
-              style="width:100%;padding:10px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#E8E4DC;font-size:14px;font-family:'Cormorant Garamond',serif;outline:none;">
+            <input type="date" id="tp-care-date" style="width:100%;padding:10px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#E8E4DC;font-size:14px;font-family:'Cormorant Garamond',serif;outline:none;">
           </div>
         </div>
       </div>
-
-      <!-- 피부 측정값 -->
       <div style="background:#1C2030;border:1px solid #2A2F45;border-radius:2px;padding:24px 28px;margin-bottom:14px">
         <div style="font-size:11px;letter-spacing:3px;color:#C8A96E;text-transform:uppercase;margin-bottom:16px">피부 측정값 (기기)</div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
           <div>
             <div style="font-size:12px;color:#7A8099;margin-bottom:6px;letter-spacing:1px">수분도 (%)</div>
-            <input type="number" id="tp-moisture" placeholder="0–100" min="0" max="100"
-              style="width:100%;padding:10px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#4A9EAF;font-size:16px;font-family:'Cormorant Garamond',serif;outline:none;text-align:center;">
+            <input type="number" id="tp-moisture" placeholder="0–100" min="0" max="100" style="width:100%;padding:10px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#4A9EAF;font-size:16px;font-family:'Cormorant Garamond',serif;outline:none;text-align:center;">
           </div>
           <div>
             <div style="font-size:12px;color:#7A8099;margin-bottom:6px;letter-spacing:1px">유분도 (%)</div>
-            <input type="number" id="tp-sebum" placeholder="0–100" min="0" max="100"
-              style="width:100%;padding:10px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#C8A96E;font-size:16px;font-family:'Cormorant Garamond',serif;outline:none;text-align:center;">
+            <input type="number" id="tp-sebum" placeholder="0–100" min="0" max="100" style="width:100%;padding:10px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#C8A96E;font-size:16px;font-family:'Cormorant Garamond',serif;outline:none;text-align:center;">
           </div>
           <div>
             <div style="font-size:12px;color:#7A8099;margin-bottom:6px;letter-spacing:1px">민감도 (1–10)</div>
-            <input type="number" id="tp-sensitivity" placeholder="1–10" min="1" max="10"
-              style="width:100%;padding:10px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#E07B4F;font-size:16px;font-family:'Cormorant Garamond',serif;outline:none;text-align:center;">
+            <input type="number" id="tp-sensitivity" placeholder="1–10" min="1" max="10" style="width:100%;padding:10px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#E07B4F;font-size:16px;font-family:'Cormorant Garamond',serif;outline:none;text-align:center;">
           </div>
         </div>
       </div>
-
-      <!-- 육안 점수 (전후) -->
       <div style="background:#1C2030;border:1px solid #2A2F45;border-radius:2px;padding:24px 28px;margin-bottom:14px">
         <div style="font-size:11px;letter-spacing:3px;color:#C8A96E;text-transform:uppercase;margin-bottom:16px">육안 상태 점수 (케어 전 → 후)</div>
         <div style="font-size:12px;color:#7A8099;margin-bottom:16px;font-style:italic">* 1점(매우 나쁨) ~ 5점(매우 좋음)</div>
         <div id="tp-visual-scores"></div>
       </div>
-
-      <!-- 고객 반응 -->
       <div style="background:#1C2030;border:1px solid #2A2F45;border-radius:2px;padding:24px 28px;margin-bottom:14px">
         <div style="font-size:11px;letter-spacing:3px;color:#C8A96E;text-transform:uppercase;margin-bottom:16px">고객 반응 & 특이사항</div>
-
         <div style="font-size:14px;color:#E8E4DC;margin-bottom:8px;font-weight:500">케어 중 반응</div>
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px" id="tp-reaction-type"></div>
-
         <div style="font-size:14px;color:#E8E4DC;margin-bottom:8px;font-weight:500">특이사항 / 메모</div>
-        <textarea id="tp-notes" rows="3" placeholder="예: 볼 부위 민감반응, 눈가 주의 필요, 제품 A에 긍정적 반응..."
+        <textarea id="tp-notes" rows="3" placeholder="예: 볼 부위 민감반응, 눈가 주의 필요..."
           style="width:100%;padding:12px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#E8E4DC;font-size:14px;font-family:'Cormorant Garamond',serif;resize:vertical;outline:none;line-height:1.6;"></textarea>
       </div>
-
-      <!-- 다음 방문 권장 -->
       <div style="background:#1C2030;border:1px solid #2A2F45;border-radius:2px;padding:24px 28px;margin-bottom:24px">
         <div style="font-size:11px;letter-spacing:3px;color:#C8A96E;text-transform:uppercase;margin-bottom:16px">다음 방문 권장</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
@@ -430,11 +404,9 @@ input[type=text].error { border-color:var(--danger); }
           </div>
         </div>
         <div style="font-size:14px;color:#E8E4DC;margin-bottom:8px;font-weight:500">홈케어 권장사항</div>
-        <textarea id="tp-homecare" rows="2" placeholder="예: 세라마이드 크림 저녁 단독 사용, 토너 중단 2주..."
+        <textarea id="tp-homecare" rows="2" placeholder="예: 아토베리어 365 크림 아침저녁, 토너 중단 1개월..."
           style="width:100%;padding:12px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#E8E4DC;font-size:14px;font-family:'Cormorant Garamond',serif;resize:vertical;outline:none;line-height:1.6;"></textarea>
       </div>
-
-      <!-- 저장 버튼 -->
       <div style="display:flex;gap:12px;justify-content:center;align-items:center">
         <button onclick="saveTherapistNote()" id="tp-save-btn"
           style="padding:14px 48px;background:#C8A96E;color:#0D0F14;border:1px solid #C8A96E;border-radius:1px;cursor:pointer;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-family:'Cormorant Garamond',serif;font-weight:700;">
@@ -447,23 +419,286 @@ input[type=text].error { border-color:var(--danger); }
       </div>
       <div id="tp-save-status" style="text-align:center;margin-top:14px;font-size:13px;color:#7A8099;min-height:20px"></div>
     </div>
-
   </div>
 </div>
 
 <div class="footer" style="display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap">
-  <span>LAUREL STUDIO · HONGDAE, SEOUL · ORI v4.0</span>
+  <span>LAUREL STUDIO · HONGDAE, SEOUL · ORI v4.1</span>
   <button onclick="openTherapist()" style="background:transparent;border:1px solid #2A2F45;color:#7A8099;padding:6px 16px;font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:2px;cursor:pointer;border-radius:1px">THERAPIST ↗</button>
 </div>
 
 <script>
-const WEBHOOK = "https://script.google.com/macros/s/AKfycbxzekmkZzr0Um7FSkDbQ46KiQ_XgEVivsavobc3AKSkX2UlCP4V-a-K-PeKgWxPh3o6yw/exec";
+// ★ WEBHOOK — ori-laurel 전용
+const WEBHOOK = "https://script.google.com/macros/s/AKfycbwCHKt5GePumYfuGylrEeYCqtdthDltbB3isR--XhVaEt1UDV2E_6K9Qpea6_9_vY92JA/exec";
+
 let lang = 'ko';
 let step = 0;
 let d = {};
 let multiState = { top3:[], rednessAreas:[], cleansingMethod:[], cleanserType:[], powderMakeup:[], sunscreenType:[] };
 let sectionStatus = {};
 let caseId = "";
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  전문가 팁 데이터 — 4가지 문서 통합본 (v4.1)
+//  문서1: 쥬베룩·다이소 레티놀
+//  문서2: MIXSOON 콩에센스·트리넥삼산
+//  문서3: 홍조 메커니즘·써마지·여드름 원인·레티놀 3일1회
+//  문서4: 세타필+피지오겔 바디크림·코모공·레티놀 추가
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const EXPERT_TIPS = {
+  ko: {
+    header: { icon:"✨", label:"FOUNDER'S EXPERT TIPS", desc:"8,000건 피부 케어 경험을 바탕으로 작성된 맞춤 홈케어 가이드" },
+    groups: [
+      {
+        key:"thin",
+        threshold: sc => sc.thin >= 5 || sc.barrier >= 6,
+        color:"#4A9EAF", icon:"💧", title:"얇은 피부 타입 전용 가이드",
+        tips:[
+          {
+            label:"각질 관리 — PHA만",
+            body:"각질 제거는 월 1회로 제한하세요. 스크럽 같은 물리적 자극은 절대 사용하지 마세요. 겔/젤 형태의 순한 각질제거제를 선택하고, PHA 성분 제품을 추천합니다."
+          },
+          {
+            label:"스킨·로션 중단 (1개월)",
+            body:"한 달간 스킨·로션을 바르지 말고 수분크림만 바르세요. 스킨·로션은 물 90% 이상으로 뒤에 바르는 제품의 흡수를 방해합니다. 피부에 향기나는 물을 묻힌 상태에서 다음 제품을 바르는 것과 같아요. 세안 후 바로 수분크림을 검지손가락 두 마디 정도의 양으로 바르세요. 건조하면 더 바를 수 있습니다."
+          },
+          {
+            label:"선크림 & 베이스 메이크업",
+            body:"선크림은 외출 30분 전에 바르고, 2~3시간마다 덧바르세요. 유기자차 또는 혼합자차를 추천합니다. 파우더·파운데이션보다 BB크림을 사용하세요. 파우더·파운데이션은 밀가루처럼 피부의 수분과 유분을 빼앗아 더 건조하게 만듭니다."
+          },
+          {
+            label:"얇은 피부와 색소침착·잡티",
+            body:"피부가 얇으면 진피층의 멜라닌과 UV가 더 쉽게 만나 잡티가 잘 생기고 잘 탑니다. 두꺼운 피부보다 선크림이 훨씬 더 중요합니다. 피부가 타거나 잡티가 생기는 것은 색소의 표현방식으로 개인차가 있습니다."
+          },
+          {
+            label:"번들거림의 진짜 원인 — 피지 과잉",
+            body:"번들거리는 피부는 지성이 아닐 수 있습니다. 피부가 건조하면 인체는 피지샘을 자극해 피지 분비를 늘려 피부를 보호하려 합니다. 피지(먹이)를 먹기 위해 피부 위 균들이 염증반응을 일으킨 것이 여드름입니다. 수분함유도를 높이면 피지가 줄고, 블랙헤드·화이트헤드·여드름이 함께 개선됩니다."
+          },
+          {
+            label:"홍조의 원인 — 냉각수 시스템",
+            body:"홍조는 피부 아래 모세혈관이 확장되어 보이는 현상입니다. 원래 얼굴이 붉어지면 빠르게 가라앉아야 하는데, 자동차 엔진의 냉각수처럼 혈관을 되돌리는 역할을 하는 것이 바로 수분입니다. 수분이 부족하면 홍조가 오래 지속됩니다. 진정 제품보다 수분 회복이 먼저입니다."
+          },
+          {
+            label:"수분이 모든 것을 해결합니다",
+            body:"피부 세포의 기본은 수분입니다. 수분함유도가 오르면 대부분의 피부 문제가 개선됩니다. 나이가 들수록, 얇은 피부일수록 수분함유도가 빠르게 감소합니다. 매일 아침·저녁으로 MIXSOON 콩에센스 또는 히알루론산 앰플(엄지손톱 크기) + 아토베리어 365 크림을 사용해보세요. 물풍선에 물이 100% 차 있으면 탱탱하지만, 50%로 줄면 주름이 생기는 것처럼 세포도 수분이 충분해야 탄력 있습니다."
+          },
+          {
+            label:"세안법 완전 가이드",
+            body:"약산성 폼클렌저를 사용하세요. 알칼리성 세안제는 락스처럼 피부 보호막까지 제거할 수 있습니다. 체온과 비슷한 미온수로 세안하세요. 뜨겁거나 차가운 물은 모두 좋지 않습니다. 선크림을 사용했다면 클렌징 밀크 2~3펌프로 녹이듯 러빙 → 미온수 3~4회 헹굼 → 약산성 폼클렌저 거품 세안 → 10회 이상 충분히 헹굼 → 1분 이내 수분크림. 사실 당분간 이것만 제대로 해도 피부가 많이 달라집니다."
+          },
+          {
+            label:"탄력·노화 예방 — 써마지 & 수분 사이클",
+            body:"수분함유도가 오르면 노화가 더디게 진행됩니다. 한국의 40대 이후 여성들은 써마지 같은 고주파 기기로 진피층 콜라겐을 1년에 1회 촉진합니다. 단, 과한 시술은 피부를 극도로 건조하게 만드니 평상시 수분 관리가 기반이 되어야 합니다. 피부가 좋은 상태일 때 시술하고, 시술 후 다시 수분 회복에 집중하는 사이클을 반복하면 노화를 더디게 할 수 있습니다."
+          },
+          {
+            label:"모공 — 수분 관리가 답",
+            body:"코 모공이 커진 것은 피부에 손을 대어 모공을 지탱하던 근육이 약해져서 넓어진 것으로 이해하시면 됩니다. 수분 관리만으로도 피부 상태가 한 달 후 호전된다면, 레티놀 제품을 밤에 3일에 1번씩 추가로 사용하면 더 도움이 됩니다."
+          },
+          {
+            label:"레티놀 사용 타이밍",
+            body:"레티놀은 장벽이 어느 정도 회복된 후 사용해야 효과적입니다. 한 달간 수분크림만으로 장벽을 회복한 뒤 저녁에 주 2~3회 사용하세요. 다이소 레티놀 크림을 전체적으로 바른 뒤 아토베리어 365 크림으로 마무리하면 좋습니다."
+          },
+          {
+            label:"추가 팁 — 트리넥삼산·쥬베룩",
+            body:"트리넥삼산 성분 약을 전문의 처방으로 약 2개월 복용하면 피부톤이 밝아지고 잡티가 눈에 띄게 개선됩니다. 한국에서 2달분이 약 2만원 정도입니다. 토닝 레이저보다 훨씬 저렴하게 피부가 환해집니다. 단, 반드시 의사와 상담 후 복용하세요. 또한 2~3년에 한 번 쥬베룩 볼륨 시술을 받으면 움직이지 않던 콜라겐이 다시 생성되어 볼륨이 올라오고 잔주름이 팽팽해집니다."
+          }
+        ]
+      },
+      {
+        key:"barrier",
+        threshold: sc => sc.barrier >= 7,
+        color:"#C8A96E", icon:"🛡", title:"장벽 손상 집중 가이드",
+        tips:[
+          {
+            label:"세라마이드·판테놀 성분 우선",
+            body:"장벽 회복에는 세라마이드, 판테놀, 스쿠알란 성분 크림이 효과적입니다. 레티놀, AHA, 고농도 비타민C 같은 자극 성분은 장벽 회복 전까지 잠시 중단하세요. 아토베리어 365 크림은 장벽 강화 성분이 함유되어 있어 특히 적합합니다."
+          },
+          {
+            label:"수분 충전 시 일시적 반응",
+            body:"너무 건조했던 피부에 갑자기 수분이 공급되면 30분 이내의 붉은 반응이 나타날 수 있습니다. 오랫동안 피부가 건조했다는 반증이에요. 놀라지 마세요, 곧 가라앉습니다."
+          },
+          {
+            label:"바디 건조함까지 함께",
+            body:"피부가 전체적으로 건조하다면 세타필 단지형 모이스춰 크림(손바닥 반 정도)과 피지오겔 DMT 페이셜 크림(엄지손가락 한 마디)을 섞어 바르세요. 두 제품의 성질이 잘 어울리고 피부 장벽을 튼튼하게 하는 성분이 들어 있어 많은 도움이 됩니다. 건조하면 더 많은 양을 추가해 바르세요."
+          }
+        ]
+      },
+      {
+        key:"uv",
+        threshold: sc => sc.thin >= 5 && sc.uv >= 3,
+        color:"#C25F5F", icon:"☀️", title:"UV 민감 피부 강화 가이드",
+        tips:[
+          {
+            label:"선크림 2회 도포",
+            body:"얇고 UV에 민감한 피부는 선크림을 두 번 얇게 나눠 바르는 것을 권장합니다. 첫 번째 도포 후 흡수되면 한 번 더 바르세요. 광노화는 햇빛에 노출되는 것만으로도 피부를 얇아지게 합니다."
+          },
+          {
+            label:"미백 기능성 — 1개월 후 시작",
+            body:"나이아신아마이드 등 미백 기능성 제품은 수분 회복 1개월 후부터 사용하세요. 장벽이 약한 상태에서 기능성 성분을 사용하면 효과가 반감됩니다. 먼저 수분크림 단독으로 장벽을 회복한 뒤 시작하면 효과가 훨씬 좋습니다."
+          }
+        ]
+      }
+    ]
+  },
+  en: {
+    header: { icon:"✨", label:"FOUNDER'S EXPERT TIPS", desc:"Personalized home care guide from 8,000 real skin consultations" },
+    groups: [
+      {
+        key:"thin",
+        threshold: sc => sc.thin >= 5 || sc.barrier >= 6,
+        color:"#4A9EAF", icon:"💧", title:"Guide for Thin Skin Type",
+        tips:[
+          {
+            label:"Exfoliation — PHA Only",
+            body:"Limit exfoliation to once a month. Avoid physical scrubs entirely. Choose a gentle gel-type exfoliant with PHA ingredients only."
+          },
+          {
+            label:"Stop Toner & Lotion (1 month)",
+            body:"For one month, skip toner and lotion — use only a moisturizing cream. Toner and lotion are 90%+ water and block absorption of products applied after them. Think of it as applying cream onto slightly damp skin. After cleansing, apply moisturizer immediately — about 2 finger-lengths. Add more if still dry."
+          },
+          {
+            label:"Sunscreen & Base Makeup",
+            body:"Apply sunscreen 30 minutes before going out, reapply every 2-3 hours. Choose hybrid (PA+++) or organic UV filters. Use BB cream instead of foundation or powder. Powder and foundation absorb your skin's moisture like flour, making it drier."
+          },
+          {
+            label:"Thin Skin & Pigmentation",
+            body:"Thin skin means UV rays reach the melanin layer more easily, making dark spots and sunburn more likely. Sunscreen is far more important for you than for people with thicker skin."
+          },
+          {
+            label:"Why Your Skin Looks Oily",
+            body:"Oiliness doesn't mean oily skin. When skin gets dehydrated, the body increases sebum to protect it. Bacteria on the skin feed on this sebum, causing acne inflammation. Increasing hydration reduces sebum — and blackheads, whiteheads, and acne improve along with it."
+          },
+          {
+            label:"Redness — The Coolant System",
+            body:"Redness occurs when blood vessels under the skin dilate. Think of it like a car's coolant system — water is what helps vessels return to normal quickly. If you're low on moisture, redness lingers. Hydration comes before calming products."
+          },
+          {
+            label:"Hydration Solves Everything",
+            body:"Skin cells are built on water. When hydration rises, most skin problems improve. Try MIXSOON Bean Essence or hyaluronic acid serum (thumbnail size) + Atobarrier 365 cream morning and evening. Skin cells are like water balloons — full = firm, half-empty = wrinkled."
+          },
+          {
+            label:"Complete Cleansing Guide",
+            body:"Use a slightly acidic foam cleanser. Alkaline cleansers can strip away your skin's protective layer. Cleanse with lukewarm water close to body temperature. If you wore sunscreen: cleansing milk (2-3 pumps) → massage gently → rinse 3-4 times → acidic foam cleanser → rinse 10+ times → apply moisturizer within 1 minute. Just doing this consistently will make a big difference."
+          },
+          {
+            label:"Elasticity & Anti-Aging — Thermage Cycle",
+            body:"When hydration rises, aging slows. Thermage (radiofrequency) once a year stimulates collagen in the dermis. However, over-treatment severely dries out skin, so daily hydration must come first. Time your treatment when skin is well-hydrated, then focus on recovery afterward — repeat this cycle annually."
+          },
+          {
+            label:"Pores — Hydration is the Answer",
+            body:"Enlarged pores are often due to weakened support around them. Consistent hydration management helps over time. Once skin improves after about a month, add retinol at night, 2-3 times per week for additional support."
+          },
+          {
+            label:"Retinol Timing",
+            body:"Retinol works best when your barrier has recovered. After 1 month of moisturizer-only routine, use retinol in the evenings 2-3 times per week. Apply retinol first, then seal with Atobarrier 365 cream."
+          },
+          {
+            label:"Bonus Tips — Tranexamic Acid & Juvelook",
+            body:"Tranexamic acid tablets (prescription only, ~2 months) can significantly brighten skin tone and reduce dark spots — much cheaper than toning laser. Always consult a doctor first. Juvelook Volume treatment every 2-3 years can also stimulate collagen regeneration, adding volume and smoothing fine lines."
+          }
+        ]
+      },
+      {
+        key:"barrier",
+        threshold: sc => sc.barrier >= 7,
+        color:"#C8A96E", icon:"🛡", title:"Barrier Recovery Guide",
+        tips:[
+          {
+            label:"Ceramide & Panthenol First",
+            body:"Ceramide, panthenol, and squalane are best for barrier recovery. Pause retinol, AHA, and high-dose vitamin C until your barrier is restored. Atobarrier 365 cream is particularly suitable for this stage."
+          },
+          {
+            label:"Initial Hydration Reaction",
+            body:"If your skin has been very dry, sudden moisture may cause brief redness — but it fades within 30 minutes. This is proof that your skin was severely dehydrated. Don't be alarmed."
+          },
+          {
+            label:"Body Dryness Too",
+            body:"If your skin is dry all over, try mixing Cetaphil Moisturizing Cream (half a palm) with Physiogel DMT Facial Cream (one thumb-knuckle). These two complement each other well and contain barrier-strengthening ingredients. Apply more if still dry."
+          }
+        ]
+      },
+      {
+        key:"uv",
+        threshold: sc => sc.thin >= 5 && sc.uv >= 3,
+        color:"#C25F5F", icon:"☀️", title:"UV-Sensitive Skin Guide",
+        tips:[
+          {
+            label:"Double Layer Sunscreen",
+            body:"For thin, UV-sensitive skin, apply sunscreen in two thin layers. Wait for the first to absorb, then apply a second coat. Photoaging — skin thinning from UV exposure — is a real concern for your skin type."
+          },
+          {
+            label:"Brightening Products — Start After 1 Month",
+            body:"Start brightening ingredients (like niacinamide) only after 1 month of hydration recovery. Using actives on a weakened barrier reduces their effectiveness. Recover your barrier first, then introduce functional ingredients for maximum effect."
+          }
+        ]
+      }
+    ]
+  }
+};
+
+// ── 전문가 팁 빌더 ──────────────────────────────────────
+function buildExpertTips(sc) {
+  const el = document.getElementById('expert-tips-section');
+  if (!el) return;
+  el.innerHTML = '';
+  const ET = EXPERT_TIPS[lang];
+  const activeGroups = ET.groups.filter(g => g.threshold(sc));
+  if (activeGroups.length === 0) return;
+
+  const headerCard = document.createElement('div');
+  headerCard.className = 'card';
+  headerCard.style.cssText = 'border-color:#4A9EAF40;background:#4A9EAF08;margin-bottom:8px;';
+  headerCard.innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-size:20px">${ET.header.icon}</span>
+      <div>
+        <div style="font-size:10px;letter-spacing:3px;color:#4A9EAF;text-transform:uppercase;margin-bottom:3px">${ET.header.label}</div>
+        <div style="font-size:13px;color:var(--muted);font-style:italic">${ET.header.desc}</div>
+      </div>
+    </div>`;
+  el.appendChild(headerCard);
+
+  activeGroups.forEach(group => {
+    const groupCard = document.createElement('div');
+    groupCard.className = 'card';
+    groupCard.style.cssText = `border-color:${group.color}30;padding:20px 24px;margin-bottom:8px;`;
+
+    const gtitle = document.createElement('div');
+    gtitle.style.cssText = `display:flex;align-items:center;gap:8px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid ${group.color}20;`;
+    gtitle.innerHTML = `<span style="font-size:16px">${group.icon}</span><span style="font-size:12px;letter-spacing:2px;color:${group.color};text-transform:uppercase;font-weight:600">${group.title}</span>`;
+    groupCard.appendChild(gtitle);
+
+    group.tips.forEach((tip) => {
+      const item = document.createElement('div');
+      item.className = 'tip-item';
+
+      const toggle = document.createElement('button');
+      toggle.className = 'tip-toggle';
+      toggle.innerHTML = `
+        <div class="tip-toggle-left">
+          <span class="tip-dot" style="background:${group.color}"></span>
+          <span class="tip-toggle-label">${tip.label}</span>
+        </div>
+        <span class="tip-chevron">▼</span>`;
+
+      const body = document.createElement('div');
+      body.className = 'tip-body';
+      body.innerHTML = `<p class="tip-content" style="border-color:${group.color}40">${tip.body}</p>`;
+
+      toggle.addEventListener('click', () => {
+        const isOpen = body.classList.contains('open');
+        body.classList.toggle('open', !isOpen);
+        toggle.querySelector('.tip-chevron').style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+      });
+
+      item.appendChild(toggle);
+      item.appendChild(body);
+      groupCard.appendChild(item);
+    });
+
+    el.appendChild(groupCard);
+  });
+}
 
 // ── 언어 시스템 ──────────────────────────────────────
 const T = {
@@ -506,7 +741,7 @@ const T = {
     morning: ["약산성 클렌저 세안 (미온수, 부드럽게)","세안 후 1분 이내 보습 크림 검지 두 마디","선크림 도포 (촉촉 타입 권장)"],
     eveningBase: ["클렌징 밀크 2~3펌프 — 녹이듯 러빙","미온수 3~4회 헹굼 후 약산성 폼클렌저","미온수 헹굼 10회 이상","세안 후 1분 이내 보습 크림"],
     eveningNS: ["약산성 폼클렌저 단독 세안 (미온수)","세안 후 1분 이내 보습 크림"],
-    barrierCream: "🔵 세라마이드/판테놀/스쿠알란 성분 크림 우선",
+    barrierCream: "🔵 아토베리어 365 / 세라마이드 성분 크림 우선",
     rednessCream: "🟠 히알루론산/글리세린 수분 집중 크림",
     uvBoost: "⚡ UV 방어: 선크림 2회 도포 권장",
     modes: {
@@ -556,7 +791,7 @@ const T = {
     morning: ["Gentle cleanse with slightly acidic cleanser (lukewarm water)","Apply moisturizer within 1 min (2 finger lengths)","Apply sunscreen (moisturizing type recommended)"],
     eveningBase: ["Cleansing milk 2-3 pumps — dissolve gently","Rinse 3-4 times, then slightly acidic foam cleanser","Rinse thoroughly 10+ times","Apply moisturizer within 1 minute"],
     eveningNS: ["Slightly acidic foam cleanser only (lukewarm water)","Apply moisturizer within 1 minute"],
-    barrierCream: "🔵 Prioritize cream with ceramide / panthenol / squalane",
+    barrierCream: "🔵 Atobarrier 365 / ceramide cream recommended",
     rednessCream: "🟠 Hyaluronic acid / glycerin intensive moisture cream",
     uvBoost: "⚡ UV Defense: apply sunscreen twice (thin skin)",
     modes: {
@@ -580,21 +815,13 @@ function setLang(l){
 }
 
 function applyLang(){
-  // data-ko / data-en 텍스트
   document.querySelectorAll('[data-ko]').forEach(el => {
     const txt = el.getAttribute('data-'+lang);
     if(txt) el.innerHTML = txt;
   });
-  // placeholder
   document.querySelectorAll('[data-placeholder-ko]').forEach(el => {
     el.placeholder = el.getAttribute('data-placeholder-'+lang);
   });
-}
-
-// ── 유틸 ─────────────────────────────────────────────
-function makeCaseId(){
-  const n=new Date();
-  return `ORI-${n.getFullYear()}${String(n.getMonth()+1).padStart(2,"0")}${String(n.getDate()).padStart(2,"0")}-${String(n.getTime()).slice(-4)}`;
 }
 
 function buildScale(cid, key, is5=false, isPain=false){
@@ -726,7 +953,6 @@ function initSection(n){
   applyLang();
 }
 
-// ── 점수 & 모드 ───────────────────────────────────────
 function calcScores(){
   return {
     thin:(d.afterWashTight||0)+(d.easilyRed||0)+(d.windSting||0)+(d.productSting||0)+(d.visibleVessel||0),
@@ -746,7 +972,6 @@ function determineModes(sc){
   return modes;
 }
 
-// ── 직렬화 ────────────────────────────────────────────
 function serializeSection(secNum){
   const sc=calcScores();
   const modes=determineModes(sc);
@@ -769,7 +994,6 @@ async function sendToSheets(payload){
   }catch{return "error";}
 }
 
-// ── 네비게이션 ────────────────────────────────────────
 function updateUI(){
   for(let i=0;i<=7;i++) document.getElementById(`page-${i}`).classList.toggle("hidden",i!==step);
   document.getElementById("nav-bar").classList.toggle("hidden",step===0||step===7);
@@ -805,42 +1029,17 @@ function startDiagnosis(){
   const email=document.getElementById("email-input").value.trim();
   const name=document.getElementById("name-input").value.trim();
   let ok=true;
-
-  // 이메일
   const emailOk=email&&/^[^@]+@[^@]+[.][^@]+$/.test(email);
   document.getElementById("email-error").style.display=emailOk?"none":"block";
   if(!emailOk) ok=false;
-
-  // 국적
-  if(!nat){
-    document.getElementById("nationality-error").style.display="block";
-    ok=false;
-  } else {
-    document.getElementById("nationality-error").style.display="none";
-  }
-
-  // 성별
-  if(!d.gender){
-    document.getElementById("gender-error").style.display="block";
-    ok=false;
-  } else {
-    document.getElementById("gender-error").style.display="none";
-  }
-
-  // 연령
-  if(!d.ageGroup){
-    document.getElementById("age-error").style.display="block";
-    ok=false;
-  } else {
-    document.getElementById("age-error").style.display="none";
-  }
-
+  if(!nat){ document.getElementById("nationality-error").style.display="block"; ok=false; }
+  else { document.getElementById("nationality-error").style.display="none"; }
+  if(!d.gender){ document.getElementById("gender-error").style.display="block"; ok=false; }
+  else { document.getElementById("gender-error").style.display="none"; }
+  if(!d.ageGroup){ document.getElementById("age-error").style.display="block"; ok=false; }
+  else { document.getElementById("age-error").style.display="none"; }
   if(!ok) return;
-
-  d.email=email;
-  d.clientName=name;
-  d.nationality=nat;
-  // case_id = 이메일 앞부분 + 날짜
+  d.email=email; d.clientName=name; d.nationality=nat;
   const today=new Date();
   const dateStr=today.getFullYear()+String(today.getMonth()+1).padStart(2,"0")+String(today.getDate()).padStart(2,"0");
   caseId="ORI-"+email.split("@")[0]+"-"+dateStr;
@@ -850,7 +1049,6 @@ function startDiagnosis(){
 function validateSection(n){
   const L=t();
   const missing=[];
-
   if(n===1){
     if(d.afterWashTight===undefined) missing.push("세안 후 당김");
     if(d.easilyRed===undefined) missing.push("쉽게 붉어짐");
@@ -896,38 +1094,26 @@ function validateSection(n){
 }
 
 function showValidationError(missing){
-  // 기존 에러 제거
   const old=document.getElementById("validation-error-box");
   if(old) old.remove();
-
   const box=document.createElement("div");
   box.id="validation-error-box";
   box.style.cssText="margin-top:16px;padding:14px 18px;background:#C25F5F12;border:1px solid #C25F5F40;border-radius:2px;font-size:13px;color:#C25F5F;line-height:1.8;";
   const label=lang==='ko'?"아직 답변하지 않은 항목이 있습니다:":"Please answer all questions:";
-  box.innerHTML=`<div style="font-weight:600;margin-bottom:6px">⚠ ${label}</div>`
-    +missing.map(m=>`<div style="padding:2px 0">· ${m}</div>`).join("");
-
+  box.innerHTML=`<div style="font-weight:600;margin-bottom:6px">⚠ ${label}</div>`+missing.map(m=>`<div style="padding:2px 0">· ${m}</div>`).join("");
   const nav=document.getElementById("nav-bar");
   nav.parentNode.insertBefore(box, nav.nextSibling);
   box.scrollIntoView({behavior:"smooth", block:"center"});
-
-  // 3초 후 자동 제거
   setTimeout(()=>{ const b=document.getElementById("validation-error-box"); if(b)b.remove(); }, 4000);
 }
 
 async function goNext(){
-  // 섹션 유효성 검사
   if(step>=1&&step<=6){
     const missing=validateSection(step);
-    if(missing.length>0){
-      showValidationError(missing);
-      return;
-    }
+    if(missing.length>0){ showValidationError(missing); return; }
   }
-  // 기존 에러박스 제거
   const old=document.getElementById("validation-error-box");
   if(old) old.remove();
-
   if(step>=1&&step<=6){
     sectionStatus[step]="saving"; updateUI();
     const result=await sendToSheets(serializeSection(step));
@@ -958,7 +1144,6 @@ function resetApp(){
   updateUI();
 }
 
-// ── 결과 ─────────────────────────────────────────────
 function buildResult(){
   const sc=calcScores(); const modes=determineModes(sc); const L=t();
   const emailDisplay=document.getElementById("result-case-id");
@@ -1022,16 +1207,18 @@ function buildResult(){
       ${items.map((r,i)=>`<div style="font-size:13px;color:#7A8099;padding:7px 0;border-bottom:${i<items.length-1?"1px solid #2A2F45":"none"};line-height:1.5"><span style="color:#C8A96E;margin-right:6px">${i+1}.</span>${r}</div>`).join("")}
     </div>`).join("");
 
+  // ✨ 전문가 팁 (v4.1)
+  buildExpertTips(sc);
+
   applyLang();
 }
 
-
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-//  테라피스트 전용 시스템
+//  테라피스트 시스템
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const TP_PASSWORD = "laurel2024"; // ← 비밀번호 변경 가능
+const TP_PASSWORD = "laurel2024";
 let tpMulti = { treatmentType:[], reactionType:[], revisitPeriod:[], nextTreatment:[] };
-let tpScores = {}; // { 수분감_before: 3, 수분감_after: 4, ... }
+let tpScores = {};
 
 function openTherapist(){
   document.getElementById("therapist-overlay").classList.remove("hidden");
@@ -1114,11 +1301,8 @@ function buildTpVisualScores(){
 function initTherapistForm(){
   tpMulti={treatmentType:[],reactionType:[],revisitPeriod:[],nextTreatment:[]};
   tpScores={};
-  // 케어 날짜 오늘로
   document.getElementById("tp-care-date").value=new Date().toISOString().split("T")[0];
-  // 현재 진단 케이스가 있으면 자동 입력
   if(caseId) document.getElementById("tp-case-id").value=caseId;
-
   buildTpMulti("tp-treatment-type","treatmentType",["기본 클렌징","딥클렌징","모공 케어","진정 케어","수분 집중","미백 케어","리프팅","LED 광선","고주파","초음파","갈바닉","기타"]);
   buildTpMulti("tp-reaction-type","reactionType",["긍정적 반응","민감 반응 없음","일부 발적","따가움 호소","붓기","즉각 진정","만족도 높음","재방문 의향"]);
   buildTpMulti("tp-revisit-period","revisitPeriod",["1주 후","2주 후","3주 후","1개월 후","2개월 후"]);
@@ -1135,30 +1319,25 @@ async function saveTherapistNote(){
   const btn=document.getElementById("tp-save-btn");
   btn.textContent="저장 중..."; btn.disabled=true;
   document.getElementById("tp-save-status").innerHTML='<span style="color:#C8A96E">⏳ 구글 시트에 전송 중...</span>';
-
   const visualFlat={};
   Object.entries(tpScores).forEach(([k,v])=>{ visualFlat[`visual_${k.replace(" ","_")}`]=v; });
-
   const payload={
-    case_id: caseIdVal,
-    section: "T1",
-    saved_at: new Date().toISOString(),
-    therapist_name: document.getElementById("tp-therapist-name").value||"",
-    care_date: document.getElementById("tp-care-date").value||"",
-    care_duration_min: document.getElementById("tp-care-duration").value||"",
-    treatment_types: tpMulti.treatmentType.join("|"),
-    products_used: document.getElementById("tp-products").value||"",
-    moisture_pct: document.getElementById("tp-moisture").value||"",
-    sebum_pct: document.getElementById("tp-sebum").value||"",
-    sensitivity_score: document.getElementById("tp-sensitivity").value||"",
+    case_id:caseIdVal, section:"T1", saved_at:new Date().toISOString(),
+    therapist_name:document.getElementById("tp-therapist-name").value||"",
+    care_date:document.getElementById("tp-care-date").value||"",
+    care_duration_min:document.getElementById("tp-care-duration").value||"",
+    treatment_types:tpMulti.treatmentType.join("|"),
+    products_used:document.getElementById("tp-products").value||"",
+    moisture_pct:document.getElementById("tp-moisture").value||"",
+    sebum_pct:document.getElementById("tp-sebum").value||"",
+    sensitivity_score:document.getElementById("tp-sensitivity").value||"",
     ...visualFlat,
-    reaction_types: tpMulti.reactionType.join("|"),
-    notes: document.getElementById("tp-notes").value||"",
-    revisit_period: tpMulti.revisitPeriod.join("|"),
-    next_treatment: tpMulti.nextTreatment.join("|"),
-    homecare_advice: document.getElementById("tp-homecare").value||"",
+    reaction_types:tpMulti.reactionType.join("|"),
+    notes:document.getElementById("tp-notes").value||"",
+    revisit_period:tpMulti.revisitPeriod.join("|"),
+    next_treatment:tpMulti.nextTreatment.join("|"),
+    homecare_advice:document.getElementById("tp-homecare").value||"",
   };
-
   try{
     await fetch(WEBHOOK+"?data="+encodeURIComponent(JSON.stringify(payload)),{method:"GET",mode:"no-cors"});
     document.getElementById("tp-save-status").innerHTML='<span style="color:#4CAF87">✓ 저장 완료 — 구글 시트에 기록됐습니다</span>';
@@ -1170,9 +1349,7 @@ async function saveTherapistNote(){
   }
 }
 
-
 function initIntroSelectors(){
-  // 성별
   const genderEl=document.getElementById("intro-gender");
   if(!genderEl) return;
   const genders=lang==='ko'?["여성","남성","기타"]:["Female","Male","Other"];
@@ -1193,7 +1370,6 @@ function initIntroSelectors(){
     genderEl.appendChild(btn);
   });
 
-  // 연령대
   const ageEl=document.getElementById("intro-age");
   if(!ageEl) return;
   const ages=lang==='ko'
@@ -1217,7 +1393,6 @@ function initIntroSelectors(){
   });
 }
 
-// 초기화
 initIntroSelectors();
 applyLang();
 updateUI();

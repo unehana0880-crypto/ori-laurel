@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ORI — Laurel Studio</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+Arabic:wght@400;600&family=Noto+Sans+Hebrew:wght@400;600&family=Noto+Sans+JP:wght@400;600&family=Noto+Sans+TC:wght@400;600&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 :root {
@@ -14,11 +16,18 @@
   --success:#4CAF87; --warn:#E07B4F; --danger:#C25F5F; --teal:#4A9EAF;
 }
 body { background:var(--bg); color:var(--text); font-family:'Cormorant Garamond',Georgia,serif; min-height:100vh; }
+body[lang="ar"], body[lang="he"] { font-family:'Noto Sans Arabic','Noto Sans Hebrew','Cormorant Garamond',serif; }
+body[lang="ja"] { font-family:'Noto Sans JP','Cormorant Garamond',serif; }
+body[lang="zh"] { font-family:'Noto Sans TC','Cormorant Garamond',serif; }
+body[dir="rtl"] .nav, body[dir="rtl"] .header { direction:rtl; }
+body[dir="rtl"] .scale-row { flex-direction:row-reverse; }
+
 .header { border-bottom:1px solid var(--border); padding:22px 40px; display:flex; align-items:center; justify-content:space-between; background:var(--surface); position:sticky; top:0; z-index:50; }
 .logo { font-size:13px; letter-spacing:4px; color:var(--accent); text-transform:uppercase; font-weight:600; }
 .sub { font-size:11px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-top:3px; }
-.lang-btn { padding:6px 14px; border:1px solid var(--border); border-radius:1px; background:transparent; color:var(--muted); cursor:pointer; font-size:11px; letter-spacing:2px; font-family:'Cormorant Garamond',serif; transition:all 0.15s; }
+.lang-btn { padding:5px 10px; border:1px solid var(--border); border-radius:1px; background:transparent; color:var(--muted); cursor:pointer; font-size:11px; letter-spacing:1px; font-family:'Cormorant Garamond',serif; transition:all 0.15s; }
 .lang-btn.active { border-color:var(--accent); color:var(--accent); }
+.lang-bar { display:flex; gap:4px; flex-wrap:wrap; max-width:280px; justify-content:flex-end; }
 .progress-bar { height:2px; background:var(--border); }
 .progress-fill { height:100%; background:var(--accent); transition:width 0.4s; }
 .section-dots { background:var(--surface); border-bottom:1px solid var(--border); display:flex; justify-content:center; gap:8px; padding:8px 0; }
@@ -32,7 +41,7 @@ body { background:var(--bg); color:var(--text); font-family:'Cormorant Garamond'
 .card { background:var(--card); border:1px solid var(--border); border-radius:2px; padding:24px 28px; margin-bottom:14px; }
 .q-label { font-size:16px; color:var(--text); margin-bottom:14px; line-height:1.5; font-weight:500; }
 .opt-row { display:flex; flex-wrap:wrap; gap:8px; }
-.opt-btn { padding:8px 16px; border:1px solid var(--border); border-radius:1px; background:transparent; color:var(--muted); cursor:pointer; font-size:13px; letter-spacing:0.5px; transition:all 0.15s; font-family:'Cormorant Garamond',serif; }
+.opt-btn { padding:8px 16px; border:1px solid var(--border); border-radius:1px; background:transparent; color:var(--muted); cursor:pointer; font-size:13px; letter-spacing:0.5px; transition:all 0.15s; font-family:inherit; }
 .opt-btn.sel { border-color:var(--accent); background:var(--accent-soft); color:var(--accent); }
 .scale-row { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
 .scale-btn { width:42px; height:42px; border:1px solid var(--border); border-radius:2px; background:transparent; color:var(--muted); cursor:pointer; font-size:14px; font-weight:600; transition:all 0.15s; }
@@ -48,42 +57,55 @@ body { background:var(--bg); color:var(--text); font-family:'Cormorant Garamond'
 .nav { display:flex; justify-content:space-between; align-items:center; margin-top:32px; padding-top:24px; border-top:1px solid var(--border); }
 .save-badge { display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:1px; font-size:12px; letter-spacing:1px; }
 .res-card { border-radius:2px; padding:16px 20px; margin-bottom:10px; }
-textarea { width:100%; padding:12px 14px; background:var(--bg); border:1px solid var(--border); border-radius:1px; color:var(--text); font-size:14px; font-family:'Cormorant Garamond',serif; resize:vertical; outline:none; line-height:1.6; }
-input[type=text] { padding:12px 20px; background:var(--card); border:1px solid var(--border); border-radius:1px; color:var(--text); font-size:14px; font-family:'Cormorant Garamond',serif; outline:none; text-align:center; }
-input[type=text].error { border-color:var(--danger); }
+textarea { width:100%; padding:12px 14px; background:var(--bg); border:1px solid var(--border); border-radius:1px; color:var(--text); font-size:14px; font-family:inherit; resize:vertical; outline:none; line-height:1.6; }
+input[type=text], input[type=email] { padding:12px 20px; background:var(--card); border:1px solid var(--border); border-radius:1px; color:var(--text); font-size:14px; font-family:inherit; outline:none; text-align:center; }
+input[type=text].error, input[type=email].error { border-color:var(--danger); }
 .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
 .score-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; margin-bottom:24px; }
 .footer { border-top:1px solid var(--border); padding:20px 40px; text-align:center; font-size:11px; color:var(--muted); letter-spacing:2px; }
 .hidden { display:none; }
 .text-center { text-align:center; }
 
-/* ── 전문가 팁 아코디언 ── */
 .tip-item { border-bottom:1px solid var(--border); }
 .tip-item:last-child { border-bottom:none; }
-.tip-toggle { width:100%; display:flex; align-items:center; justify-content:space-between; padding:13px 0; background:transparent; border:none; cursor:pointer; font-family:'Cormorant Garamond',serif; text-align:left; }
+.tip-toggle { width:100%; display:flex; align-items:center; justify-content:space-between; padding:13px 0; background:transparent; border:none; cursor:pointer; font-family:inherit; text-align:left; }
 .tip-toggle:hover { opacity:0.85; }
 .tip-toggle-left { display:flex; align-items:center; gap:10px; }
 .tip-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
 .tip-toggle-label { font-size:14px; font-weight:600; color:var(--text); }
 .tip-chevron { font-size:11px; color:var(--muted); transition:transform 0.2s; }
 .tip-body { max-height:0; overflow:hidden; transition:max-height 0.35s ease, padding 0.2s; }
-.tip-body.open { max-height:1000px; padding-bottom:16px; }
+.tip-body.open { max-height:1500px; padding-bottom:16px; }
 .tip-content { font-size:14px; color:#B0A898; line-height:1.9; font-style:italic; padding-left:17px; border-left:2px solid; }
 
-@media(max-width:600px){ .grid2{grid-template-columns:1fr;} .header{padding:16px 20px;} .main{padding:24px 16px;} }
+@media(max-width:600px){
+  .grid2{grid-template-columns:1fr;}
+  .header{padding:16px 20px; flex-direction:column; align-items:flex-start; gap:12px;}
+  .lang-bar{max-width:100%; justify-content:flex-start;}
+  .main{padding:24px 16px;}
+}
 </style>
 </head>
-<body>
+<body lang="ko">
 
 <div class="header">
   <div>
     <div class="logo">Laurel Studio</div>
     <div class="sub">ORI — Optimal Routine Intelligence</div>
   </div>
-  <div style="display:flex;align-items:center;gap:12px">
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end">
     <div id="progress-text" style="font-size:12px;color:var(--muted);letter-spacing:1px"></div>
-    <button class="lang-btn active" id="btn-ko" onclick="setLang('ko')">KO</button>
-    <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+    <div class="lang-bar">
+      <button class="lang-btn active" id="btn-ko" onclick="setLang('ko')">KO</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" id="btn-de" onclick="setLang('de')">DE</button>
+      <button class="lang-btn" id="btn-fr" onclick="setLang('fr')">FR</button>
+      <button class="lang-btn" id="btn-es" onclick="setLang('es')">ES</button>
+      <button class="lang-btn" id="btn-ar" onclick="setLang('ar')">عربي</button>
+      <button class="lang-btn" id="btn-he" onclick="setLang('he')">עברית</button>
+      <button class="lang-btn" id="btn-ja" onclick="setLang('ja')">日本語</button>
+      <button class="lang-btn" id="btn-zh" onclick="setLang('zh')">繁中</button>
+    </div>
   </div>
 </div>
 
@@ -105,168 +127,158 @@ input[type=text].error { border-color:var(--danger); }
   <div class="text-center" style="padding-top:60px">
     <div style="font-size:11px;letter-spacing:4px;color:var(--accent);margin-bottom:20px;text-transform:uppercase">Laurel Studio · Seoul Hongdae</div>
     <h1 style="font-size:clamp(28px,5vw,48px);font-weight:400;line-height:1.2;margin-bottom:20px">
-      <span data-ko="당신의 피부," data-en="Your Skin,"></span><br>
-      <span style="color:var(--accent);font-style:italic" data-ko="데이터로 읽습니다" data-en="Read by Data"></span>
+      <span id="intro-line1"></span><br>
+      <span style="color:var(--accent);font-style:italic" id="intro-line2"></span>
     </h1>
-    <p style="font-size:16px;color:var(--muted);max-width:480px;margin:0 auto 36px;line-height:1.8;font-style:italic" data-ko="8,000건의 실증 데이터 기반 ORI 알고리즘이<br>피부 문제의 근본 원인을 역추적합니다" data-en="ORI algorithm based on 8,000 real cases<br>traces the root cause of your skin concerns"></p>
+    <p style="font-size:16px;color:var(--muted);max-width:480px;margin:0 auto 36px;line-height:1.8;font-style:italic" id="intro-tagline"></p>
     <div style="max-width:380px;margin:0 auto 24px;text-align:left">
       <div style="margin-bottom:14px">
-        <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px" data-ko="이름 (선택)" data-en="Name (optional)"></div>
-        <input type="text" id="name-input" style="display:block;width:100%" data-placeholder-ko="홍길동" data-placeholder-en="Your name">
+        <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px" id="lbl-name"></div>
+        <input type="text" id="name-input" style="display:block;width:100%">
       </div>
       <div style="margin-bottom:14px">
         <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px">
-          <span data-ko="이메일" data-en="Email"></span>
+          <span id="lbl-email"></span>
           <span style="color:var(--danger);margin-left:4px">*</span>
         </div>
-        <input type="email" id="email-input" style="display:block;width:100%" data-placeholder-ko="example@email.com" data-placeholder-en="example@email.com">
-        <div class="error-msg" id="email-error" style="margin-top:4px">
-          <span data-ko="이메일을 입력해 주세요" data-en="Please enter your email"></span>
-        </div>
-        <div style="margin-top:5px;font-size:11px;color:var(--muted);font-style:italic" data-ko="* 재방문 시 기록 조회에 사용됩니다" data-en="* Used to retrieve your record on future visits"></div>
+        <input type="email" id="email-input" style="display:block;width:100%">
+        <div class="error-msg" id="email-error" style="margin-top:4px"></div>
+        <div style="margin-top:5px;font-size:11px;color:var(--muted);font-style:italic" id="email-hint"></div>
       </div>
       <div style="margin-bottom:14px">
-        <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px" data-ko="국적" data-en="Nationality"></div>
-        <input type="text" id="nationality-input" style="display:block;width:100%" data-placeholder-ko="Korean / Japanese / etc." data-placeholder-en="Korean / Japanese / etc.">
-        <div class="error-msg" id="nationality-error" style="margin-top:4px">
-          <span data-ko="국적을 입력해 주세요" data-en="Please enter your nationality"></span>
-        </div>
+        <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px" id="lbl-nationality"></div>
+        <input type="text" id="nationality-input" style="display:block;width:100%">
+        <div class="error-msg" id="nationality-error" style="margin-top:4px"></div>
       </div>
       <div style="margin-bottom:14px">
-        <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px" data-ko="성별" data-en="Gender"></div>
+        <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px" id="lbl-gender"></div>
         <div style="display:flex;gap:8px" id="intro-gender"></div>
-        <div class="error-msg" id="gender-error" style="margin-top:4px">
-          <span data-ko="성별을 선택해 주세요" data-en="Please select gender"></span>
-        </div>
+        <div class="error-msg" id="gender-error" style="margin-top:4px"></div>
       </div>
       <div>
-        <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px" data-ko="연령대" data-en="Age Group"></div>
+        <div style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px" id="lbl-age"></div>
         <div style="display:flex;flex-wrap:wrap;gap:8px" id="intro-age"></div>
-        <div class="error-msg" id="age-error" style="margin-top:4px">
-          <span data-ko="연령대를 선택해 주세요" data-en="Please select age group"></span>
-        </div>
+        <div class="error-msg" id="age-error" style="margin-top:4px"></div>
       </div>
     </div>
-    <button class="btn-primary" onclick="startDiagnosis()" style="margin-top:16px">
-      <span data-ko="진단 시작하기" data-en="Start Diagnosis"></span>
-    </button>
-    <div style="margin-top:14px;font-size:11px;color:var(--muted);letter-spacing:1px">
-      <span data-ko="약 3분 · 6개 섹션" data-en="About 3 min · 6 sections"></span>
-    </div>
+    <button class="btn-primary" onclick="startDiagnosis()" style="margin-top:16px" id="btn-start"></button>
+    <div style="margin-top:14px;font-size:11px;color:var(--muted);letter-spacing:1px" id="intro-meta"></div>
   </div>
 </div>
 
-<!-- Section 1~6 (원본 동일) -->
+<!-- Section 1 -->
 <div id="page-1" class="hidden">
-  <div class="sec-title" data-ko="Section 01 · 피부 민감·구조 신호" data-en="Section 01 · Skin Sensitivity Signals"></div>
-  <div class="sec-desc" data-ko="피부가 얼마나 얇고 민감한지 파악합니다 — 이 점수가 높을수록 자극에 더 조심해야 합니다" data-en="Measures how thin and sensitive your skin is — higher scores require more gentle care"></div>
-  <div class="card"><div class="q-label" data-ko="세안 후 얼굴이 당깁니다" data-en="My skin feels tight after cleansing"></div><div class="scale-row" id="s-afterWashTight"></div></div>
-  <div class="card"><div class="q-label" data-ko="쉽게 붉어지거나 열감이 생깁니다" data-en="My skin easily turns red or feels hot"></div><div class="scale-row" id="s-easilyRed"></div></div>
-  <div class="card"><div class="q-label" data-ko="바람·추위에 피부가 따갑습니다" data-en="Wind or cold makes my skin sting"></div><div class="scale-row" id="s-windSting"></div></div>
-  <div class="card"><div class="q-label" data-ko="제품을 바르면 따끔하거나 눈이 시립니다" data-en="Products cause stinging or eye irritation"></div><div class="scale-row" id="s-productSting"></div></div>
-  <div class="card"><div class="q-label" data-ko="피부에 혈관이 비치거나 홍조가 지속됩니다" data-en="Visible capillaries or persistent redness"></div><div class="scale-row" id="s-visibleVessel"></div></div>
+  <div class="sec-title" id="s1-title"></div>
+  <div class="sec-desc" id="s1-desc"></div>
+  <div class="card"><div class="q-label" id="q-afterWashTight"></div><div class="scale-row" id="s-afterWashTight"></div></div>
+  <div class="card"><div class="q-label" id="q-easilyRed"></div><div class="scale-row" id="s-easilyRed"></div></div>
+  <div class="card"><div class="q-label" id="q-windSting"></div><div class="scale-row" id="s-windSting"></div></div>
+  <div class="card"><div class="q-label" id="q-productSting"></div><div class="scale-row" id="s-productSting"></div></div>
+  <div class="card"><div class="q-label" id="q-visibleVessel"></div><div class="scale-row" id="s-visibleVessel"></div></div>
   <div class="card">
-    <div class="q-label" data-ko="가장 불편한 피부 증상 (복수 선택)" data-en="Main skin concerns (multiple choice)"></div>
+    <div class="q-label" id="q-top3"></div>
     <div class="opt-row" id="multi-top3"></div>
   </div>
 </div>
 
+<!-- Section 2 -->
 <div id="page-2" class="hidden">
-  <div class="sec-title" data-ko="Section 02 · 수분 부족 & 장벽 손상" data-en="Section 02 · Moisture & Barrier Damage"></div>
-  <div class="sec-desc" data-ko="피부 장벽이 얼마나 손상됐는지 파악합니다 — 대부분의 피부 문제는 여기서 시작됩니다" data-en="Measures barrier damage — most skin issues start here"></div>
-  <div class="card"><div class="q-label" data-ko="피부가 건조하고 거칩니다" data-en="My skin feels dry and rough"></div><div class="scale-row" id="s-dryRough"></div></div>
-  <div class="card"><div class="q-label" data-ko="각질이 들뜨거나 메이크업이 뜹니다" data-en="Flaky skin or makeup doesn't stay on"></div><div class="scale-row" id="s-flakyMakeup"></div></div>
-  <div class="card"><div class="q-label" data-ko="밤에 피부가 더 가렵습니다" data-en="Skin itches more at night"></div><div class="scale-row" id="s-nightItch"></div></div>
-  <div class="card"><div class="q-label" data-ko="크림을 발라도 금방 건조해집니다" data-en="Skin dries out quickly even after moisturizer"></div><div class="scale-row" id="s-creamDryFast"></div></div>
-  <div class="card"><div class="q-label" data-ko="자극 후 회복이 느립니다" data-en="Slow recovery after irritation"></div><div class="scale-row" id="s-slowRecovery"></div></div>
+  <div class="sec-title" id="s2-title"></div>
+  <div class="sec-desc" id="s2-desc"></div>
+  <div class="card"><div class="q-label" id="q-dryRough"></div><div class="scale-row" id="s-dryRough"></div></div>
+  <div class="card"><div class="q-label" id="q-flakyMakeup"></div><div class="scale-row" id="s-flakyMakeup"></div></div>
+  <div class="card"><div class="q-label" id="q-nightItch"></div><div class="scale-row" id="s-nightItch"></div></div>
+  <div class="card"><div class="q-label" id="q-creamDryFast"></div><div class="scale-row" id="s-creamDryFast"></div></div>
+  <div class="card"><div class="q-label" id="q-slowRecovery"></div><div class="scale-row" id="s-slowRecovery"></div></div>
 </div>
 
+<!-- Section 3 -->
 <div id="page-3" class="hidden">
-  <div class="sec-title" data-ko="Section 03 · 피지·트러블 패턴" data-en="Section 03 · Oil & Acne Pattern"></div>
-  <div class="sec-desc" data-ko="피지와 여드름의 패턴을 파악합니다 — 지성처럼 보여도 실제론 건성일 수 있습니다" data-en="Identifies oil and acne patterns — oily-looking skin may actually be dehydrated"></div>
-  <div class="card"><div class="q-label" data-ko="얼굴이 번들거리거나 피지가 많습니다" data-en="Shiny face or excess sebum"></div><div class="scale-row" id="s-oiliness"></div></div>
-  <div class="card"><div class="q-label" data-ko="블랙헤드·화이트헤드가 있습니다" data-en="Blackheads or whiteheads present"></div><div class="scale-row" id="s-blackhead"></div></div>
-  <div class="card"><div class="q-label" data-ko="염증성 여드름(붉고 아픈)이 있습니다" data-en="Inflamed acne (red and painful)"></div><div class="scale-row" id="s-inflammedAcne"></div></div>
+  <div class="sec-title" id="s3-title"></div>
+  <div class="sec-desc" id="s3-desc"></div>
+  <div class="card"><div class="q-label" id="q-oiliness"></div><div class="scale-row" id="s-oiliness"></div></div>
+  <div class="card"><div class="q-label" id="q-blackhead"></div><div class="scale-row" id="s-blackhead"></div></div>
+  <div class="card"><div class="q-label" id="q-inflammedAcne"></div><div class="scale-row" id="s-inflammedAcne"></div></div>
+  <div class="card"><div class="q-label" id="q-acnePain"></div><div class="scale-row" id="s-acnePain5"></div></div>
   <div class="card">
-    <div class="q-label" data-ko="트러블 통증 강도 — 염증 깊이 지표" data-en="Acne pain level — indicates inflammation depth"></div>
-    <div class="scale-row" id="s-acnePain5"></div>
-  </div>
-  <div class="card">
-    <div class="q-label" data-ko="트러블 주요 발생 부위" data-en="Main acne location"></div>
+    <div class="q-label" id="q-acneZone"></div>
     <div class="opt-row" id="radio-acneZone"></div>
   </div>
   <div class="card">
-    <div class="q-label" data-ko='"건조한데 기름진 느낌"을 받은 적 있나요?' data-en='"Dry but oily at the same time" experience?'></div>
+    <div class="q-label" id="q-dehydratedOily"></div>
     <div class="opt-row" id="radio-dehydratedOily"></div>
-    <div style="margin-top:8px;font-size:12px;color:var(--muted);font-style:italic" data-ko="* 지성처럼 보이는 건성 피부 판별 지표" data-en="* Key indicator for dehydrated-oily skin type"></div>
+    <div style="margin-top:8px;font-size:12px;color:var(--muted);font-style:italic" id="hint-dehydratedOily"></div>
   </div>
 </div>
 
+<!-- Section 4 -->
 <div id="page-4" class="hidden">
-  <div class="sec-title" data-ko="Section 04 · 홍조 & 혈관 반응" data-en="Section 04 · Redness & Vascular Response"></div>
-  <div class="sec-desc" data-ko="홍조의 원인을 파악합니다 — 대부분의 홍조는 진정이 아니라 수분 회복으로 해결됩니다" data-en="Identifies redness causes — most redness resolves with hydration, not calming products"></div>
-  <div class="card"><div class="q-label" data-ko="술·열·감정에 의해 얼굴이 붉어집니다" data-en="Face flushes with alcohol, heat, or emotion"></div><div class="scale-row" id="s-rednessEvent"></div></div>
-  <div class="card"><div class="q-label" data-ko="붉어진 후 오래 지속됩니다 (10분 이상)" data-en="Redness persists for 10+ minutes"></div><div class="scale-row" id="s-rednessLong"></div></div>
-  <div class="card"><div class="q-label" data-ko="붉어질 때 따가움이 동반됩니다" data-en="Stinging occurs when skin turns red"></div><div class="scale-row" id="s-rednessSting"></div></div>
+  <div class="sec-title" id="s4-title"></div>
+  <div class="sec-desc" id="s4-desc"></div>
+  <div class="card"><div class="q-label" id="q-rednessEvent"></div><div class="scale-row" id="s-rednessEvent"></div></div>
+  <div class="card"><div class="q-label" id="q-rednessLong"></div><div class="scale-row" id="s-rednessLong"></div></div>
+  <div class="card"><div class="q-label" id="q-rednessSting"></div><div class="scale-row" id="s-rednessSting"></div></div>
   <div class="card">
-    <div class="q-label" data-ko="홍조 주요 발생 부위 (복수 선택)" data-en="Main redness areas (multiple choice)"></div>
+    <div class="q-label" id="q-rednessAreas"></div>
     <div class="opt-row" id="multi-rednessAreas"></div>
   </div>
   <div class="card">
-    <div class="q-label" data-ko="피부 표면 혈관 비침" data-en="Visible surface capillaries"></div>
+    <div class="q-label" id="q-visibleVesselType"></div>
     <div class="opt-row" id="radio-visibleVesselType"></div>
     <div id="vessel-warn" class="warn-box hidden"></div>
   </div>
 </div>
 
+<!-- Section 5 -->
 <div id="page-5" class="hidden">
-  <div class="sec-title" data-ko="Section 05 · 루틴 & 습관" data-en="Section 05 · Routine & Habits"></div>
-  <div class="sec-desc" data-ko="현재 루틴에서 피부를 악화시키는 습관을 찾아냅니다" data-en="Identifies habits in your current routine that may be harming your skin"></div>
+  <div class="sec-title" id="s5-title"></div>
+  <div class="sec-desc" id="s5-desc"></div>
   <div class="card">
-    <div class="q-label" data-ko="현재 사용 중인 세안제 타입 (복수 선택 가능)" data-en="Current cleanser type (multiple choice)"></div>
+    <div class="q-label" id="q-cleanserType"></div>
     <div class="opt-row" id="multi-cleanserType"></div>
     <div id="cleanser-warn" class="warn-box hidden"></div>
   </div>
   <div class="card">
-    <div class="q-label" data-ko="저녁 클렌징 방법 (복수 선택)" data-en="Evening cleansing method (multiple choice)"></div>
+    <div class="q-label" id="q-cleansingMethod"></div>
     <div class="opt-row" id="multi-cleansingMethod"></div>
   </div>
   <div class="card">
-    <div class="q-label" data-ko="세안 시 물 온도" data-en="Water temperature when cleansing"></div>
+    <div class="q-label" id="q-waterTemp"></div>
     <div class="opt-row" id="radio-waterTemp"></div>
     <div id="water-warn" class="warn-box hidden"></div>
   </div>
-  <div class="card"><div class="q-label" data-ko="토너/스킨 사용 여부" data-en="Do you use toner / skin lotion?"></div><div class="opt-row" id="radio-tonerUse"></div></div>
-  <div class="card"><div class="q-label" data-ko="각질 제거 빈도" data-en="Exfoliation frequency"></div><div class="opt-row" id="radio-exfolFreq"></div></div>
+  <div class="card"><div class="q-label" id="q-tonerUse"></div><div class="opt-row" id="radio-tonerUse"></div></div>
+  <div class="card"><div class="q-label" id="q-exfolFreq"></div><div class="opt-row" id="radio-exfolFreq"></div></div>
   <div class="card">
-    <div class="q-label" data-ko="베이스 메이크업 (복수 선택 가능)" data-en="Base makeup (multiple choice)"></div>
+    <div class="q-label" id="q-powderMakeup"></div>
     <div class="opt-row" id="multi-powderMakeup"></div>
   </div>
   <div class="card">
-    <div class="q-label" data-ko="선크림 타입 (복수 선택 가능)" data-en="Sunscreen type (multiple choice)"></div>
+    <div class="q-label" id="q-sunscreenType"></div>
     <div class="opt-row" id="multi-sunscreenType"></div>
     <div id="sunscreen-warn" class="warn-box hidden"></div>
   </div>
-  <div class="card"><div class="q-label" data-ko="선크림 덧바름 습관" data-en="Sunscreen reapplication habit"></div><div class="opt-row" id="radio-sunscreenHabit"></div></div>
+  <div class="card"><div class="q-label" id="q-sunscreenHabit"></div><div class="opt-row" id="radio-sunscreenHabit"></div></div>
   <div class="card">
-    <div class="q-label" data-ko="루틴 이행 의지" data-en="Commitment to following a routine"></div>
+    <div class="q-label" id="q-routineWill"></div>
     <div class="scale-row" id="s-routineWill5"></div>
   </div>
 </div>
 
+<!-- Section 6 -->
 <div id="page-6" class="hidden">
-  <div class="sec-title" data-ko="Section 06 · 자외선 & 색소" data-en="Section 06 · UV & Pigmentation"></div>
-  <div class="sec-desc" data-ko="자외선 민감도와 색소 반응을 파악합니다 — 피부가 얇을수록 자외선 영향을 더 많이 받습니다" data-en="Measures UV sensitivity and pigmentation — thinner skin is more vulnerable to UV"></div>
-  <div class="card"><div class="q-label" data-ko="햇빛에 쉽게 탑니다" data-en="I tan or burn easily in the sun"></div><div class="scale-row" id="s-easilyTan"></div></div>
-  <div class="card"><div class="q-label" data-ko="잡티·기미·색소침착이 잘 생깁니다" data-en="I get dark spots or hyperpigmentation easily"></div><div class="scale-row" id="s-pigmentSpot"></div></div>
+  <div class="sec-title" id="s6-title"></div>
+  <div class="sec-desc" id="s6-desc"></div>
+  <div class="card"><div class="q-label" id="q-easilyTan"></div><div class="scale-row" id="s-easilyTan"></div></div>
+  <div class="card"><div class="q-label" id="q-pigmentSpot"></div><div class="scale-row" id="s-pigmentSpot"></div></div>
   <div class="card">
-    <div class="q-label" data-ko="최근 3개월 내 피부과 시술" data-en="Dermatological procedures in the last 3 months"></div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;font-style:italic" data-ko="* 레이저·시술은 피부에 미세한 상처를 냅니다. 재생이 완전히 이루어지지 않았다면 장벽이 약해진 상태일 수 있습니다." data-en="* Laser and procedures create micro-wounds. If not fully healed, your barrier may still be weakened."></div>
+    <div class="q-label" id="q-recentTreatment"></div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;font-style:italic" id="hint-recentTreatment"></div>
     <div class="opt-row" id="radio-recentTreatment"></div>
     <div id="treatment-detail-box" class="hidden" style="margin-top:16px">
-      <div style="font-size:13px;color:var(--muted);margin-bottom:8px" data-ko="어떤 시술을 받으셨나요?" data-en="What procedure did you receive?"></div>
-      <textarea id="treatment-detail-input" rows="3" data-placeholder-ko="예: 프락셀 2회, 피코레이저, CO2 레이저 등" data-placeholder-en="e.g. Fraxel x2, Pico laser, CO2 laser"></textarea>
-      <div class="info-box" style="margin-top:12px" data-ko="💡 시술 후 피부 장벽 약화 → 수분 회복 모드 우선 적용" data-en="💡 Post-procedure barrier weakness → Hydration recovery mode applied first"></div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:8px" id="lbl-treatment-detail"></div>
+      <textarea id="treatment-detail-input" rows="3"></textarea>
+      <div class="info-box" style="margin-top:12px" id="info-treatment"></div>
     </div>
   </div>
 </div>
@@ -275,56 +287,60 @@ input[type=text].error { border-color:var(--danger); }
 <div id="page-7" class="hidden">
   <div class="text-center" style="margin-bottom:32px">
     <div style="font-size:11px;letter-spacing:3px;color:var(--accent);margin-bottom:8px;text-transform:uppercase">ORI Analysis Complete</div>
-    <h2 style="font-size:clamp(22px,4vw,36px);font-weight:400" data-ko="진단 결과" data-en="Your Results"></h2>
+    <h2 style="font-size:clamp(22px,4vw,36px);font-weight:400" id="result-title"></h2>
     <div id="result-case-id" style="margin-top:10px;font-size:12px;color:var(--muted);font-family:monospace"></div>
     <div id="save-status-row" style="display:flex;justify-content:center;gap:8px;margin-top:14px;flex-wrap:wrap"></div>
   </div>
   <div class="score-grid" id="score-grid"></div>
   <div class="card" id="mode-card"></div>
-  <div class="card hidden" id="warn-card"></div>
-  <div class="card" id="mission-card"></div>
-  <div class="grid2" id="routine-grid"></div>
 
-  <!-- ✨ 전문가 팁 섹션 -->
-  <div id="expert-tips-section"></div>
+  <!-- ✨ Premium Care 안내 카드 (전문가 팁/루틴/미션 대체) -->
+  <div class="card" id="premium-card" style="border-color:#C8A96E60;background:linear-gradient(135deg,#C8A96E08 0%,#4A9EAF08 100%);padding:32px;margin-top:14px">
+    <div style="text-align:center;margin-bottom:18px">
+      <div style="font-size:10px;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:8px">For Deeper Care</div>
+      <div style="font-size:20px;font-weight:400;color:var(--text);font-style:italic" id="premium-title"></div>
+    </div>
+    <p style="font-size:14px;line-height:1.9;color:var(--muted);text-align:center;max-width:480px;margin:0 auto 20px;font-style:italic" id="premium-desc"></p>
+    <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;font-size:11px;color:var(--muted);letter-spacing:1px" id="premium-features"></div>
+  </div>
 
   <div class="card" style="border-color:#C8A96E30;text-align:center;padding:32px">
     <div style="font-size:12px;letter-spacing:2px;color:var(--accent);margin-bottom:14px;text-transform:uppercase">Laurel Studio Philosophy</div>
-    <p style="font-size:16px;line-height:1.9;color:var(--muted);font-style:italic;max-width:540px;margin:0 auto" data-ko="피부는 스스로 회복할 수 있는 능력이 있습니다.<br>그 능력이 작동하기 위해서는<br><span style='color:var(--text)'>피부의 수분 환경이 먼저 안정되어야 합니다.</span>" data-en="Your skin has the natural ability to heal itself.<br>But for that to happen,<br><span style='color:var(--text)'>the skin's moisture environment must be stabilized first.</span>"></p>
+    <p style="font-size:16px;line-height:1.9;color:var(--muted);font-style:italic;max-width:540px;margin:0 auto" id="philosophy"></p>
   </div>
   <div class="text-center" style="margin-top:28px">
-    <button class="btn-outline" onclick="resetApp()" data-ko="처음으로 돌아가기" data-en="Back to Start"></button>
+    <button class="btn-outline" onclick="resetApp()" id="btn-reset"></button>
   </div>
 </div>
 
 <!-- 네비게이션 -->
 <div id="nav-bar" class="nav hidden">
-  <button class="btn-outline" onclick="goPrev()"><span data-ko="← 이전" data-en="← Back"></span></button>
+  <button class="btn-outline" onclick="goPrev()" id="btn-prev"></button>
   <div id="nav-badge"></div>
-  <button class="btn-primary" id="next-btn" onclick="goNext()"><span data-ko="다음 →" data-en="Next →"></span></button>
+  <button class="btn-primary" id="next-btn" onclick="goNext()"></button>
 </div>
 
 </div>
 
-<!-- 테라피스트 전용 패널 -->
+<!-- 테라피스트 패널 — 한국어 전용 (다운/예진/수진 사용) -->
 <div id="therapist-overlay" class="hidden" style="position:fixed;inset:0;background:#0D0F14ee;z-index:100;overflow-y:auto;">
-  <div style="max-width:720px;margin:0 auto;padding:40px 24px 80px">
+  <div style="max-width:720px;margin:0 auto;padding:40px 24px 80px" dir="ltr">
     <div id="tp-lock">
       <div style="text-align:center;padding-top:80px">
         <div style="font-size:11px;letter-spacing:4px;color:#C8A96E;margin-bottom:16px;text-transform:uppercase">Therapist Access</div>
-        <div style="font-size:28px;font-weight:400;margin-bottom:8px">케어 기록 입력</div>
-        <div style="font-size:14px;color:#7A8099;margin-bottom:40px;font-style:italic">테라피스트 전용 화면입니다</div>
+        <div style="font-size:28px;font-weight:400;margin-bottom:8px;font-family:'Cormorant Garamond',serif">케어 기록 입력</div>
+        <div style="font-size:14px;color:#7A8099;margin-bottom:40px;font-style:italic;font-family:'Cormorant Garamond',serif">테라피스트 전용 화면입니다</div>
         <input type="password" id="tp-pw-input" placeholder="비밀번호 입력"
           style="display:block;margin:0 auto 12px;width:240px;padding:12px 20px;background:#1C2030;border:1px solid #2A2F45;border-radius:1px;color:#E8E4DC;font-size:14px;font-family:'Cormorant Garamond',serif;outline:none;text-align:center;"
           onkeydown="if(event.key==='Enter')checkTpPw()">
-        <div id="tp-pw-error" style="color:#C25F5F;font-size:12px;margin-bottom:16px;display:none">비밀번호가 올바르지 않습니다</div>
+        <div id="tp-pw-error" style="color:#C25F5F;font-size:12px;margin-bottom:16px;display:none;font-family:'Cormorant Garamond',serif">비밀번호가 올바르지 않습니다</div>
         <div style="display:flex;gap:12px;justify-content:center">
           <button onclick="checkTpPw()" style="padding:12px 32px;background:#C8A96E;color:#0D0F14;border:1px solid #C8A96E;border-radius:1px;cursor:pointer;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-family:'Cormorant Garamond',serif;font-weight:700">입력</button>
           <button onclick="closeTherapist()" style="padding:12px 24px;background:transparent;color:#C8A96E;border:1px solid #C8A96E;border-radius:1px;cursor:pointer;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-family:'Cormorant Garamond',serif;">닫기</button>
         </div>
       </div>
     </div>
-    <div id="tp-form" class="hidden">
+    <div id="tp-form" class="hidden" style="font-family:'Cormorant Garamond',serif">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px">
         <div>
           <div style="font-size:11px;letter-spacing:3px;color:#C8A96E;text-transform:uppercase;margin-bottom:4px">Therapist Note</div>
@@ -348,8 +364,7 @@ input[type=text].error { border-color:var(--danger); }
         <div style="font-size:14px;color:#E8E4DC;margin-bottom:10px;font-weight:500">시술 종류 (복수 선택)</div>
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px" id="tp-treatment-type"></div>
         <div style="font-size:14px;color:#E8E4DC;margin-bottom:10px;font-weight:500">사용 제품</div>
-        <textarea id="tp-products" rows="2" placeholder="예: 히알루론산 앰플, 아토베리어 365 크림..."
-          style="width:100%;padding:12px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#E8E4DC;font-size:14px;font-family:'Cormorant Garamond',serif;resize:vertical;outline:none;line-height:1.6;"></textarea>
+        <textarea id="tp-products" rows="2" placeholder="예: 히알루론산 앰플, 아토베리어 365 크림..." style="width:100%;padding:12px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#E8E4DC;font-size:14px;font-family:'Cormorant Garamond',serif;resize:vertical;outline:none;line-height:1.6;"></textarea>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
           <div>
             <div style="font-size:13px;color:#7A8099;margin-bottom:8px">케어 총 시간 (분)</div>
@@ -388,8 +403,7 @@ input[type=text].error { border-color:var(--danger); }
         <div style="font-size:14px;color:#E8E4DC;margin-bottom:8px;font-weight:500">케어 중 반응</div>
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px" id="tp-reaction-type"></div>
         <div style="font-size:14px;color:#E8E4DC;margin-bottom:8px;font-weight:500">특이사항 / 메모</div>
-        <textarea id="tp-notes" rows="3" placeholder="예: 볼 부위 민감반응, 눈가 주의 필요..."
-          style="width:100%;padding:12px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#E8E4DC;font-size:14px;font-family:'Cormorant Garamond',serif;resize:vertical;outline:none;line-height:1.6;"></textarea>
+        <textarea id="tp-notes" rows="3" placeholder="예: 볼 부위 민감반응, 눈가 주의 필요..." style="width:100%;padding:12px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#E8E4DC;font-size:14px;font-family:'Cormorant Garamond',serif;resize:vertical;outline:none;line-height:1.6;"></textarea>
       </div>
       <div style="background:#1C2030;border:1px solid #2A2F45;border-radius:2px;padding:24px 28px;margin-bottom:24px">
         <div style="font-size:11px;letter-spacing:3px;color:#C8A96E;text-transform:uppercase;margin-bottom:16px">다음 방문 권장</div>
@@ -404,18 +418,11 @@ input[type=text].error { border-color:var(--danger); }
           </div>
         </div>
         <div style="font-size:14px;color:#E8E4DC;margin-bottom:8px;font-weight:500">홈케어 권장사항</div>
-        <textarea id="tp-homecare" rows="2" placeholder="예: 아토베리어 365 크림 아침저녁, 토너 중단 1개월..."
-          style="width:100%;padding:12px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#E8E4DC;font-size:14px;font-family:'Cormorant Garamond',serif;resize:vertical;outline:none;line-height:1.6;"></textarea>
+        <textarea id="tp-homecare" rows="2" placeholder="예: 아토베리어 365 크림 아침저녁, 토너 중단 1개월..." style="width:100%;padding:12px 14px;background:#0D0F14;border:1px solid #2A2F45;border-radius:1px;color:#E8E4DC;font-size:14px;font-family:'Cormorant Garamond',serif;resize:vertical;outline:none;line-height:1.6;"></textarea>
       </div>
       <div style="display:flex;gap:12px;justify-content:center;align-items:center">
-        <button onclick="saveTherapistNote()" id="tp-save-btn"
-          style="padding:14px 48px;background:#C8A96E;color:#0D0F14;border:1px solid #C8A96E;border-radius:1px;cursor:pointer;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-family:'Cormorant Garamond',serif;font-weight:700;">
-          구글 시트에 저장
-        </button>
-        <button onclick="closeTherapist()"
-          style="padding:14px 24px;background:transparent;color:#C8A96E;border:1px solid #C8A96E;border-radius:1px;cursor:pointer;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-family:'Cormorant Garamond',serif;">
-          닫기
-        </button>
+        <button onclick="saveTherapistNote()" id="tp-save-btn" style="padding:14px 48px;background:#C8A96E;color:#0D0F14;border:1px solid #C8A96E;border-radius:1px;cursor:pointer;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-family:'Cormorant Garamond',serif;font-weight:700;">구글 시트에 저장</button>
+        <button onclick="closeTherapist()" style="padding:14px 24px;background:transparent;color:#C8A96E;border:1px solid #C8A96E;border-radius:1px;cursor:pointer;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-family:'Cormorant Garamond',serif;">닫기</button>
       </div>
       <div id="tp-save-status" style="text-align:center;margin-top:14px;font-size:13px;color:#7A8099;min-height:20px"></div>
     </div>
@@ -423,12 +430,12 @@ input[type=text].error { border-color:var(--danger); }
 </div>
 
 <div class="footer" style="display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap">
-  <span>LAUREL STUDIO · HONGDAE, SEOUL · ORI v4.1</span>
+  <span>LAUREL STUDIO · HONGDAE, SEOUL · ORI v4.3</span>
   <button onclick="openTherapist()" style="background:transparent;border:1px solid #2A2F45;color:#7A8099;padding:6px 16px;font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:2px;cursor:pointer;border-radius:1px">THERAPIST ↗</button>
 </div>
 
 <script>
-// ★ WEBHOOK — ori-laurel 전용
+// ★ WEBHOOK — 기존 구글시트 그대로
 const WEBHOOK = "https://script.google.com/macros/s/AKfycbwCHKt5GePumYfuGylrEeYCqtdthDltbB3isR--XhVaEt1UDV2E_6K9Qpea6_9_vY92JA/exec";
 
 let lang = 'ko';
@@ -438,271 +445,77 @@ let multiState = { top3:[], rednessAreas:[], cleansingMethod:[], cleanserType:[]
 let sectionStatus = {};
 let caseId = "";
 
+const RTL_LANGS = ["ar", "he"];
+const LANG_LIST = ["ko","en","de","fr","es","ar","he","ja","zh"];
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-//  전문가 팁 데이터 — 4가지 문서 통합본 (v4.1)
-//  문서1: 쥬베룩·다이소 레티놀
-//  문서2: MIXSOON 콩에센스·트리넥삼산
-//  문서3: 홍조 메커니즘·써마지·여드름 원인·레티놀 3일1회
-//  문서4: 세타필+피지오겔 바디크림·코모공·레티놀 추가
+//  T — 9개 언어 번역 데이터 (KO/EN/DE/FR/ES/AR/HE/JA/ZH)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const EXPERT_TIPS = {
-  ko: {
-    header: { icon:"✨", label:"FOUNDER'S EXPERT TIPS", desc:"8,000건 피부 케어 경험을 바탕으로 작성된 맞춤 홈케어 가이드" },
-    groups: [
-      {
-        key:"thin",
-        threshold: sc => sc.thin >= 5 || sc.barrier >= 6,
-        color:"#4A9EAF", icon:"💧", title:"얇은 피부 타입 전용 가이드",
-        tips:[
-          {
-            label:"각질 관리 — PHA만",
-            body:"각질 제거는 월 1회로 제한하세요. 스크럽 같은 물리적 자극은 절대 사용하지 마세요. 겔/젤 형태의 순한 각질제거제를 선택하고, PHA 성분 제품을 추천합니다."
-          },
-          {
-            label:"스킨·로션 중단 (1개월)",
-            body:"한 달간 스킨·로션을 바르지 말고 수분크림만 바르세요. 스킨·로션은 물 90% 이상으로 뒤에 바르는 제품의 흡수를 방해합니다. 피부에 향기나는 물을 묻힌 상태에서 다음 제품을 바르는 것과 같아요. 세안 후 바로 수분크림을 검지손가락 두 마디 정도의 양으로 바르세요. 건조하면 더 바를 수 있습니다."
-          },
-          {
-            label:"선크림 & 베이스 메이크업",
-            body:"선크림은 외출 30분 전에 바르고, 2~3시간마다 덧바르세요. 유기자차 또는 혼합자차를 추천합니다. 파우더·파운데이션보다 BB크림을 사용하세요. 파우더·파운데이션은 밀가루처럼 피부의 수분과 유분을 빼앗아 더 건조하게 만듭니다."
-          },
-          {
-            label:"얇은 피부와 색소침착·잡티",
-            body:"피부가 얇으면 진피층의 멜라닌과 UV가 더 쉽게 만나 잡티가 잘 생기고 잘 탑니다. 두꺼운 피부보다 선크림이 훨씬 더 중요합니다. 피부가 타거나 잡티가 생기는 것은 색소의 표현방식으로 개인차가 있습니다."
-          },
-          {
-            label:"번들거림의 진짜 원인 — 피지 과잉",
-            body:"번들거리는 피부는 지성이 아닐 수 있습니다. 피부가 건조하면 인체는 피지샘을 자극해 피지 분비를 늘려 피부를 보호하려 합니다. 피지(먹이)를 먹기 위해 피부 위 균들이 염증반응을 일으킨 것이 여드름입니다. 수분함유도를 높이면 피지가 줄고, 블랙헤드·화이트헤드·여드름이 함께 개선됩니다."
-          },
-          {
-            label:"홍조의 원인 — 냉각수 시스템",
-            body:"홍조는 피부 아래 모세혈관이 확장되어 보이는 현상입니다. 원래 얼굴이 붉어지면 빠르게 가라앉아야 하는데, 자동차 엔진의 냉각수처럼 혈관을 되돌리는 역할을 하는 것이 바로 수분입니다. 수분이 부족하면 홍조가 오래 지속됩니다. 진정 제품보다 수분 회복이 먼저입니다."
-          },
-          {
-            label:"수분이 모든 것을 해결합니다",
-            body:"피부 세포의 기본은 수분입니다. 수분함유도가 오르면 대부분의 피부 문제가 개선됩니다. 나이가 들수록, 얇은 피부일수록 수분함유도가 빠르게 감소합니다. 매일 아침·저녁으로 MIXSOON 콩에센스 또는 히알루론산 앰플(엄지손톱 크기) + 아토베리어 365 크림을 사용해보세요. 물풍선에 물이 100% 차 있으면 탱탱하지만, 50%로 줄면 주름이 생기는 것처럼 세포도 수분이 충분해야 탄력 있습니다."
-          },
-          {
-            label:"세안법 완전 가이드",
-            body:"약산성 폼클렌저를 사용하세요. 알칼리성 세안제는 락스처럼 피부 보호막까지 제거할 수 있습니다. 체온과 비슷한 미온수로 세안하세요. 뜨겁거나 차가운 물은 모두 좋지 않습니다. 선크림을 사용했다면 클렌징 밀크 2~3펌프로 녹이듯 러빙 → 미온수 3~4회 헹굼 → 약산성 폼클렌저 거품 세안 → 10회 이상 충분히 헹굼 → 1분 이내 수분크림. 사실 당분간 이것만 제대로 해도 피부가 많이 달라집니다."
-          },
-          {
-            label:"탄력·노화 예방 — 써마지 & 수분 사이클",
-            body:"수분함유도가 오르면 노화가 더디게 진행됩니다. 한국의 40대 이후 여성들은 써마지 같은 고주파 기기로 진피층 콜라겐을 1년에 1회 촉진합니다. 단, 과한 시술은 피부를 극도로 건조하게 만드니 평상시 수분 관리가 기반이 되어야 합니다. 피부가 좋은 상태일 때 시술하고, 시술 후 다시 수분 회복에 집중하는 사이클을 반복하면 노화를 더디게 할 수 있습니다."
-          },
-          {
-            label:"모공 — 수분 관리가 답",
-            body:"코 모공이 커진 것은 피부에 손을 대어 모공을 지탱하던 근육이 약해져서 넓어진 것으로 이해하시면 됩니다. 수분 관리만으로도 피부 상태가 한 달 후 호전된다면, 레티놀 제품을 밤에 3일에 1번씩 추가로 사용하면 더 도움이 됩니다."
-          },
-          {
-            label:"레티놀 사용 타이밍",
-            body:"레티놀은 장벽이 어느 정도 회복된 후 사용해야 효과적입니다. 한 달간 수분크림만으로 장벽을 회복한 뒤 저녁에 주 2~3회 사용하세요. 다이소 레티놀 크림을 전체적으로 바른 뒤 아토베리어 365 크림으로 마무리하면 좋습니다."
-          },
-          {
-            label:"추가 팁 — 트리넥삼산·쥬베룩",
-            body:"트리넥삼산 성분 약을 전문의 처방으로 약 2개월 복용하면 피부톤이 밝아지고 잡티가 눈에 띄게 개선됩니다. 한국에서 2달분이 약 2만원 정도입니다. 토닝 레이저보다 훨씬 저렴하게 피부가 환해집니다. 단, 반드시 의사와 상담 후 복용하세요. 또한 2~3년에 한 번 쥬베룩 볼륨 시술을 받으면 움직이지 않던 콜라겐이 다시 생성되어 볼륨이 올라오고 잔주름이 팽팽해집니다."
-          }
-        ]
-      },
-      {
-        key:"barrier",
-        threshold: sc => sc.barrier >= 7,
-        color:"#C8A96E", icon:"🛡", title:"장벽 손상 집중 가이드",
-        tips:[
-          {
-            label:"세라마이드·판테놀 성분 우선",
-            body:"장벽 회복에는 세라마이드, 판테놀, 스쿠알란 성분 크림이 효과적입니다. 레티놀, AHA, 고농도 비타민C 같은 자극 성분은 장벽 회복 전까지 잠시 중단하세요. 아토베리어 365 크림은 장벽 강화 성분이 함유되어 있어 특히 적합합니다."
-          },
-          {
-            label:"수분 충전 시 일시적 반응",
-            body:"너무 건조했던 피부에 갑자기 수분이 공급되면 30분 이내의 붉은 반응이 나타날 수 있습니다. 오랫동안 피부가 건조했다는 반증이에요. 놀라지 마세요, 곧 가라앉습니다."
-          },
-          {
-            label:"바디 건조함까지 함께",
-            body:"피부가 전체적으로 건조하다면 세타필 단지형 모이스춰 크림(손바닥 반 정도)과 피지오겔 DMT 페이셜 크림(엄지손가락 한 마디)을 섞어 바르세요. 두 제품의 성질이 잘 어울리고 피부 장벽을 튼튼하게 하는 성분이 들어 있어 많은 도움이 됩니다. 건조하면 더 많은 양을 추가해 바르세요."
-          }
-        ]
-      },
-      {
-        key:"uv",
-        threshold: sc => sc.thin >= 5 && sc.uv >= 3,
-        color:"#C25F5F", icon:"☀️", title:"UV 민감 피부 강화 가이드",
-        tips:[
-          {
-            label:"선크림 2회 도포",
-            body:"얇고 UV에 민감한 피부는 선크림을 두 번 얇게 나눠 바르는 것을 권장합니다. 첫 번째 도포 후 흡수되면 한 번 더 바르세요. 광노화는 햇빛에 노출되는 것만으로도 피부를 얇아지게 합니다."
-          },
-          {
-            label:"미백 기능성 — 1개월 후 시작",
-            body:"나이아신아마이드 등 미백 기능성 제품은 수분 회복 1개월 후부터 사용하세요. 장벽이 약한 상태에서 기능성 성분을 사용하면 효과가 반감됩니다. 먼저 수분크림 단독으로 장벽을 회복한 뒤 시작하면 효과가 훨씬 좋습니다."
-          }
-        ]
-      }
-    ]
-  },
-  en: {
-    header: { icon:"✨", label:"FOUNDER'S EXPERT TIPS", desc:"Personalized home care guide from 8,000 real skin consultations" },
-    groups: [
-      {
-        key:"thin",
-        threshold: sc => sc.thin >= 5 || sc.barrier >= 6,
-        color:"#4A9EAF", icon:"💧", title:"Guide for Thin Skin Type",
-        tips:[
-          {
-            label:"Exfoliation — PHA Only",
-            body:"Limit exfoliation to once a month. Avoid physical scrubs entirely. Choose a gentle gel-type exfoliant with PHA ingredients only."
-          },
-          {
-            label:"Stop Toner & Lotion (1 month)",
-            body:"For one month, skip toner and lotion — use only a moisturizing cream. Toner and lotion are 90%+ water and block absorption of products applied after them. Think of it as applying cream onto slightly damp skin. After cleansing, apply moisturizer immediately — about 2 finger-lengths. Add more if still dry."
-          },
-          {
-            label:"Sunscreen & Base Makeup",
-            body:"Apply sunscreen 30 minutes before going out, reapply every 2-3 hours. Choose hybrid (PA+++) or organic UV filters. Use BB cream instead of foundation or powder. Powder and foundation absorb your skin's moisture like flour, making it drier."
-          },
-          {
-            label:"Thin Skin & Pigmentation",
-            body:"Thin skin means UV rays reach the melanin layer more easily, making dark spots and sunburn more likely. Sunscreen is far more important for you than for people with thicker skin."
-          },
-          {
-            label:"Why Your Skin Looks Oily",
-            body:"Oiliness doesn't mean oily skin. When skin gets dehydrated, the body increases sebum to protect it. Bacteria on the skin feed on this sebum, causing acne inflammation. Increasing hydration reduces sebum — and blackheads, whiteheads, and acne improve along with it."
-          },
-          {
-            label:"Redness — The Coolant System",
-            body:"Redness occurs when blood vessels under the skin dilate. Think of it like a car's coolant system — water is what helps vessels return to normal quickly. If you're low on moisture, redness lingers. Hydration comes before calming products."
-          },
-          {
-            label:"Hydration Solves Everything",
-            body:"Skin cells are built on water. When hydration rises, most skin problems improve. Try MIXSOON Bean Essence or hyaluronic acid serum (thumbnail size) + Atobarrier 365 cream morning and evening. Skin cells are like water balloons — full = firm, half-empty = wrinkled."
-          },
-          {
-            label:"Complete Cleansing Guide",
-            body:"Use a slightly acidic foam cleanser. Alkaline cleansers can strip away your skin's protective layer. Cleanse with lukewarm water close to body temperature. If you wore sunscreen: cleansing milk (2-3 pumps) → massage gently → rinse 3-4 times → acidic foam cleanser → rinse 10+ times → apply moisturizer within 1 minute. Just doing this consistently will make a big difference."
-          },
-          {
-            label:"Elasticity & Anti-Aging — Thermage Cycle",
-            body:"When hydration rises, aging slows. Thermage (radiofrequency) once a year stimulates collagen in the dermis. However, over-treatment severely dries out skin, so daily hydration must come first. Time your treatment when skin is well-hydrated, then focus on recovery afterward — repeat this cycle annually."
-          },
-          {
-            label:"Pores — Hydration is the Answer",
-            body:"Enlarged pores are often due to weakened support around them. Consistent hydration management helps over time. Once skin improves after about a month, add retinol at night, 2-3 times per week for additional support."
-          },
-          {
-            label:"Retinol Timing",
-            body:"Retinol works best when your barrier has recovered. After 1 month of moisturizer-only routine, use retinol in the evenings 2-3 times per week. Apply retinol first, then seal with Atobarrier 365 cream."
-          },
-          {
-            label:"Bonus Tips — Tranexamic Acid & Juvelook",
-            body:"Tranexamic acid tablets (prescription only, ~2 months) can significantly brighten skin tone and reduce dark spots — much cheaper than toning laser. Always consult a doctor first. Juvelook Volume treatment every 2-3 years can also stimulate collagen regeneration, adding volume and smoothing fine lines."
-          }
-        ]
-      },
-      {
-        key:"barrier",
-        threshold: sc => sc.barrier >= 7,
-        color:"#C8A96E", icon:"🛡", title:"Barrier Recovery Guide",
-        tips:[
-          {
-            label:"Ceramide & Panthenol First",
-            body:"Ceramide, panthenol, and squalane are best for barrier recovery. Pause retinol, AHA, and high-dose vitamin C until your barrier is restored. Atobarrier 365 cream is particularly suitable for this stage."
-          },
-          {
-            label:"Initial Hydration Reaction",
-            body:"If your skin has been very dry, sudden moisture may cause brief redness — but it fades within 30 minutes. This is proof that your skin was severely dehydrated. Don't be alarmed."
-          },
-          {
-            label:"Body Dryness Too",
-            body:"If your skin is dry all over, try mixing Cetaphil Moisturizing Cream (half a palm) with Physiogel DMT Facial Cream (one thumb-knuckle). These two complement each other well and contain barrier-strengthening ingredients. Apply more if still dry."
-          }
-        ]
-      },
-      {
-        key:"uv",
-        threshold: sc => sc.thin >= 5 && sc.uv >= 3,
-        color:"#C25F5F", icon:"☀️", title:"UV-Sensitive Skin Guide",
-        tips:[
-          {
-            label:"Double Layer Sunscreen",
-            body:"For thin, UV-sensitive skin, apply sunscreen in two thin layers. Wait for the first to absorb, then apply a second coat. Photoaging — skin thinning from UV exposure — is a real concern for your skin type."
-          },
-          {
-            label:"Brightening Products — Start After 1 Month",
-            body:"Start brightening ingredients (like niacinamide) only after 1 month of hydration recovery. Using actives on a weakened barrier reduces their effectiveness. Recover your barrier first, then introduce functional ingredients for maximum effect."
-          }
-        ]
-      }
-    ]
-  }
-};
-
-// ── 전문가 팁 빌더 ──────────────────────────────────────
-function buildExpertTips(sc) {
-  const el = document.getElementById('expert-tips-section');
-  if (!el) return;
-  el.innerHTML = '';
-  const ET = EXPERT_TIPS[lang];
-  const activeGroups = ET.groups.filter(g => g.threshold(sc));
-  if (activeGroups.length === 0) return;
-
-  const headerCard = document.createElement('div');
-  headerCard.className = 'card';
-  headerCard.style.cssText = 'border-color:#4A9EAF40;background:#4A9EAF08;margin-bottom:8px;';
-  headerCard.innerHTML = `
-    <div style="display:flex;align-items:center;gap:12px">
-      <span style="font-size:20px">${ET.header.icon}</span>
-      <div>
-        <div style="font-size:10px;letter-spacing:3px;color:#4A9EAF;text-transform:uppercase;margin-bottom:3px">${ET.header.label}</div>
-        <div style="font-size:13px;color:var(--muted);font-style:italic">${ET.header.desc}</div>
-      </div>
-    </div>`;
-  el.appendChild(headerCard);
-
-  activeGroups.forEach(group => {
-    const groupCard = document.createElement('div');
-    groupCard.className = 'card';
-    groupCard.style.cssText = `border-color:${group.color}30;padding:20px 24px;margin-bottom:8px;`;
-
-    const gtitle = document.createElement('div');
-    gtitle.style.cssText = `display:flex;align-items:center;gap:8px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid ${group.color}20;`;
-    gtitle.innerHTML = `<span style="font-size:16px">${group.icon}</span><span style="font-size:12px;letter-spacing:2px;color:${group.color};text-transform:uppercase;font-weight:600">${group.title}</span>`;
-    groupCard.appendChild(gtitle);
-
-    group.tips.forEach((tip) => {
-      const item = document.createElement('div');
-      item.className = 'tip-item';
-
-      const toggle = document.createElement('button');
-      toggle.className = 'tip-toggle';
-      toggle.innerHTML = `
-        <div class="tip-toggle-left">
-          <span class="tip-dot" style="background:${group.color}"></span>
-          <span class="tip-toggle-label">${tip.label}</span>
-        </div>
-        <span class="tip-chevron">▼</span>`;
-
-      const body = document.createElement('div');
-      body.className = 'tip-body';
-      body.innerHTML = `<p class="tip-content" style="border-color:${group.color}40">${tip.body}</p>`;
-
-      toggle.addEventListener('click', () => {
-        const isOpen = body.classList.contains('open');
-        body.classList.toggle('open', !isOpen);
-        toggle.querySelector('.tip-chevron').style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
-      });
-
-      item.appendChild(toggle);
-      item.appendChild(body);
-      groupCard.appendChild(item);
-    });
-
-    el.appendChild(groupCard);
-  });
-}
-
-// ── 언어 시스템 ──────────────────────────────────────
 const T = {
   ko: {
+    introLine1: "당신의 피부,", introLine2: "데이터로 읽습니다",
+    introTagline: "8,000건의 실증 데이터 기반 ORI 알고리즘이<br>피부 문제의 근본 원인을 역추적합니다",
+    introMeta: "약 3분 · 6개 섹션",
+    lblName: "이름 (선택)", lblEmail: "이메일", lblNationality: "국적", lblGender: "성별", lblAge: "연령대",
+    phName: "홍길동", phEmail: "example@email.com", phNationality: "한국 / 일본 등",
+    emailError: "이메일을 입력해 주세요", emailHint: "* 재방문 시 기록 조회에 사용됩니다",
+    nationalityError: "국적을 입력해 주세요", genderError: "성별을 선택해 주세요", ageError: "연령대를 선택해 주세요",
+    btnStart: "진단 시작하기", btnNext: "다음 →", btnPrev: "← 이전", btnResult: "진단 결과 보기",
+    btnReset: "처음으로 돌아가기", resultTitle: "진단 결과",
+    progressDone: "% 완료", progressComplete: "진단 완료",
+    saving: "저장 중…", saved: "✓ 저장됨", saveFailed: "⚠ 실패",
+    genders: ["여성","남성","기타"],
+    ages: ["19–24세","25–29세","30–34세","35–39세","40–44세","45–49세","50–54세","55세 이상"],
+    s1Title: "Section 01 · 피부 민감·구조 신호",
+    s1Desc: "피부가 얼마나 얇고 민감한지 파악합니다 — 이 점수가 높을수록 자극에 더 조심해야 합니다",
+    qAfterWashTight: "세안 후 얼굴이 당깁니다",
+    qEasilyRed: "쉽게 붉어지거나 열감이 생깁니다",
+    qWindSting: "바람·추위에 피부가 따갑습니다",
+    qProductSting: "제품을 바르면 따끔하거나 눈이 시립니다",
+    qVisibleVessel: "피부에 혈관이 비치거나 홍조가 지속됩니다",
+    qTop3: "가장 불편한 피부 증상 (복수 선택)",
+    s2Title: "Section 02 · 수분 부족 & 장벽 손상",
+    s2Desc: "피부 장벽이 얼마나 손상됐는지 파악합니다 — 대부분의 피부 문제는 여기서 시작됩니다",
+    qDryRough: "피부가 건조하고 거칩니다",
+    qFlakyMakeup: "각질이 들뜨거나 메이크업이 뜹니다",
+    qNightItch: "밤에 피부가 더 가렵습니다",
+    qCreamDryFast: "크림을 발라도 금방 건조해집니다",
+    qSlowRecovery: "자극 후 회복이 느립니다",
+    s3Title: "Section 03 · 피지·트러블 패턴",
+    s3Desc: "피지와 여드름의 패턴을 파악합니다 — 지성처럼 보여도 실제론 건성일 수 있습니다",
+    qOiliness: "얼굴이 번들거리거나 피지가 많습니다",
+    qBlackhead: "블랙헤드·화이트헤드가 있습니다",
+    qInflammedAcne: "염증성 여드름(붉고 아픈)이 있습니다",
+    qAcnePain: "트러블 통증 강도 — 염증 깊이 지표",
+    qAcneZone: "트러블 주요 발생 부위",
+    qDehydratedOily: '"건조한데 기름진 느낌"을 받은 적 있나요?',
+    hintDehydratedOily: "* 지성처럼 보이는 건성 피부 판별 지표",
+    s4Title: "Section 04 · 홍조 & 혈관 반응",
+    s4Desc: "홍조의 원인을 파악합니다 — 대부분의 홍조는 진정이 아니라 수분 회복으로 해결됩니다",
+    qRednessEvent: "술·열·감정에 의해 얼굴이 붉어집니다",
+    qRednessLong: "붉어진 후 오래 지속됩니다 (10분 이상)",
+    qRednessSting: "붉어질 때 따가움이 동반됩니다",
+    qRednessAreas: "홍조 주요 발생 부위 (복수 선택)",
+    qVisibleVesselType: "피부 표면 혈관 비침",
+    s5Title: "Section 05 · 루틴 & 습관",
+    s5Desc: "현재 루틴에서 피부를 악화시키는 습관을 찾아냅니다",
+    qCleanserType: "현재 사용 중인 세안제 타입 (복수 선택 가능)",
+    qCleansingMethod: "저녁 클렌징 방법 (복수 선택)",
+    qWaterTemp: "세안 시 물 온도",
+    qTonerUse: "토너/스킨 사용 여부",
+    qExfolFreq: "각질 제거 빈도",
+    qPowderMakeup: "베이스 메이크업 (복수 선택 가능)",
+    qSunscreenType: "선크림 타입 (복수 선택 가능)",
+    qSunscreenHabit: "선크림 덧바름 습관",
+    qRoutineWill: "루틴 이행 의지",
+    s6Title: "Section 06 · 자외선 & 색소",
+    s6Desc: "자외선 민감도와 색소 반응을 파악합니다 — 피부가 얇을수록 자외선 영향을 더 많이 받습니다",
+    qEasilyTan: "햇빛에 쉽게 탑니다",
+    qPigmentSpot: "잡티·기미·색소침착이 잘 생깁니다",
+    qRecentTreatment: "최근 3개월 내 피부과 시술",
+    hintRecentTreatment: "* 레이저·시술은 피부에 미세한 상처를 냅니다. 재생이 완전히 이루어지지 않았다면 장벽이 약해진 상태일 수 있습니다.",
+    lblTreatmentDetail: "어떤 시술을 받으셨나요?",
+    phTreatmentDetail: "예: 프락셀 2회, 피코레이저, CO2 레이저 등",
+    infoTreatment: "💡 시술 후 피부 장벽 약화 → 수분 회복 모드 우선 적용",
     scaleLabels: ["없음","약간","보통","심함"],
     scale5Left: "자신 없음", scale5Right: "30일 이상",
     painLeft: "1 약한 통증", painRight: "5 강한 통증",
@@ -729,6 +542,7 @@ const T = {
     missionTitle: "1개월 미션",
     morningTitle: "☀ 아침 루틴",
     eveningTitle: "🌙 저녁 루틴",
+    philosophy: "피부는 스스로 회복할 수 있는 능력이 있습니다.<br>그 능력이 작동하기 위해서는<br><span style='color:var(--text)'>피부의 수분 환경이 먼저 안정되어야 합니다.</span>",
     warnings: {
       exfol: "각질 제거 빈도 과다 → 월 1회(PHA 젤)로 즉시 감소",
       cleanser: "알칼리 세안제 → 약산성 클렌저로 교체 필요",
@@ -751,8 +565,83 @@ const T = {
       UV_DEFENSE: {label:"UV 방어 모드", desc:"얇은 피부 + 색소 민감 — 선크림 루틴 강화 필수"},
     },
     scoreLabels: ["Thin/Sensitive","Barrier Score","Acne Pattern","UV/Pigment"],
+    premiumTitle: "Premium Care에서 만나는 맞춤 가이드",
+    premiumDesc: "오늘의 진단 데이터는 안전하게 저장됐어요. 테라피스트의 육안·촉진 진단과 결합한 <b>맞춤 홈케어 가이드</b>는 Premium Care 이용 시 이메일로 보내드립니다.",
+    premiumFeatures: ["✓ 단계별 월간 루틴","✓ 구체적 제품 추천","✓ 전문가 노하우 팁"],
+    validation: { label:"아직 답변하지 않은 항목이 있습니다:",
+      m: {afterWashTight:"세안 후 당김", easilyRed:"쉽게 붉어짐", windSting:"바람·추위 따가움", productSting:"제품 따끔", visibleVessel:"혈관 비침",
+          dryRough:"건조·거침", flakyMakeup:"각질·메이크업 뜸", nightItch:"밤 가려움", creamDryFast:"크림 후 건조", slowRecovery:"회복 느림",
+          oiliness:"번들거림", blackhead:"블랙헤드", inflammedAcne:"염증성 여드름", acnePain:"트러블 통증 강도", acneZone:"트러블 발생 부위", dehydratedOily:"건조+기름진 느낌",
+          rednessEvent:"얼굴 붉어짐", rednessLong:"붉어짐 지속", rednessSting:"붉어질 때 따가움", visibleVesselType:"혈관 비침 정도",
+          cleanserType:"세안제 타입", waterTemp:"세안 물 온도", tonerUse:"토너 사용 여부", exfolFreq:"각질 제거 빈도", sunscreenHabit:"선크림 덧바름", routineWill:"루틴 이행 의지",
+          easilyTan:"햇빛에 탐", pigmentSpot:"잡티·색소침착", recentTreatment:"최근 피부과 시술"} }
   },
+
   en: {
+    introLine1: "Your Skin,", introLine2: "Read by Data",
+    introTagline: "ORI algorithm based on 8,000 real cases<br>traces the root cause of your skin concerns",
+    introMeta: "About 3 min · 6 sections",
+    lblName: "Name (optional)", lblEmail: "Email", lblNationality: "Nationality", lblGender: "Gender", lblAge: "Age Group",
+    phName: "Your name", phEmail: "example@email.com", phNationality: "Korean / Japanese / etc.",
+    emailError: "Please enter your email", emailHint: "* Used to retrieve your record on future visits",
+    nationalityError: "Please enter your nationality", genderError: "Please select gender", ageError: "Please select age group",
+    btnStart: "Start Diagnosis", btnNext: "Next →", btnPrev: "← Back", btnResult: "See Results",
+    btnReset: "Back to Start", resultTitle: "Your Results",
+    progressDone: "% done", progressComplete: "Complete",
+    saving: "Saving…", saved: "✓ Saved", saveFailed: "⚠ Failed",
+    genders: ["Female","Male","Other"],
+    ages: ["19–24","25–29","30–34","35–39","40–44","45–49","50–54","55+"],
+    s1Title: "Section 01 · Skin Sensitivity Signals",
+    s1Desc: "Measures how thin and sensitive your skin is — higher scores require more gentle care",
+    qAfterWashTight: "My skin feels tight after cleansing",
+    qEasilyRed: "My skin easily turns red or feels hot",
+    qWindSting: "Wind or cold makes my skin sting",
+    qProductSting: "Products cause stinging or eye irritation",
+    qVisibleVessel: "Visible capillaries or persistent redness",
+    qTop3: "Main skin concerns (multiple choice)",
+    s2Title: "Section 02 · Moisture & Barrier Damage",
+    s2Desc: "Measures barrier damage — most skin issues start here",
+    qDryRough: "My skin feels dry and rough",
+    qFlakyMakeup: "Flaky skin or makeup doesn't stay on",
+    qNightItch: "Skin itches more at night",
+    qCreamDryFast: "Skin dries out quickly even after moisturizer",
+    qSlowRecovery: "Slow recovery after irritation",
+    s3Title: "Section 03 · Oil & Acne Pattern",
+    s3Desc: "Identifies oil and acne patterns — oily-looking skin may actually be dehydrated",
+    qOiliness: "Shiny face or excess sebum",
+    qBlackhead: "Blackheads or whiteheads present",
+    qInflammedAcne: "Inflamed acne (red and painful)",
+    qAcnePain: "Acne pain level — indicates inflammation depth",
+    qAcneZone: "Main acne location",
+    qDehydratedOily: '"Dry but oily at the same time" experience?',
+    hintDehydratedOily: "* Key indicator for dehydrated-oily skin type",
+    s4Title: "Section 04 · Redness & Vascular Response",
+    s4Desc: "Identifies redness causes — most redness resolves with hydration, not calming products",
+    qRednessEvent: "Face flushes with alcohol, heat, or emotion",
+    qRednessLong: "Redness persists for 10+ minutes",
+    qRednessSting: "Stinging occurs when skin turns red",
+    qRednessAreas: "Main redness areas (multiple choice)",
+    qVisibleVesselType: "Visible surface capillaries",
+    s5Title: "Section 05 · Routine & Habits",
+    s5Desc: "Identifies habits in your current routine that may be harming your skin",
+    qCleanserType: "Current cleanser type (multiple choice)",
+    qCleansingMethod: "Evening cleansing method (multiple choice)",
+    qWaterTemp: "Water temperature when cleansing",
+    qTonerUse: "Do you use toner / skin lotion?",
+    qExfolFreq: "Exfoliation frequency",
+    qPowderMakeup: "Base makeup (multiple choice)",
+    qSunscreenType: "Sunscreen type (multiple choice)",
+    qSunscreenHabit: "Sunscreen reapplication habit",
+    qRoutineWill: "Commitment to following a routine",
+    s6Title: "Section 06 · UV & Pigmentation",
+    s6Desc: "Measures UV sensitivity and pigmentation — thinner skin is more vulnerable to UV",
+    qEasilyTan: "I tan or burn easily in the sun",
+    qPigmentSpot: "I get dark spots or hyperpigmentation easily",
+    qRecentTreatment: "Dermatological procedures in the last 3 months",
+    hintRecentTreatment: "* Laser and procedures create micro-wounds. If not fully healed, your barrier may still be weakened.",
+    lblTreatmentDetail: "What procedure did you receive?",
+    phTreatmentDetail: "e.g. Fraxel x2, Pico laser, CO2 laser",
+    infoTreatment: "💡 Post-procedure barrier weakness → Hydration recovery mode applied first",
     scaleLabels: ["None","Mild","Moderate","Severe"],
     scale5Left: "Not confident", scale5Right: "30+ days",
     painLeft: "1 Mild pain", painRight: "5 Severe pain",
@@ -779,6 +668,7 @@ const T = {
     missionTitle: "30-Day Mission",
     morningTitle: "☀ Morning Routine",
     eveningTitle: "🌙 Evening Routine",
+    philosophy: "Your skin has the natural ability to heal itself.<br>But for that to happen,<br><span style='color:var(--text)'>the skin's moisture environment must be stabilized first.</span>",
     warnings: {
       exfol: "Too frequent exfoliation → reduce to once a month (PHA gel only)",
       cleanser: "Alkaline cleanser → switch to slightly acidic cleanser",
@@ -801,29 +691,984 @@ const T = {
       UV_DEFENSE: {label:"UV Defense Mode", desc:"Thin skin + pigmentation sensitive — strengthen sunscreen routine"},
     },
     scoreLabels: ["Thin/Sensitive","Barrier Score","Acne Pattern","UV/Pigment"],
+    premiumTitle: "Your Personalized Guide Awaits",
+    premiumDesc: "Today's diagnostic data is safely stored. Combined with your therapist's visual and tactile assessment, your <b>personalized home care guide</b> will be sent by email — exclusively for Premium Care guests.",
+    premiumFeatures: ["✓ Month-by-month routine","✓ Specific product recommendations","✓ Founder's expert tips"],
+    validation: { label:"Please answer all questions:",
+      m: {afterWashTight:"Tightness after cleansing", easilyRed:"Easily red", windSting:"Wind/cold stinging", productSting:"Product stinging", visibleVessel:"Visible vessels",
+          dryRough:"Dry & rough", flakyMakeup:"Flaky/makeup issue", nightItch:"Night itching", creamDryFast:"Quick dry after cream", slowRecovery:"Slow recovery",
+          oiliness:"Oiliness", blackhead:"Blackheads", inflammedAcne:"Inflamed acne", acnePain:"Acne pain level", acneZone:"Acne location", dehydratedOily:"Dry but oily feel",
+          rednessEvent:"Face flushing", rednessLong:"Redness duration", rednessSting:"Stinging with redness", visibleVesselType:"Visible vessel level",
+          cleanserType:"Cleanser type", waterTemp:"Water temperature", tonerUse:"Toner use", exfolFreq:"Exfoliation frequency", sunscreenHabit:"Sunscreen reapplication", routineWill:"Routine commitment",
+          easilyTan:"Sun tanning", pigmentSpot:"Pigmentation", recentTreatment:"Recent procedures"} }
+  },
+
+  de: {
+    introLine1: "Ihre Haut,", introLine2: "durch Daten gelesen",
+    introTagline: "ORI-Algorithmus basierend auf 8.000 echten Fällen<br>verfolgt die Grundursache Ihrer Hautprobleme",
+    introMeta: "Etwa 3 Min · 6 Abschnitte",
+    lblName: "Name (optional)", lblEmail: "E-Mail", lblNationality: "Nationalität", lblGender: "Geschlecht", lblAge: "Altersgruppe",
+    phName: "Ihr Name", phEmail: "beispiel@email.com", phNationality: "Deutsch / Französisch / etc.",
+    emailError: "Bitte E-Mail eingeben", emailHint: "* Wird zur Abfrage Ihrer Akte bei zukünftigen Besuchen verwendet",
+    nationalityError: "Bitte Nationalität eingeben", genderError: "Bitte Geschlecht wählen", ageError: "Bitte Altersgruppe wählen",
+    btnStart: "Diagnose starten", btnNext: "Weiter →", btnPrev: "← Zurück", btnResult: "Ergebnis ansehen",
+    btnReset: "Zum Anfang", resultTitle: "Ihr Ergebnis",
+    progressDone: "% fertig", progressComplete: "Abgeschlossen",
+    saving: "Speichert…", saved: "✓ Gespeichert", saveFailed: "⚠ Fehlgeschlagen",
+    genders: ["Weiblich","Männlich","Andere"],
+    ages: ["19–24","25–29","30–34","35–39","40–44","45–49","50–54","55+"],
+    s1Title: "Abschnitt 01 · Hautempfindlichkeit",
+    s1Desc: "Misst, wie dünn und empfindlich Ihre Haut ist — höhere Werte erfordern sanftere Pflege",
+    qAfterWashTight: "Meine Haut spannt nach der Reinigung",
+    qEasilyRed: "Meine Haut wird leicht rot oder heiß",
+    qWindSting: "Wind oder Kälte verursachen Brennen",
+    qProductSting: "Produkte verursachen Brennen oder Augenreizung",
+    qVisibleVessel: "Sichtbare Äderchen oder anhaltende Rötung",
+    qTop3: "Hauptbeschwerden (Mehrfachauswahl)",
+    s2Title: "Abschnitt 02 · Feuchtigkeit & Barriereschaden",
+    s2Desc: "Misst Barriereschäden — die meisten Hautprobleme beginnen hier",
+    qDryRough: "Meine Haut fühlt sich trocken und rau an",
+    qFlakyMakeup: "Schuppige Haut oder Make-up hält nicht",
+    qNightItch: "Haut juckt mehr nachts",
+    qCreamDryFast: "Haut trocknet schnell aus trotz Creme",
+    qSlowRecovery: "Langsame Erholung nach Reizung",
+    s3Title: "Abschnitt 03 · Talg & Akne",
+    s3Desc: "Identifiziert Talg- und Aknemuster — ölig aussehende Haut kann tatsächlich dehydriert sein",
+    qOiliness: "Glänzendes Gesicht oder übermäßiger Talg",
+    qBlackhead: "Mitesser oder Whiteheads vorhanden",
+    qInflammedAcne: "Entzündete Akne (rot und schmerzhaft)",
+    qAcnePain: "Akne-Schmerzlevel — zeigt Entzündungstiefe",
+    qAcneZone: "Hauptort der Akne",
+    qDehydratedOily: '"Trocken aber gleichzeitig ölig" Erfahrung?',
+    hintDehydratedOily: "* Hauptindikator für dehydriert-ölige Haut",
+    s4Title: "Abschnitt 04 · Rötung & Gefäßreaktion",
+    s4Desc: "Identifiziert Rötungsursachen — die meisten Rötungen lösen sich mit Feuchtigkeit, nicht mit Beruhigung",
+    qRednessEvent: "Gesicht rötet sich bei Alkohol, Hitze oder Emotion",
+    qRednessLong: "Rötung hält über 10 Min an",
+    qRednessSting: "Brennen tritt bei Rötung auf",
+    qRednessAreas: "Haupt-Rötungsbereiche (Mehrfachauswahl)",
+    qVisibleVesselType: "Sichtbare Oberflächengefäße",
+    s5Title: "Abschnitt 05 · Routine & Gewohnheiten",
+    s5Desc: "Identifiziert Gewohnheiten in Ihrer aktuellen Routine, die Ihrer Haut schaden könnten",
+    qCleanserType: "Aktueller Reinigertyp (Mehrfachauswahl)",
+    qCleansingMethod: "Abendreinigungsmethode (Mehrfachauswahl)",
+    qWaterTemp: "Wassertemperatur beim Reinigen",
+    qTonerUse: "Verwenden Sie Toner / Gesichtswasser?",
+    qExfolFreq: "Peeling-Häufigkeit",
+    qPowderMakeup: "Make-up-Basis (Mehrfachauswahl)",
+    qSunscreenType: "Sonnenschutztyp (Mehrfachauswahl)",
+    qSunscreenHabit: "Sonnenschutz-Nachauftrag",
+    qRoutineWill: "Engagement für eine Routine",
+    s6Title: "Abschnitt 06 · UV & Pigmentierung",
+    s6Desc: "Misst UV-Empfindlichkeit und Pigmentierung — dünnere Haut ist anfälliger für UV",
+    qEasilyTan: "Ich bräune oder verbrenne leicht in der Sonne",
+    qPigmentSpot: "Ich bekomme leicht dunkle Flecken oder Pigmentierung",
+    qRecentTreatment: "Dermatologische Behandlungen in den letzten 3 Monaten",
+    hintRecentTreatment: "* Laser und Behandlungen erzeugen Mikroverletzungen. Wenn nicht vollständig verheilt, kann Ihre Barriere noch geschwächt sein.",
+    lblTreatmentDetail: "Welche Behandlung haben Sie erhalten?",
+    phTreatmentDetail: "z.B. Fraxel x2, Pico-Laser, CO2-Laser",
+    infoTreatment: "💡 Post-Behandlungs-Barriereschwäche → Feuchtigkeitsmodus zuerst",
+    scaleLabels: ["Keine","Leicht","Mäßig","Schwer"],
+    scale5Left: "Nicht zuversichtlich", scale5Right: "30+ Tage",
+    painLeft: "1 Leichter Schmerz", painRight: "5 Starker Schmerz",
+    top3: ["Trockenheit","Rötung","Akne","Mitesser","Pigmentierung","Poren","Schuppung","Elastizitätsverlust"],
+    acneZone: ["Stirn","Wangen","Nase","Kinn","Überall"],
+    dehydratedOily: ["Ja","Nein","Unsicher"],
+    rednessAreas: ["Stirn","Wangen","Nase","Kinn","Um den Mund","Schmetterlingszone"],
+    vesselType: ["Kaum sichtbar","Teilweise sichtbar","Stark sichtbar"],
+    vesselWarn: "⚠ Möglicher Barriereschaden — Feuchtigkeit hat Priorität",
+    cleanserType: ["Leicht saurer Schaum","Alkalischer Schaum","Seife","Nur Wasser","Unsicher"],
+    cleanserWarn: "⚠ Alkalischer Reiniger → schädigt die Schutzbarriere",
+    cleansingMethod: ["Reinigungsöl/Balsam","Reinigungswasser/Milch","Schaum/Seife","Keine doppelte Reinigung"],
+    waterTemp: ["Lauwarm","Heiß","Kalt"],
+    waterWarn: "⚠ Heißes Wasser → verursacht Gefäßerweiterung und Trockenheit, auf lauwarm wechseln",
+    tonerUse: ["Ja","Nein"],
+    exfolFreq: ["Nie","Einmal im Monat","Einmal pro Woche","2+ pro Woche"],
+    powderMakeup: ["Keine","BB-Creme","Foundation","Puder","Gemischt"],
+    sunscreenType: ["Feuchtigkeitsspendend","Matt","Hybrid (PA+++)","Unbekannt / Keine"],
+    sunscreenWarn: "⚠ Matter Sonnenschutz → trocknet aus, auf feuchtigkeitsspendend wechseln",
+    sunscreenHabit: ["Nicht verwenden","Nur morgens","Alle 2-3h erneut"],
+    recentTreatment: ["Keine","Laser","Thermage/Ulthera","Andere"],
+    modeTitle: "Diagnose-Modus",
+    warnTitle: "⚠ Sofortige Korrekturen erforderlich",
+    missionTitle: "30-Tage-Mission",
+    morningTitle: "☀ Morgenroutine",
+    eveningTitle: "🌙 Abendroutine",
+    philosophy: "Ihre Haut hat die natürliche Fähigkeit, sich selbst zu heilen.<br>Damit das geschieht,<br><span style='color:var(--text)'>muss die Feuchtigkeitsumgebung zuerst stabilisiert werden.</span>",
+    warnings: {
+      exfol: "Zu häufiges Peeling → auf einmal im Monat reduzieren (nur PHA-Gel)",
+      cleanser: "Alkalischer Reiniger → zu leicht saurem Reiniger wechseln",
+      water: "Heißes Wasser → zu lauwarmem Wasser wechseln",
+      toner: "Toner/Lotion → 1 Monat aussetzen und Hautreaktion beobachten",
+      powder: "Puder/Foundation → absorbiert Feuchtigkeit, auf BB-Creme wechseln",
+      sunscreen: "Matter Sonnenschutz → verursacht Trockenheit, auf feuchtigkeitsspendend wechseln",
+    },
+    mission: ["① Toner, Lotion, Essenz stoppen (1 Monat) — nur Feuchtigkeitscreme","② Feuchtigkeitscreme innerhalb 1 Min nach Reinigung (2 Finger lang)","③ Sonnenschutz 30 Min vor dem Ausgehen + alle 2-3h erneut","④ Peeling max einmal monatlich (nur PHA-Gel)","⑤ Puder/Foundation minimieren → BB-Creme oder Sonnenschutz"],
+    morning: ["Sanfte Reinigung mit leicht saurem Reiniger (lauwarm)","Feuchtigkeitscreme innerhalb 1 Min (2 Finger lang)","Sonnenschutz auftragen (feuchtigkeitsspendend empfohlen)"],
+    eveningBase: ["Reinigungsmilch 2-3 Pumpstöße — sanft auflösen","3-4 Mal spülen, dann leicht saurer Schaumreiniger","Gründlich 10+ Mal spülen","Feuchtigkeitscreme innerhalb 1 Min"],
+    eveningNS: ["Nur leicht saurer Schaumreiniger (lauwarm)","Feuchtigkeitscreme innerhalb 1 Min"],
+    barrierCream: "🔵 Atobarrier 365 / Ceramid-Creme empfohlen",
+    rednessCream: "🟠 Hyaluronsäure / Glycerin Intensiv-Feuchtigkeitscreme",
+    uvBoost: "⚡ UV-Schutz: Sonnenschutz zweimal auftragen (dünne Haut)",
+    modes: {
+      BARRIER: {label:"Barriere-Wiederherstellung", desc:"Hautbarriere stabilisieren + Feuchtigkeitswiederherstellung hat Priorität"},
+      DEHYDRATED_OILY: {label:"Dehydriert-Öliger Modus", desc:"Übermäßiger Talg durch Dehydration — befeuchten, nicht Öl kontrollieren"},
+      REDNESS: {label:"Rötung → Feuchtigkeitsmodus", desc:"Schwache Gefäßreaktion — Feuchtigkeit schlägt Beruhigung"},
+      UV_DEFENSE: {label:"UV-Schutzmodus", desc:"Dünne Haut + pigmentempfindlich — Sonnenschutzroutine stärken"},
+    },
+    scoreLabels: ["Dünn/Empfindlich","Barriere-Wert","Akne-Muster","UV/Pigment"],
+    premiumTitle: "Ihr persönlicher Leitfaden",
+    premiumDesc: "Ihre heutigen Diagnosedaten sind sicher gespeichert. Kombiniert mit der visuellen und taktilen Einschätzung Ihrer Therapeutin wird Ihr <b>personalisierter Pflege-Leitfaden</b> per E-Mail gesendet — exklusiv für Premium-Care-Gäste.",
+    premiumFeatures: ["✓ Monatlicher Routineplan","✓ Konkrete Produktempfehlungen","✓ Experten-Tipps der Gründerin"],
+    validation: { label:"Bitte alle Fragen beantworten:",
+      m: {afterWashTight:"Spannung nach Reinigung", easilyRed:"Leichte Rötung", windSting:"Wind/Kälte-Brennen", productSting:"Produkt-Brennen", visibleVessel:"Sichtbare Gefäße",
+          dryRough:"Trocken & rau", flakyMakeup:"Schuppung/Make-up", nightItch:"Nächtliches Jucken", creamDryFast:"Schnell trocken trotz Creme", slowRecovery:"Langsame Erholung",
+          oiliness:"Öligkeit", blackhead:"Mitesser", inflammedAcne:"Entzündete Akne", acnePain:"Akne-Schmerz", acneZone:"Akne-Bereich", dehydratedOily:"Trocken aber ölig",
+          rednessEvent:"Gesichtsrötung", rednessLong:"Rötungsdauer", rednessSting:"Brennen mit Rötung", visibleVesselType:"Gefäßsichtbarkeit",
+          cleanserType:"Reinigertyp", waterTemp:"Wassertemperatur", tonerUse:"Tonerverwendung", exfolFreq:"Peeling-Häufigkeit", sunscreenHabit:"Sonnenschutz-Nachauftrag", routineWill:"Routine-Engagement",
+          easilyTan:"Sonnenbräunung", pigmentSpot:"Pigmentierung", recentTreatment:"Aktuelle Behandlungen"} }
+  },
+
+  fr: {
+    introLine1: "Votre Peau,", introLine2: "Lue par les Données",
+    introTagline: "L'algorithme ORI basé sur 8 000 cas réels<br>retrace la cause profonde de vos problèmes cutanés",
+    introMeta: "Environ 3 min · 6 sections",
+    lblName: "Nom (facultatif)", lblEmail: "Email", lblNationality: "Nationalité", lblGender: "Genre", lblAge: "Tranche d'âge",
+    phName: "Votre nom", phEmail: "exemple@email.com", phNationality: "Française / Japonaise / etc.",
+    emailError: "Veuillez entrer votre email", emailHint: "* Utilisé pour retrouver votre dossier lors de vos prochaines visites",
+    nationalityError: "Veuillez entrer votre nationalité", genderError: "Veuillez sélectionner un genre", ageError: "Veuillez sélectionner une tranche d'âge",
+    btnStart: "Commencer le Diagnostic", btnNext: "Suivant →", btnPrev: "← Retour", btnResult: "Voir les Résultats",
+    btnReset: "Retour au Début", resultTitle: "Vos Résultats",
+    progressDone: "% fait", progressComplete: "Terminé",
+    saving: "Sauvegarde…", saved: "✓ Sauvegardé", saveFailed: "⚠ Échec",
+    genders: ["Femme","Homme","Autre"],
+    ages: ["19–24","25–29","30–34","35–39","40–44","45–49","50–54","55+"],
+    s1Title: "Section 01 · Signaux de Sensibilité Cutanée",
+    s1Desc: "Mesure la finesse et la sensibilité de votre peau — des scores plus élevés nécessitent des soins plus doux",
+    qAfterWashTight: "Ma peau tiraille après le nettoyage",
+    qEasilyRed: "Ma peau rougit facilement ou devient chaude",
+    qWindSting: "Le vent ou le froid me fait picoter la peau",
+    qProductSting: "Les produits causent des picotements ou irritations oculaires",
+    qVisibleVessel: "Capillaires visibles ou rougeur persistante",
+    qTop3: "Principales préoccupations cutanées (choix multiple)",
+    s2Title: "Section 02 · Hydratation & Barrière",
+    s2Desc: "Mesure les dommages à la barrière — la plupart des problèmes cutanés commencent ici",
+    qDryRough: "Ma peau est sèche et rugueuse",
+    qFlakyMakeup: "Peau qui pèle ou maquillage qui ne tient pas",
+    qNightItch: "La peau démange plus la nuit",
+    qCreamDryFast: "La peau s'assèche vite même après la crème",
+    qSlowRecovery: "Récupération lente après irritation",
+    s3Title: "Section 03 · Sébum & Acné",
+    s3Desc: "Identifie les schémas de sébum et d'acné — une peau d'apparence grasse peut être déshydratée",
+    qOiliness: "Visage brillant ou excès de sébum",
+    qBlackhead: "Points noirs ou points blancs présents",
+    qInflammedAcne: "Acné enflammée (rouge et douloureuse)",
+    qAcnePain: "Niveau de douleur acnéique — indique la profondeur",
+    qAcneZone: "Localisation principale de l'acné",
+    qDehydratedOily: '"Sèche mais grasse à la fois" expérience?',
+    hintDehydratedOily: "* Indicateur clé pour la peau déshydratée-grasse",
+    s4Title: "Section 04 · Rougeur & Réponse Vasculaire",
+    s4Desc: "Identifie les causes de la rougeur — la plupart des rougeurs se résolvent avec l'hydratation",
+    qRednessEvent: "Le visage rougit avec l'alcool, la chaleur ou l'émotion",
+    qRednessLong: "Rougeur persistante pendant 10+ minutes",
+    qRednessSting: "Picotements quand la peau rougit",
+    qRednessAreas: "Zones principales de rougeur (choix multiple)",
+    qVisibleVesselType: "Capillaires de surface visibles",
+    s5Title: "Section 05 · Routine & Habitudes",
+    s5Desc: "Identifie les habitudes de votre routine actuelle qui peuvent nuire à votre peau",
+    qCleanserType: "Type de nettoyant actuel (choix multiple)",
+    qCleansingMethod: "Méthode de nettoyage du soir (choix multiple)",
+    qWaterTemp: "Température de l'eau lors du nettoyage",
+    qTonerUse: "Utilisez-vous tonique / lotion ?",
+    qExfolFreq: "Fréquence d'exfoliation",
+    qPowderMakeup: "Maquillage de base (choix multiple)",
+    qSunscreenType: "Type de crème solaire (choix multiple)",
+    qSunscreenHabit: "Habitude de réappliquer la crème solaire",
+    qRoutineWill: "Engagement à suivre une routine",
+    s6Title: "Section 06 · UV & Pigmentation",
+    s6Desc: "Mesure la sensibilité UV et la pigmentation — une peau fine est plus vulnérable aux UV",
+    qEasilyTan: "Je bronze ou brûle facilement au soleil",
+    qPigmentSpot: "J'ai facilement des taches sombres ou hyperpigmentation",
+    qRecentTreatment: "Procédures dermatologiques dans les 3 derniers mois",
+    hintRecentTreatment: "* Les lasers et procédures créent des micro-blessures. Si non complètement cicatrisée, votre barrière peut encore être affaiblie.",
+    lblTreatmentDetail: "Quelle procédure avez-vous reçue ?",
+    phTreatmentDetail: "ex. Fraxel x2, Pico laser, CO2 laser",
+    infoTreatment: "💡 Barrière affaiblie post-procédure → Mode récupération hydratation prioritaire",
+    scaleLabels: ["Aucun","Léger","Modéré","Sévère"],
+    scale5Left: "Pas confiant", scale5Right: "30+ jours",
+    painLeft: "1 Douleur légère", painRight: "5 Douleur sévère",
+    top3: ["Sécheresse","Rougeur","Acné","Points noirs","Pigmentation","Pores","Desquamation","Perte d'élasticité"],
+    acneZone: ["Front","Joues","Nez","Menton","Partout"],
+    dehydratedOily: ["Oui","Non","Pas sûr"],
+    rednessAreas: ["Front","Joues","Nez","Menton","Autour de la bouche","Zone papillon"],
+    vesselType: ["À peine visible","Partiellement visible","Largement visible"],
+    vesselWarn: "⚠ Possible dommage à la barrière — l'hydratation est prioritaire",
+    cleanserType: ["Mousse légèrement acide","Mousse alcaline","Savon","Eau seulement","Pas sûr"],
+    cleanserWarn: "⚠ Nettoyant alcalin → endommage la barrière protectrice",
+    cleansingMethod: ["Huile/baume nettoyant","Eau/lait nettoyant","Mousse/savon","Pas de double nettoyage"],
+    waterTemp: ["Tiède","Chaude","Froide"],
+    waterWarn: "⚠ Eau chaude → cause vasodilatation et sécheresse, passez à tiède",
+    tonerUse: ["Oui","Non"],
+    exfolFreq: ["Jamais","Une fois par mois","Une fois par semaine","2+ fois par semaine"],
+    powderMakeup: ["Aucun","Crème BB","Fond de teint","Poudre","Mixte"],
+    sunscreenType: ["Hydratant","Mat","Hybride (PA+++)","Inconnu / Aucun"],
+    sunscreenWarn: "⚠ Crème solaire mate → assèche la peau, passez au type hydratant",
+    sunscreenHabit: ["N'utilise pas","Matin seulement","Réapplique toutes les 2-3h"],
+    recentTreatment: ["Aucune","Laser","Thermage/Ulthera","Autre"],
+    modeTitle: "Mode de Diagnostic",
+    warnTitle: "⚠ Corrections immédiates nécessaires",
+    missionTitle: "Mission 30 jours",
+    morningTitle: "☀ Routine du Matin",
+    eveningTitle: "🌙 Routine du Soir",
+    philosophy: "Votre peau a la capacité naturelle de se guérir.<br>Mais pour que cela arrive,<br><span style='color:var(--text)'>l'environnement d'hydratation doit d'abord se stabiliser.</span>",
+    warnings: {
+      exfol: "Exfoliation trop fréquente → réduire à une fois par mois (gel PHA uniquement)",
+      cleanser: "Nettoyant alcalin → passez à un nettoyant légèrement acide",
+      water: "Eau chaude → passez à de l'eau tiède",
+      toner: "Tonique/lotion → arrêter 1 mois et observer la réaction cutanée",
+      powder: "Poudre/fond de teint → absorbe l'humidité, passez à la crème BB",
+      sunscreen: "Crème solaire mate → cause sécheresse, passez au type hydratant",
+    },
+    mission: ["① Arrêter tonique, lotion, essence (1 mois) — crème hydratante uniquement","② Appliquer la crème dans la minute après nettoyage (2 phalanges)","③ Crème solaire 30 min avant la sortie + réappliquer toutes les 2-3h","④ Exfoliation max une fois par mois (gel PHA uniquement)","⑤ Minimiser poudre/fond de teint → utiliser crème BB ou solaire"],
+    morning: ["Nettoyage doux avec nettoyant légèrement acide (eau tiède)","Crème hydratante dans la minute (2 phalanges)","Appliquer crème solaire (type hydratant recommandé)"],
+    eveningBase: ["Lait nettoyant 2-3 pressions — dissoudre doucement","Rincer 3-4 fois, puis nettoyant moussant légèrement acide","Rincer abondamment 10+ fois","Crème hydratante dans la minute"],
+    eveningNS: ["Nettoyant moussant légèrement acide uniquement (eau tiède)","Crème hydratante dans la minute"],
+    barrierCream: "🔵 Atobarrier 365 / crème céramide recommandée",
+    rednessCream: "🟠 Crème intensive hydratante acide hyaluronique / glycérine",
+    uvBoost: "⚡ Défense UV : appliquer la crème solaire deux fois (peau fine)",
+    modes: {
+      BARRIER: {label:"Mode Récupération Barrière", desc:"Stabiliser la barrière cutanée + récupération de l'hydratation prioritaire"},
+      DEHYDRATED_OILY: {label:"Mode Déshydraté-Gras", desc:"Excès de sébum par déshydratation — hydratez, ne contrôlez pas l'huile"},
+      REDNESS: {label:"Rougeur → Mode Hydratation", desc:"Réponse vasculaire faible — l'hydratation bat les produits apaisants"},
+      UV_DEFENSE: {label:"Mode Défense UV", desc:"Peau fine + pigmentation sensible — renforcer la routine solaire"},
+    },
+    scoreLabels: ["Fine/Sensible","Score Barrière","Acné","UV/Pigment"],
+    premiumTitle: "Votre Guide Personnalisé",
+    premiumDesc: "Les données de votre diagnostic d'aujourd'hui sont sauvegardées en toute sécurité. Combiné à l'évaluation visuelle et tactile de votre thérapeute, votre <b>guide de soins personnalisé</b> sera envoyé par e-mail — exclusivement pour les clientes Premium Care.",
+    premiumFeatures: ["✓ Routine mois par mois","✓ Recommandations de produits","✓ Conseils d'experte"],
+    validation: { label:"Veuillez répondre à toutes les questions :",
+      m: {afterWashTight:"Tiraillement après nettoyage", easilyRed:"Rougeur facile", windSting:"Picotement vent/froid", productSting:"Picotement produit", visibleVessel:"Capillaires visibles",
+          dryRough:"Sec & rugueux", flakyMakeup:"Desquamation/maquillage", nightItch:"Démangeaisons nocturnes", creamDryFast:"Sécheresse rapide après crème", slowRecovery:"Récupération lente",
+          oiliness:"Brillance", blackhead:"Points noirs", inflammedAcne:"Acné enflammée", acnePain:"Douleur acnéique", acneZone:"Zone acné", dehydratedOily:"Sèche mais grasse",
+          rednessEvent:"Rougeur du visage", rednessLong:"Durée rougeur", rednessSting:"Picotement avec rougeur", visibleVesselType:"Niveau capillaires",
+          cleanserType:"Type nettoyant", waterTemp:"Température eau", tonerUse:"Usage tonique", exfolFreq:"Fréquence exfoliation", sunscreenHabit:"Réapplication solaire", routineWill:"Engagement routine",
+          easilyTan:"Bronzage", pigmentSpot:"Pigmentation", recentTreatment:"Procédures récentes"} }
+  },
+
+  es: {
+    introLine1: "Tu Piel,", introLine2: "Leída por Datos",
+    introTagline: "Algoritmo ORI basado en 8.000 casos reales<br>rastrea la causa raíz de tus problemas cutáneos",
+    introMeta: "Aprox. 3 min · 6 secciones",
+    lblName: "Nombre (opcional)", lblEmail: "Email", lblNationality: "Nacionalidad", lblGender: "Género", lblAge: "Grupo de edad",
+    phName: "Tu nombre", phEmail: "ejemplo@email.com", phNationality: "Española / Japonesa / etc.",
+    emailError: "Por favor ingresa tu email", emailHint: "* Usado para recuperar tu registro en futuras visitas",
+    nationalityError: "Por favor ingresa tu nacionalidad", genderError: "Por favor selecciona género", ageError: "Por favor selecciona grupo de edad",
+    btnStart: "Iniciar Diagnóstico", btnNext: "Siguiente →", btnPrev: "← Atrás", btnResult: "Ver Resultados",
+    btnReset: "Volver al Inicio", resultTitle: "Tus Resultados",
+    progressDone: "% hecho", progressComplete: "Completo",
+    saving: "Guardando…", saved: "✓ Guardado", saveFailed: "⚠ Fallo",
+    genders: ["Mujer","Hombre","Otro"],
+    ages: ["19–24","25–29","30–34","35–39","40–44","45–49","50–54","55+"],
+    s1Title: "Sección 01 · Señales de Sensibilidad",
+    s1Desc: "Mide qué tan delgada y sensible es tu piel — puntuaciones más altas requieren cuidado más suave",
+    qAfterWashTight: "Mi piel se siente tirante después de limpiar",
+    qEasilyRed: "Mi piel se pone roja o caliente fácilmente",
+    qWindSting: "El viento o frío me hace escocer la piel",
+    qProductSting: "Los productos causan escozor o irritación ocular",
+    qVisibleVessel: "Capilares visibles o rojez persistente",
+    qTop3: "Principales preocupaciones (selección múltiple)",
+    s2Title: "Sección 02 · Hidratación & Barrera",
+    s2Desc: "Mide el daño a la barrera — la mayoría de problemas cutáneos comienzan aquí",
+    qDryRough: "Mi piel está seca y áspera",
+    qFlakyMakeup: "Piel descamada o maquillaje que no se mantiene",
+    qNightItch: "La piel pica más por la noche",
+    qCreamDryFast: "La piel se seca rápido incluso con crema",
+    qSlowRecovery: "Recuperación lenta tras irritación",
+    s3Title: "Sección 03 · Sebo & Acné",
+    s3Desc: "Identifica patrones de sebo y acné — piel que parece grasa puede estar deshidratada",
+    qOiliness: "Cara brillante o exceso de sebo",
+    qBlackhead: "Puntos negros o blancos presentes",
+    qInflammedAcne: "Acné inflamado (rojo y doloroso)",
+    qAcnePain: "Nivel de dolor del acné — indica profundidad",
+    qAcneZone: "Ubicación principal del acné",
+    qDehydratedOily: '"Seca pero grasa al mismo tiempo" experiencia?',
+    hintDehydratedOily: "* Indicador clave para piel deshidratada-grasa",
+    s4Title: "Sección 04 · Rojez & Respuesta Vascular",
+    s4Desc: "Identifica causas de rojez — la mayoría se resuelve con hidratación, no con calmantes",
+    qRednessEvent: "La cara se enrojece con alcohol, calor o emoción",
+    qRednessLong: "Rojez persistente por 10+ minutos",
+    qRednessSting: "Escozor cuando la piel se enrojece",
+    qRednessAreas: "Áreas principales de rojez (selección múltiple)",
+    qVisibleVesselType: "Capilares superficiales visibles",
+    s5Title: "Sección 05 · Rutina & Hábitos",
+    s5Desc: "Identifica hábitos en tu rutina actual que pueden estar dañando tu piel",
+    qCleanserType: "Tipo de limpiador actual (selección múltiple)",
+    qCleansingMethod: "Método de limpieza nocturna (selección múltiple)",
+    qWaterTemp: "Temperatura del agua al limpiar",
+    qTonerUse: "¿Usas tónico / loción?",
+    qExfolFreq: "Frecuencia de exfoliación",
+    qPowderMakeup: "Maquillaje base (selección múltiple)",
+    qSunscreenType: "Tipo de protector solar (selección múltiple)",
+    qSunscreenHabit: "Hábito de reaplicación solar",
+    qRoutineWill: "Compromiso con una rutina",
+    s6Title: "Sección 06 · UV & Pigmentación",
+    s6Desc: "Mide sensibilidad UV y pigmentación — piel más fina es más vulnerable a UV",
+    qEasilyTan: "Me bronceo o quemo fácilmente al sol",
+    qPigmentSpot: "Me salen manchas oscuras o hiperpigmentación fácilmente",
+    qRecentTreatment: "Procedimientos dermatológicos en los últimos 3 meses",
+    hintRecentTreatment: "* Láser y procedimientos crean micro-heridas. Si no está completamente curada, tu barrera puede estar aún debilitada.",
+    lblTreatmentDetail: "¿Qué procedimiento recibiste?",
+    phTreatmentDetail: "ej. Fraxel x2, Pico láser, CO2 láser",
+    infoTreatment: "💡 Debilidad de barrera post-procedimiento → Modo recuperación de hidratación primero",
+    scaleLabels: ["Ninguno","Leve","Moderado","Severo"],
+    scale5Left: "No confiado", scale5Right: "30+ días",
+    painLeft: "1 Dolor leve", painRight: "5 Dolor severo",
+    top3: ["Sequedad","Rojez","Acné","Puntos negros","Pigmentación","Poros","Descamación","Pérdida de elasticidad"],
+    acneZone: ["Frente","Mejillas","Nariz","Mentón","Todo"],
+    dehydratedOily: ["Sí","No","No estoy seguro"],
+    rednessAreas: ["Frente","Mejillas","Nariz","Mentón","Alrededor de la boca","Zona mariposa"],
+    vesselType: ["Apenas visible","Parcialmente visible","Ampliamente visible"],
+    vesselWarn: "⚠ Posible daño de barrera — la hidratación es prioridad",
+    cleanserType: ["Espuma ligeramente ácida","Espuma alcalina","Jabón","Solo agua","No sé"],
+    cleanserWarn: "⚠ Limpiador alcalino → daña la barrera protectora",
+    cleansingMethod: ["Aceite/bálsamo limpiador","Agua/leche limpiadora","Espuma/jabón","Sin doble limpieza"],
+    waterTemp: ["Tibia","Caliente","Fría"],
+    waterWarn: "⚠ Agua caliente → causa vasodilatación y sequedad, cambia a tibia",
+    tonerUse: ["Sí","No"],
+    exfolFreq: ["Nunca","Una vez al mes","Una vez por semana","2+ veces por semana"],
+    powderMakeup: ["Ninguno","Crema BB","Base","Polvo","Mixto"],
+    sunscreenType: ["Hidratante","Mate","Híbrido (PA+++)","Desconocido / Ninguno"],
+    sunscreenWarn: "⚠ Protector mate → reseca la piel, cambia a hidratante",
+    sunscreenHabit: ["No uso","Solo mañana","Reaplico cada 2-3h"],
+    recentTreatment: ["Ninguno","Láser","Thermage/Ulthera","Otro"],
+    modeTitle: "Modo de Diagnóstico",
+    warnTitle: "⚠ Correcciones inmediatas necesarias",
+    missionTitle: "Misión de 30 días",
+    morningTitle: "☀ Rutina Matutina",
+    eveningTitle: "🌙 Rutina Nocturna",
+    philosophy: "Tu piel tiene la capacidad natural de sanar.<br>Pero para que eso ocurra,<br><span style='color:var(--text)'>el ambiente de hidratación debe estabilizarse primero.</span>",
+    warnings: {
+      exfol: "Exfoliación demasiado frecuente → reducir a una vez al mes (gel PHA solo)",
+      cleanser: "Limpiador alcalino → cambiar a limpiador ligeramente ácido",
+      water: "Agua caliente → cambiar a agua tibia",
+      toner: "Tónico/loción → parar 1 mes y observar reacción",
+      powder: "Polvo/base → absorbe humedad, cambiar a crema BB",
+      sunscreen: "Protector mate → causa sequedad, cambiar a tipo hidratante",
+    },
+    mission: ["① Parar tónico, loción, esencia (1 mes) — solo crema hidratante","② Aplicar crema en 1 min tras limpieza (2 falanges)","③ Protector solar 30 min antes de salir + reaplicar cada 2-3h","④ Exfoliar máx una vez al mes (solo gel PHA)","⑤ Minimizar polvo/base → usar crema BB o protector solar"],
+    morning: ["Limpieza suave con limpiador ligeramente ácido (agua tibia)","Crema hidratante en 1 min (2 falanges)","Aplicar protector solar (tipo hidratante recomendado)"],
+    eveningBase: ["Leche limpiadora 2-3 pumps — disolver suavemente","Enjuagar 3-4 veces, luego espuma ligeramente ácida","Enjuagar bien 10+ veces","Crema hidratante en 1 min"],
+    eveningNS: ["Solo espuma ligeramente ácida (agua tibia)","Crema hidratante en 1 min"],
+    barrierCream: "🔵 Atobarrier 365 / crema ceramida recomendada",
+    rednessCream: "🟠 Crema intensiva ácido hialurónico / glicerina",
+    uvBoost: "⚡ Defensa UV: aplicar protector dos veces (piel fina)",
+    modes: {
+      BARRIER: {label:"Modo Recuperación Barrera", desc:"Estabilizar barrera cutánea + recuperación de hidratación prioritaria"},
+      DEHYDRATED_OILY: {label:"Modo Deshidratado-Graso", desc:"Exceso de sebo por deshidratación — hidrata, no controles el aceite"},
+      REDNESS: {label:"Rojez → Modo Hidratación", desc:"Respuesta vascular débil — hidratación supera a calmantes"},
+      UV_DEFENSE: {label:"Modo Defensa UV", desc:"Piel fina + sensible a pigmentación — fortalecer rutina solar"},
+    },
+    scoreLabels: ["Fina/Sensible","Puntuación Barrera","Patrón Acné","UV/Pigmento"],
+    premiumTitle: "Tu Guía Personalizada",
+    premiumDesc: "Los datos de tu diagnóstico de hoy están guardados de forma segura. Combinada con la evaluación visual y táctil de tu terapeuta, tu <b>guía de cuidado personalizada</b> se enviará por email — exclusivamente para clientas de Premium Care.",
+    premiumFeatures: ["✓ Rutina mes a mes","✓ Recomendaciones de productos","✓ Consejos de experta"],
+    validation: { label:"Por favor responde todas las preguntas:",
+      m: {afterWashTight:"Tirantez tras limpieza", easilyRed:"Rojez fácil", windSting:"Escozor viento/frío", productSting:"Escozor producto", visibleVessel:"Capilares visibles",
+          dryRough:"Seco & áspero", flakyMakeup:"Descamación/maquillaje", nightItch:"Picor nocturno", creamDryFast:"Sequedad rápida tras crema", slowRecovery:"Recuperación lenta",
+          oiliness:"Grasa", blackhead:"Puntos negros", inflammedAcne:"Acné inflamado", acnePain:"Dolor acné", acneZone:"Zona acné", dehydratedOily:"Seca pero grasa",
+          rednessEvent:"Rojez facial", rednessLong:"Duración rojez", rednessSting:"Escozor con rojez", visibleVesselType:"Nivel capilares",
+          cleanserType:"Tipo limpiador", waterTemp:"Temperatura agua", tonerUse:"Uso tónico", exfolFreq:"Frecuencia exfoliación", sunscreenHabit:"Reaplicación solar", routineWill:"Compromiso rutina",
+          easilyTan:"Bronceado", pigmentSpot:"Pigmentación", recentTreatment:"Procedimientos recientes"} }
+  },
+
+  ar: {
+    introLine1: "بشرتك،", introLine2: "تُقرأ بالبيانات",
+    introTagline: "خوارزمية ORI المبنية على ٨٠٠٠ حالة حقيقية<br>تتتبع السبب الجذري لمشاكل بشرتك",
+    introMeta: "حوالي ٣ دقائق · ٦ أقسام",
+    lblName: "الاسم (اختياري)", lblEmail: "البريد الإلكتروني", lblNationality: "الجنسية", lblGender: "الجنس", lblAge: "الفئة العمرية",
+    phName: "اسمك", phEmail: "example@email.com", phNationality: "سعودية / يابانية / إلخ",
+    emailError: "يرجى إدخال البريد الإلكتروني", emailHint: "* يُستخدم لاسترجاع سجلك في الزيارات المستقبلية",
+    nationalityError: "يرجى إدخال الجنسية", genderError: "يرجى اختيار الجنس", ageError: "يرجى اختيار الفئة العمرية",
+    btnStart: "ابدأ التشخيص", btnNext: "التالي ←", btnPrev: "→ السابق", btnResult: "عرض النتائج",
+    btnReset: "العودة للبداية", resultTitle: "نتائجك",
+    progressDone: "٪ مكتمل", progressComplete: "مكتمل",
+    saving: "جاري الحفظ…", saved: "✓ تم الحفظ", saveFailed: "⚠ فشل",
+    genders: ["أنثى","ذكر","آخر"],
+    ages: ["١٩–٢٤","٢٥–٢٩","٣٠–٣٤","٣٥–٣٩","٤٠–٤٤","٤٥–٤٩","٥٠–٥٤","٥٥+"],
+    s1Title: "القسم ٠١ · إشارات حساسية البشرة",
+    s1Desc: "يقيس مدى رقة وحساسية بشرتك — النتائج الأعلى تتطلب رعاية ألطف",
+    qAfterWashTight: "بشرتي تشد بعد التنظيف",
+    qEasilyRed: "بشرتي تحمر أو تسخن بسهولة",
+    qWindSting: "الرياح أو البرد تسبب وخزاً في بشرتي",
+    qProductSting: "المنتجات تسبب وخزاً أو تهيج العين",
+    qVisibleVessel: "شعيرات دموية ظاهرة أو احمرار مستمر",
+    qTop3: "المخاوف الرئيسية (اختيار متعدد)",
+    s2Title: "القسم ٠٢ · الترطيب وضرر الحاجز",
+    s2Desc: "يقيس ضرر الحاجز — معظم مشاكل البشرة تبدأ هنا",
+    qDryRough: "بشرتي جافة وخشنة",
+    qFlakyMakeup: "تقشر البشرة أو عدم ثبات المكياج",
+    qNightItch: "البشرة تحكني أكثر في الليل",
+    qCreamDryFast: "البشرة تجف بسرعة حتى بعد الكريم",
+    qSlowRecovery: "تعافي بطيء بعد التهيج",
+    s3Title: "القسم ٠٣ · الزيوت وحب الشباب",
+    s3Desc: "يحدد أنماط الزيوت وحب الشباب — البشرة الدهنية الظاهر قد تكون جافة فعلاً",
+    qOiliness: "وجه لامع أو إفراز زائد للزيوت",
+    qBlackhead: "رؤوس سوداء أو بيضاء موجودة",
+    qInflammedAcne: "حب شباب ملتهب (أحمر ومؤلم)",
+    qAcnePain: "مستوى ألم حب الشباب — مؤشر العمق",
+    qAcneZone: "الموقع الرئيسي لحب الشباب",
+    qDehydratedOily: '"جافة لكن دهنية في نفس الوقت" تجربة؟',
+    hintDehydratedOily: "* مؤشر رئيسي للبشرة الجافة-الدهنية",
+    s4Title: "القسم ٠٤ · الاحمرار والاستجابة الوعائية",
+    s4Desc: "يحدد أسباب الاحمرار — معظم الاحمرار يحل بالترطيب لا بالمهدئات",
+    qRednessEvent: "الوجه يحمر مع الكحول أو الحرارة أو الانفعال",
+    qRednessLong: "الاحمرار يستمر ١٠+ دقائق",
+    qRednessSting: "وخز يحدث عند احمرار البشرة",
+    qRednessAreas: "المناطق الرئيسية للاحمرار (اختيار متعدد)",
+    qVisibleVesselType: "الشعيرات الدموية السطحية الظاهرة",
+    s5Title: "القسم ٠٥ · الروتين والعادات",
+    s5Desc: "يحدد العادات في روتينك الحالي التي قد تضر ببشرتك",
+    qCleanserType: "نوع المنظف الحالي (اختيار متعدد)",
+    qCleansingMethod: "طريقة التنظيف المسائي (اختيار متعدد)",
+    qWaterTemp: "درجة حرارة الماء عند التنظيف",
+    qTonerUse: "هل تستخدمين التونر / الغسول؟",
+    qExfolFreq: "تكرار التقشير",
+    qPowderMakeup: "مكياج الأساس (اختيار متعدد)",
+    qSunscreenType: "نوع واقي الشمس (اختيار متعدد)",
+    qSunscreenHabit: "عادة إعادة وضع واقي الشمس",
+    qRoutineWill: "الالتزام بالروتين",
+    s6Title: "القسم ٠٦ · الأشعة فوق البنفسجية والتصبغ",
+    s6Desc: "يقيس حساسية الأشعة فوق البنفسجية والتصبغ — البشرة الأرق أكثر عرضة للأشعة",
+    qEasilyTan: "بشرتي تسمر أو تحترق بسهولة في الشمس",
+    qPigmentSpot: "تظهر لدي بقع داكنة أو تصبغ بسهولة",
+    qRecentTreatment: "إجراءات جلدية في الأشهر الثلاثة الماضية",
+    hintRecentTreatment: "* الليزر والإجراءات تحدث جروحاً مجهرية. إذا لم تشف كلياً، قد يكون حاجزك ما زال ضعيفاً.",
+    lblTreatmentDetail: "ما الإجراء الذي تلقيته؟",
+    phTreatmentDetail: "مثل: فراكسل ×٢، بيكو ليزر، CO2 ليزر",
+    infoTreatment: "💡 ضعف الحاجز بعد الإجراء → وضع استعادة الترطيب أولاً",
+    scaleLabels: ["لا شيء","خفيف","متوسط","شديد"],
+    scale5Left: "غير واثق", scale5Right: "٣٠+ يوم",
+    painLeft: "١ ألم خفيف", painRight: "٥ ألم شديد",
+    top3: ["الجفاف","الاحمرار","حب الشباب","الرؤوس السوداء","التصبغ","المسام","التقشر","فقدان المرونة"],
+    acneZone: ["الجبهة","الخدود","الأنف","الذقن","كل الوجه"],
+    dehydratedOily: ["نعم","لا","غير متأكدة"],
+    rednessAreas: ["الجبهة","الخدود","الأنف","الذقن","حول الفم","منطقة الفراشة"],
+    vesselType: ["بالكاد ظاهرة","ظاهرة جزئياً","ظاهرة بشكل واسع"],
+    vesselWarn: "⚠ احتمال ضرر بالحاجز — الترطيب أولوية قصوى",
+    cleanserType: ["رغوة حمضية خفيفة","رغوة قلوية","صابون","ماء فقط","غير متأكدة"],
+    cleanserWarn: "⚠ منظف قلوي → يضر بحاجز البشرة الواقي",
+    cleansingMethod: ["زيت/بلسم منظف","ماء/حليب منظف","رغوة/صابون","بدون تنظيف مزدوج"],
+    waterTemp: ["فاتر","ساخن","بارد"],
+    waterWarn: "⚠ ماء ساخن → يسبب تمدد الأوعية والجفاف، استخدمي الفاتر",
+    tonerUse: ["نعم","لا"],
+    exfolFreq: ["أبداً","مرة شهرياً","مرة أسبوعياً","٢+ مرات أسبوعياً"],
+    powderMakeup: ["لا شيء","كريم BB","كريم أساس","بودرة","مختلط"],
+    sunscreenType: ["مرطب","مات","هجين (PA+++)","غير معروف / لا شيء"],
+    sunscreenWarn: "⚠ واقي شمس مات → يجفف البشرة، استخدمي النوع المرطب",
+    sunscreenHabit: ["لا أستخدم","صباحاً فقط","إعادة كل ٢-٣ ساعات"],
+    recentTreatment: ["لا شيء","ليزر","ثيرماج/ألثيرا","آخر"],
+    modeTitle: "وضع التشخيص",
+    warnTitle: "⚠ تصحيحات فورية مطلوبة",
+    missionTitle: "مهمة ٣٠ يوماً",
+    morningTitle: "☀ روتين الصباح",
+    eveningTitle: "🌙 روتين المساء",
+    philosophy: "بشرتك لديها القدرة الطبيعية على شفاء نفسها.<br>لكن لكي يحدث ذلك،<br><span style='color:var(--text)'>يجب استقرار بيئة الترطيب أولاً.</span>",
+    warnings: {
+      exfol: "تقشير متكرر جداً → قللي إلى مرة شهرياً (جل PHA فقط)",
+      cleanser: "منظف قلوي → استبدلي بمنظف حمضي خفيف",
+      water: "ماء ساخن → استبدلي بماء فاتر",
+      toner: "تونر/غسول → أوقفي شهراً وراقبي البشرة",
+      powder: "بودرة/كريم أساس → يمتص الرطوبة، استبدلي بكريم BB",
+      sunscreen: "واقي شمس مات → يسبب جفافاً، استبدلي بالمرطب",
+    },
+    mission: ["① أوقفي التونر واللوشن والإسنس (شهر) — كريم مرطب فقط","② كريم في الدقيقة الأولى بعد التنظيف (سلامية إصبعين)","③ واقي الشمس قبل ٣٠ دقيقة من الخروج + كل ٢-٣ ساعات","④ تقشير مرة شهرياً كحد أقصى (جل PHA فقط)","⑤ قللي البودرة/كريم الأساس → استخدمي كريم BB أو واقي شمس"],
+    morning: ["تنظيف لطيف بمنظف حمضي خفيف (ماء فاتر)","كريم مرطب في الدقيقة الأولى (سلامية إصبعين)","ضعي واقي الشمس (يُفضل النوع المرطب)"],
+    eveningBase: ["حليب منظف ٢-٣ ضغطات — أذيبي بلطف","اشطفي ٣-٤ مرات ثم رغوة حمضية خفيفة","اشطفي جيداً ١٠+ مرات","كريم مرطب في الدقيقة الأولى"],
+    eveningNS: ["رغوة حمضية خفيفة فقط (ماء فاتر)","كريم مرطب في الدقيقة الأولى"],
+    barrierCream: "🔵 أتوباريير ٣٦٥ / كريم سيراميد موصى به",
+    rednessCream: "🟠 كريم مكثف بحمض الهيالورونيك / الجلسرين",
+    uvBoost: "⚡ حماية UV: ضعي واقي الشمس مرتين (بشرة رقيقة)",
+    modes: {
+      BARRIER: {label:"وضع استعادة الحاجز", desc:"تثبيت حاجز البشرة + استعادة الترطيب أولوية قصوى"},
+      DEHYDRATED_OILY: {label:"وضع الجاف-الدهني", desc:"زيوت زائدة بسبب الجفاف — رطبي ولا تتحكمي بالزيت"},
+      REDNESS: {label:"وضع الاحمرار → الترطيب", desc:"استجابة وعائية ضعيفة — الترطيب يتفوق على المهدئات"},
+      UV_DEFENSE: {label:"وضع الحماية من UV", desc:"بشرة رقيقة + حساسة للتصبغ — عززي روتين الواقي"},
+    },
+    scoreLabels: ["رقيقة/حساسة","حاجز","حب الشباب","UV/تصبغ"],
+    premiumTitle: "دليلك الشخصي ينتظرك",
+    premiumDesc: "بيانات تشخيصك اليوم محفوظة بأمان. مدمجة مع تقييم الأخصائية البصري واللمسي، سيُرسل <b>دليل العناية المنزلية المخصص</b> بالبريد الإلكتروني — حصرياً لضيفات Premium Care.",
+    premiumFeatures: ["✓ روتين شهري متدرج","✓ توصيات منتجات محددة","✓ نصائح خبيرة المؤسسة"],
+    validation: { label:"يرجى الإجابة على جميع الأسئلة:",
+      m: {afterWashTight:"شد بعد التنظيف", easilyRed:"احمرار سهل", windSting:"وخز الرياح/البرد", productSting:"وخز المنتج", visibleVessel:"شعيرات ظاهرة",
+          dryRough:"جاف وخشن", flakyMakeup:"تقشر/مكياج", nightItch:"حكة ليلية", creamDryFast:"جفاف سريع بعد الكريم", slowRecovery:"تعافي بطيء",
+          oiliness:"دهنية", blackhead:"رؤوس سوداء", inflammedAcne:"حب شباب ملتهب", acnePain:"ألم حب الشباب", acneZone:"موقع حب الشباب", dehydratedOily:"جافة لكن دهنية",
+          rednessEvent:"احمرار الوجه", rednessLong:"مدة الاحمرار", rednessSting:"وخز مع احمرار", visibleVesselType:"مستوى الشعيرات",
+          cleanserType:"نوع المنظف", waterTemp:"حرارة الماء", tonerUse:"استخدام التونر", exfolFreq:"تكرار التقشير", sunscreenHabit:"إعادة الواقي", routineWill:"الالتزام بالروتين",
+          easilyTan:"اسمرار", pigmentSpot:"تصبغ", recentTreatment:"إجراءات حديثة"} }
+  },
+
+  he: {
+    introLine1: "העור שלך,", introLine2: "נקרא על ידי נתונים",
+    introTagline: "אלגוריתם ORI מבוסס על 8,000 מקרים אמיתיים<br>מאתר את שורש בעיות העור שלך",
+    introMeta: "כ-3 דקות · 6 חלקים",
+    lblName: "שם (אופציונלי)", lblEmail: "אימייל", lblNationality: "לאום", lblGender: "מגדר", lblAge: "קבוצת גיל",
+    phName: "השם שלך", phEmail: "example@email.com", phNationality: "ישראלי / יפני / וכו'",
+    emailError: "אנא הזיני אימייל", emailHint: "* משמש לאחזור הרישום בביקורים עתידיים",
+    nationalityError: "אנא הזיני לאום", genderError: "אנא בחרי מגדר", ageError: "אנא בחרי קבוצת גיל",
+    btnStart: "התחילי אבחון", btnNext: "הבא ←", btnPrev: "→ חזור", btnResult: "צפי בתוצאות",
+    btnReset: "חזרה להתחלה", resultTitle: "התוצאות שלך",
+    progressDone: "% הושלם", progressComplete: "הושלם",
+    saving: "שומר…", saved: "✓ נשמר", saveFailed: "⚠ נכשל",
+    genders: ["נקבה","זכר","אחר"],
+    ages: ["19–24","25–29","30–34","35–39","40–44","45–49","50–54","55+"],
+    s1Title: "חלק 01 · אותות רגישות העור",
+    s1Desc: "מודד עד כמה העור שלך דק ורגיש — ציונים גבוהים דורשים טיפול עדין יותר",
+    qAfterWashTight: "העור שלי מתוח אחרי ניקוי",
+    qEasilyRed: "העור שלי מאדים או מתחמם בקלות",
+    qWindSting: "רוח או קור גורמים לעקצוצים בעור",
+    qProductSting: "מוצרים גורמים לעקצוצים או גירוי בעיניים",
+    qVisibleVessel: "נימים נראים או אדמומיות מתמשכת",
+    qTop3: "דאגות עיקריות (בחירה מרובה)",
+    s2Title: "חלק 02 · לחות ונזק למחסום",
+    s2Desc: "מודד נזק למחסום — רוב בעיות העור מתחילות כאן",
+    qDryRough: "העור שלי יבש ומחוספס",
+    qFlakyMakeup: "עור מתקלף או איפור שלא נשאר",
+    qNightItch: "העור מגרד יותר בלילה",
+    qCreamDryFast: "העור מתייבש מהר אפילו אחרי קרם",
+    qSlowRecovery: "החלמה איטית אחרי גירוי",
+    s3Title: "חלק 03 · שומן ואקנה",
+    s3Desc: "מזהה דפוסי שומן ואקנה — עור שנראה שמן יכול להיות בעצם מיובש",
+    qOiliness: "פנים מבריקות או חלב יתר",
+    qBlackhead: "בלקהדס או וייטהדס קיימים",
+    qInflammedAcne: "אקנה דלקתית (אדומה וכואבת)",
+    qAcnePain: "רמת כאב אקנה — מציין עומק",
+    qAcneZone: "מיקום עיקרי של אקנה",
+    qDehydratedOily: '"יבש אבל שמן בו זמנית" חוויה?',
+    hintDehydratedOily: "* מדד מפתח לעור מיובש-שמן",
+    s4Title: "חלק 04 · אדמומיות ותגובה כלי דם",
+    s4Desc: "מזהה סיבות לאדמומיות — רוב האדמומיות מתפוגגת עם לחות, לא עם מרגיעים",
+    qRednessEvent: "הפנים מאדימות עם אלכוהול, חום או רגש",
+    qRednessLong: "אדמומיות נמשכת 10+ דקות",
+    qRednessSting: "עקצוצים כשהעור מאדים",
+    qRednessAreas: "אזורי אדמומיות עיקריים (בחירה מרובה)",
+    qVisibleVesselType: "נימים שטחיים נראים",
+    s5Title: "חלק 05 · שגרה והרגלים",
+    s5Desc: "מזהה הרגלים בשגרה הנוכחית שעלולים לפגוע בעור",
+    qCleanserType: "סוג מנקה נוכחי (בחירה מרובה)",
+    qCleansingMethod: "שיטת ניקוי ערב (בחירה מרובה)",
+    qWaterTemp: "טמפרטורת מים בניקוי",
+    qTonerUse: "האם משתמשת בטונר?",
+    qExfolFreq: "תדירות פילינג",
+    qPowderMakeup: "איפור בסיס (בחירה מרובה)",
+    qSunscreenType: "סוג קרם הגנה (בחירה מרובה)",
+    qSunscreenHabit: "הרגל מריחה חוזרת",
+    qRoutineWill: "מחויבות לשגרה",
+    s6Title: "חלק 06 · UV ופיגמנטציה",
+    s6Desc: "מודד רגישות UV ופיגמנטציה — עור דק יותר חשוף יותר ל-UV",
+    qEasilyTan: "אני משתזפת או נכווית בקלות בשמש",
+    qPigmentSpot: "מקבלת כתמים כהים או היפרפיגמנטציה בקלות",
+    qRecentTreatment: "הליכים דרמטולוגיים ב-3 חודשים האחרונים",
+    hintRecentTreatment: "* לייזרים והליכים יוצרים מיקרו-פצעים. אם לא החלימו לגמרי, המחסום עדיין עלול להיות חלש.",
+    lblTreatmentDetail: "איזה הליך עברת?",
+    phTreatmentDetail: "למשל: פרקסל x2, פיקו לייזר, CO2 לייזר",
+    infoTreatment: "💡 חולשת מחסום אחרי הליך → מצב שיקום לחות ראשון",
+    scaleLabels: ["אין","קל","בינוני","חמור"],
+    scale5Left: "לא בטוחה", scale5Right: "30+ ימים",
+    painLeft: "1 כאב קל", painRight: "5 כאב חזק",
+    top3: ["יובש","אדמומיות","אקנה","בלקהדס","פיגמנטציה","נקבוביות","קילופים","אובדן גמישות"],
+    acneZone: ["מצח","לחיים","אף","סנטר","הכל"],
+    dehydratedOily: ["כן","לא","לא בטוחה"],
+    rednessAreas: ["מצח","לחיים","אף","סנטר","סביב הפה","אזור פרפר"],
+    vesselType: ["בקושי נראים","חלקית נראים","נראים נרחב"],
+    vesselWarn: "⚠ נזק אפשרי למחסום — לחות בעדיפות עליונה",
+    cleanserType: ["קצף חומצי קל","קצף בסיסי","סבון","רק מים","לא בטוחה"],
+    cleanserWarn: "⚠ מנקה בסיסי → פוגע במחסום ההגנה",
+    cleansingMethod: ["שמן/באלם ניקוי","מים/חלב ניקוי","קצף/סבון","ללא ניקוי כפול"],
+    waterTemp: ["פושר","חם","קר"],
+    waterWarn: "⚠ מים חמים → גורמים להרחבת כלי דם ויובש, עברי לפושר",
+    tonerUse: ["כן","לא"],
+    exfolFreq: ["אף פעם","פעם בחודש","פעם בשבוע","2+ בשבוע"],
+    powderMakeup: ["אין","קרם BB","מייקאפ","פודרה","משולב"],
+    sunscreenType: ["מלחלח","מאט","היברידי (PA+++)","לא ידוע / אין"],
+    sunscreenWarn: "⚠ קרם הגנה מאט → מייבש את העור, עברי לסוג מלחלח",
+    sunscreenHabit: ["לא משתמשת","רק בבוקר","כל 2-3 שעות"],
+    recentTreatment: ["אין","לייזר","תרמאז'/אולתרה","אחר"],
+    modeTitle: "מצב אבחון",
+    warnTitle: "⚠ תיקונים מיידיים נדרשים",
+    missionTitle: "משימת 30 יום",
+    morningTitle: "☀ שגרת בוקר",
+    eveningTitle: "🌙 שגרת ערב",
+    philosophy: "לעור שלך יש את היכולת הטבעית לרפא את עצמו.<br>אבל כדי שזה יקרה,<br><span style='color:var(--text)'>סביבת הלחות חייבת להתייצב קודם.</span>",
+    warnings: {
+      exfol: "פילינג תכוף מדי → צמצמי לפעם בחודש (ג'ל PHA בלבד)",
+      cleanser: "מנקה בסיסי → עברי למנקה חומצי קל",
+      water: "מים חמים → עברי למים פושרים",
+      toner: "טונר/לוסיון → הפסיקי לחודש וצפי בתגובה",
+      powder: "פודרה/מייקאפ → סופג לחות, עברי לקרם BB",
+      sunscreen: "קרם הגנה מאט → גורם ליובש, עברי לסוג מלחלח",
+    },
+    mission: ["① הפסיקי טונר, לוסיון, אסנס (חודש) — רק קרם לחות","② קרם תוך דקה מסיום ניקוי (2 פלנגות)","③ קרם הגנה 30 דק' לפני יציאה + כל 2-3 שעות","④ פילינג מקסימום פעם בחודש (רק ג'ל PHA)","⑤ צמצמי פודרה/מייקאפ → קרם BB או קרם הגנה"],
+    morning: ["ניקוי עדין במנקה חומצי קל (מים פושרים)","קרם לחות תוך דקה (2 פלנגות)","קרם הגנה (מומלץ סוג מלחלח)"],
+    eveningBase: ["חלב ניקוי 2-3 לחיצות — להמיס בעדינות","שטפי 3-4 פעמים, אז קצף חומצי קל","שטפי היטב 10+ פעמים","קרם לחות תוך דקה"],
+    eveningNS: ["רק קצף חומצי קל (מים פושרים)","קרם לחות תוך דקה"],
+    barrierCream: "🔵 אטוברייר 365 / קרם סרמייד מומלץ",
+    rednessCream: "🟠 קרם אינטנסיבי חומצה היאלורונית / גליצרין",
+    uvBoost: "⚡ הגנת UV: מרחי קרם הגנה פעמיים (עור דק)",
+    modes: {
+      BARRIER: {label:"מצב שיקום מחסום", desc:"ייצוב מחסום העור + שיקום לחות בעדיפות עליונה"},
+      DEHYDRATED_OILY: {label:"מצב מיובש-שמן", desc:"חלב יתר מיובש — הוסיפי לחות, אל תשלטי בשמן"},
+      REDNESS: {label:"אדמומיות → מצב לחות", desc:"תגובת כלי דם חלשה — לחות עדיפה על מרגיעים"},
+      UV_DEFENSE: {label:"מצב הגנת UV", desc:"עור דק + רגיש לפיגמנט — חזקי שגרת קרם הגנה"},
+    },
+    scoreLabels: ["דק/רגיש","ציון מחסום","דפוס אקנה","UV/פיגמנט"],
+    premiumTitle: "המדריך האישי שלך מחכה",
+    premiumDesc: "נתוני האבחון של היום שלך נשמרו בבטחה. בשילוב עם ההערכה הוויזואלית והמישושית של המטפלת שלך, <b>מדריך הטיפוח האישי</b> שלך יישלח באימייל — בלעדי לאורחות Premium Care.",
+    premiumFeatures: ["✓ שגרה חודשית מדורגת","✓ המלצות מוצרים ספציפיות","✓ טיפים מומחים מהמייסדת"],
+    validation: { label:"אנא עני על כל השאלות:",
+      m: {afterWashTight:"מתיחות אחרי ניקוי", easilyRed:"אדמומיות קלה", windSting:"עקצוץ מרוח/קור", productSting:"עקצוץ ממוצר", visibleVessel:"נימים נראים",
+          dryRough:"יבש ומחוספס", flakyMakeup:"קילופים/איפור", nightItch:"גירוד לילי", creamDryFast:"יובש מהיר אחרי קרם", slowRecovery:"החלמה איטית",
+          oiliness:"שומניות", blackhead:"בלקהדס", inflammedAcne:"אקנה דלקתית", acnePain:"כאב אקנה", acneZone:"אזור אקנה", dehydratedOily:"יבש אבל שמן",
+          rednessEvent:"אדמומיות פנים", rednessLong:"משך אדמומיות", rednessSting:"עקצוץ עם אדמומיות", visibleVesselType:"רמת נימים",
+          cleanserType:"סוג מנקה", waterTemp:"טמפרטורת מים", tonerUse:"שימוש בטונר", exfolFreq:"תדירות פילינג", sunscreenHabit:"מריחת קרם הגנה", routineWill:"מחויבות לשגרה",
+          easilyTan:"השתזפות", pigmentSpot:"פיגמנטציה", recentTreatment:"הליכים אחרונים"} }
+  },
+
+  ja: {
+    introLine1: "あなたの肌、", introLine2: "データで読み解く",
+    introTagline: "8,000件の実証データに基づくORIアルゴリズムが<br>肌トラブルの根本原因を逆追跡します",
+    introMeta: "約3分 · 6セクション",
+    lblName: "お名前(任意)", lblEmail: "メール", lblNationality: "国籍", lblGender: "性別", lblAge: "年齢層",
+    phName: "お名前", phEmail: "example@email.com", phNationality: "日本 / 韓国 / など",
+    emailError: "メールを入力してください", emailHint: "* 再訪問時の記録照会に使用されます",
+    nationalityError: "国籍を入力してください", genderError: "性別を選択してください", ageError: "年齢層を選択してください",
+    btnStart: "診断を始める", btnNext: "次へ →", btnPrev: "← 戻る", btnResult: "結果を見る",
+    btnReset: "最初に戻る", resultTitle: "診断結果",
+    progressDone: "% 完了", progressComplete: "診断完了",
+    saving: "保存中…", saved: "✓ 保存済み", saveFailed: "⚠ 失敗",
+    genders: ["女性","男性","その他"],
+    ages: ["19–24歳","25–29歳","30–34歳","35–39歳","40–44歳","45–49歳","50–54歳","55歳以上"],
+    s1Title: "Section 01 · 肌の敏感・構造シグナル",
+    s1Desc: "肌の薄さと敏感さを把握します — このスコアが高いほど刺激により注意が必要",
+    qAfterWashTight: "洗顔後に顔がつっぱります",
+    qEasilyRed: "簡単に赤くなったり熱感が出ます",
+    qWindSting: "風・寒さで肌がピリピリします",
+    qProductSting: "製品をつけるとピリピリしたり目がしみます",
+    qVisibleVessel: "肌に血管が透けるか紅潮が持続します",
+    qTop3: "最も気になる肌の症状(複数選択)",
+    s2Title: "Section 02 · 水分不足 & バリア損傷",
+    s2Desc: "肌バリアの損傷度を把握します — ほとんどの肌トラブルはここから始まります",
+    qDryRough: "肌が乾燥してザラついています",
+    qFlakyMakeup: "角質が浮いたりメイクが浮きます",
+    qNightItch: "夜に肌がよりかゆくなります",
+    qCreamDryFast: "クリームを塗ってもすぐ乾燥します",
+    qSlowRecovery: "刺激後の回復が遅いです",
+    s3Title: "Section 03 · 皮脂・トラブルパターン",
+    s3Desc: "皮脂とニキビのパターンを把握 — 脂性に見えても実は乾燥肌の可能性",
+    qOiliness: "顔がテカったり皮脂が多いです",
+    qBlackhead: "ブラックヘッド・ホワイトヘッドがあります",
+    qInflammedAcne: "炎症性ニキビ(赤くて痛い)があります",
+    qAcnePain: "トラブル痛みの強さ — 炎症深度の指標",
+    qAcneZone: "トラブル主な発生部位",
+    qDehydratedOily: '"乾燥しているのにベタつく"感じはありますか?',
+    hintDehydratedOily: "* 脂性に見える乾燥肌の判別指標",
+    s4Title: "Section 04 · 紅潮 & 血管反応",
+    s4Desc: "紅潮の原因を把握 — ほとんどの紅潮は鎮静ではなく水分回復で解決",
+    qRednessEvent: "アルコール・熱・感情で顔が赤くなります",
+    qRednessLong: "赤くなった後10分以上続きます",
+    qRednessSting: "赤くなる時にピリピリ感を伴います",
+    qRednessAreas: "紅潮主な発生部位(複数選択)",
+    qVisibleVesselType: "肌表面の血管透け",
+    s5Title: "Section 05 · ルーティン & 習慣",
+    s5Desc: "現在のルーティンで肌を悪化させる習慣を見つけます",
+    qCleanserType: "現在使用中の洗顔料タイプ(複数選択可)",
+    qCleansingMethod: "夜のクレンジング方法(複数選択)",
+    qWaterTemp: "洗顔時の水温",
+    qTonerUse: "化粧水/トナーの使用",
+    qExfolFreq: "角質除去の頻度",
+    qPowderMakeup: "ベースメイク(複数選択可)",
+    qSunscreenType: "日焼け止めタイプ(複数選択可)",
+    qSunscreenHabit: "日焼け止め塗り直し習慣",
+    qRoutineWill: "ルーティン実行への意志",
+    s6Title: "Section 06 · 紫外線 & 色素",
+    s6Desc: "紫外線感度と色素反応を把握 — 肌が薄いほど紫外線の影響を受けやすい",
+    qEasilyTan: "日光で簡単に焼けます",
+    qPigmentSpot: "シミ・ソバカス・色素沈着ができやすいです",
+    qRecentTreatment: "最近3ヶ月以内の皮膚科施術",
+    hintRecentTreatment: "* レーザー・施術は肌に微小な傷を作ります。完全に再生していない場合、バリアが弱った状態かもしれません。",
+    lblTreatmentDetail: "どの施術を受けましたか?",
+    phTreatmentDetail: "例: フラクセル2回、ピコレーザー、CO2レーザーなど",
+    infoTreatment: "💡 施術後バリア弱化 → 水分回復モード優先適用",
+    scaleLabels: ["なし","少し","普通","ひどい"],
+    scale5Left: "自信なし", scale5Right: "30日以上",
+    painLeft: "1 弱い痛み", painRight: "5 強い痛み",
+    top3: ["乾燥","紅潮","ニキビ","ブラックヘッド","色素沈着","毛穴","角質","弾力低下"],
+    acneZone: ["額","頬","鼻","顎","全体"],
+    dehydratedOily: ["はい","いいえ","わからない"],
+    rednessAreas: ["額","頬","鼻","顎","口周り","バタフライゾーン"],
+    vesselType: ["ほとんど見えない","特定部位のみ","全体的に透ける"],
+    vesselWarn: "⚠ バリア損傷の懸念 — 水分回復最優先",
+    cleanserType: ["弱酸性フォーム","アルカリフォーム","石鹸","水洗顔のみ","わからない"],
+    cleanserWarn: "⚠ アルカリ洗顔料 → 肌の保護膜損傷リスク",
+    cleansingMethod: ["クレンジングオイル/バーム","クレンジングウォーター/ミルク","クレンジングフォーム/石鹸","ダブル洗顔なし"],
+    waterTemp: ["ぬるま湯","熱いお湯","冷たい水"],
+    waterWarn: "⚠ 熱いお湯 → 血管拡張・乾燥誘発、ぬるま湯に変更",
+    tonerUse: ["使用","未使用"],
+    exfolFreq: ["なし","月1回","週1回","週2回以上"],
+    powderMakeup: ["なし","BBクリーム","ファンデーション","パウダー","混合"],
+    sunscreenType: ["しっとりタイプ","マットタイプ","ハイブリッド(PA+++)","不明/未使用"],
+    sunscreenWarn: "⚠ マット日焼け止め → 乾燥誘発、しっとりタイプ推奨",
+    sunscreenHabit: ["塗らない","朝のみ","2~3時間ごと"],
+    recentTreatment: ["なし","レーザー","サーマージ/ウルセラ","その他"],
+    modeTitle: "診断モード",
+    warnTitle: "⚠ 即時修正が必要",
+    missionTitle: "1ヶ月ミッション",
+    morningTitle: "☀ 朝のルーティン",
+    eveningTitle: "🌙 夜のルーティン",
+    philosophy: "肌には自ら回復する能力があります。<br>その能力が働くためには<br><span style='color:var(--text)'>肌の水分環境がまず安定する必要があります。</span>",
+    warnings: {
+      exfol: "角質除去頻度過多 → 月1回(PHAジェル)に即減少",
+      cleanser: "アルカリ洗顔料 → 弱酸性クレンザーに交換必要",
+      water: "熱いお湯 → 血管拡張・乾燥誘発、ぬるま湯に変更",
+      toner: "化粧水/ローション → 1ヶ月中止後肌の反応確認",
+      powder: "パウダー・ファンデーション → 肌の水分吸収、BBクリーム交換推奨",
+      sunscreen: "マット日焼け止め → 乾燥誘発、しっとりタイプ推奨",
+    },
+    mission: ["① 化粧水・ローション・エッセンスSTOP(1ヶ月) — クリーム単独ルーティン","② 洗顔後1分以内に保湿クリーム(人差し指2節分以上)","③ 日焼け止め外出30分前 + 2~3時間ごと塗り直し","④ 角質除去月1回以下(PHA・ジェルタイプのみ)","⑤ パウダー・ファンデ最小化 → BBまたは日焼け止めへ"],
+    morning: ["弱酸性クレンザー洗顔(ぬるま湯、優しく)","洗顔後1分以内に保湿クリーム人差し指2節","日焼け止め塗布(しっとりタイプ推奨)"],
+    eveningBase: ["クレンジングミルク2~3プッシュ — 溶かすようにラビング","ぬるま湯3~4回すすぎ後弱酸性フォーム","ぬるま湯すすぎ10回以上","洗顔後1分以内に保湿クリーム"],
+    eveningNS: ["弱酸性フォームクレンザー単独洗顔(ぬるま湯)","洗顔後1分以内に保湿クリーム"],
+    barrierCream: "🔵 アトバリア365 / セラミドクリーム優先",
+    rednessCream: "🟠 ヒアルロン酸/グリセリン水分集中クリーム",
+    uvBoost: "⚡ UV防御: 日焼け止め2回塗り推奨",
+    modes: {
+      BARRIER: {label:"バリア回復モード", desc:"肌バリア安定化 + 水分回復最優先"},
+      DEHYDRATED_OILY: {label:"乾性-脂性混合モード", desc:"乾燥で皮脂過剰 — 皮脂抑制より保湿が核心"},
+      REDNESS: {label:"紅潮→水分回復モード", desc:"血管収縮システム弱化 — 鎮静より水分回復"},
+      UV_DEFENSE: {label:"UV防御モード", desc:"薄い肌 + 色素敏感 — 日焼け止めルーティン強化必須"},
+    },
+    scoreLabels: ["薄い/敏感","バリアスコア","ニキビパターン","UV/色素"],
+    premiumTitle: "あなただけのパーソナルガイド",
+    premiumDesc: "本日の診断データは安全に保存されました。テラピストの目視・触診評価と組み合わせた<b>パーソナライズドホームケアガイド</b>を、Premium Careをご利用のお客様にはメールでお送りします。",
+    premiumFeatures: ["✓ 月別ステップアップルーティン","✓ 具体的な製品推奨","✓ 創設者のエキスパートTIPS"],
+    validation: { label:"まだ回答していない項目があります:",
+      m: {afterWashTight:"洗顔後つっぱり", easilyRed:"赤くなりやすい", windSting:"風・寒さピリピリ", productSting:"製品ピリピリ", visibleVessel:"血管透け",
+          dryRough:"乾燥・ザラつき", flakyMakeup:"角質・メイク浮き", nightItch:"夜のかゆみ", creamDryFast:"クリーム後乾燥", slowRecovery:"回復が遅い",
+          oiliness:"テカリ", blackhead:"ブラックヘッド", inflammedAcne:"炎症性ニキビ", acnePain:"トラブル痛みの強さ", acneZone:"トラブル発生部位", dehydratedOily:"乾燥+ベタつき感",
+          rednessEvent:"顔の紅潮", rednessLong:"紅潮持続", rednessSting:"赤くなる時のピリピリ", visibleVesselType:"血管透け程度",
+          cleanserType:"洗顔料タイプ", waterTemp:"洗顔水温", tonerUse:"化粧水使用", exfolFreq:"角質除去頻度", sunscreenHabit:"日焼け止め塗り直し", routineWill:"ルーティン実行意志",
+          easilyTan:"日焼け", pigmentSpot:"シミ・色素沈着", recentTreatment:"最近の皮膚科施術"} }
+  },
+
+  zh: {
+    introLine1: "您的肌膚,", introLine2: "由數據解讀",
+    introTagline: "基於8,000筆實證數據的ORI演算法<br>追溯肌膚問題的根本原因",
+    introMeta: "約3分鐘 · 6個區段",
+    lblName: "姓名(選填)", lblEmail: "電子郵件", lblNationality: "國籍", lblGender: "性別", lblAge: "年齡層",
+    phName: "您的姓名", phEmail: "example@email.com", phNationality: "台灣 / 日本 / 等",
+    emailError: "請輸入電子郵件", emailHint: "* 用於再次造訪時查詢紀錄",
+    nationalityError: "請輸入國籍", genderError: "請選擇性別", ageError: "請選擇年齡層",
+    btnStart: "開始診斷", btnNext: "下一步 →", btnPrev: "← 返回", btnResult: "查看結果",
+    btnReset: "回到開始", resultTitle: "您的結果",
+    progressDone: "% 完成", progressComplete: "診斷完成",
+    saving: "儲存中…", saved: "✓ 已儲存", saveFailed: "⚠ 失敗",
+    genders: ["女性","男性","其他"],
+    ages: ["19–24歲","25–29歲","30–34歲","35–39歲","40–44歲","45–49歲","50–54歲","55歲以上"],
+    s1Title: "Section 01 · 肌膚敏感與結構訊號",
+    s1Desc: "了解您的肌膚有多薄、多敏感 — 分數越高代表需要更溫和的護理",
+    qAfterWashTight: "洗臉後臉部緊繃",
+    qEasilyRed: "容易泛紅或發熱",
+    qWindSting: "風或冷讓肌膚刺痛",
+    qProductSting: "塗抹產品時刺痛或眼睛痠澀",
+    qVisibleVessel: "肌膚透出血管或持續紅潮",
+    qTop3: "最困擾的肌膚症狀(可複選)",
+    s2Title: "Section 02 · 水分不足與屏障受損",
+    s2Desc: "了解肌膚屏障受損程度 — 大部分肌膚問題從此開始",
+    qDryRough: "肌膚乾燥粗糙",
+    qFlakyMakeup: "角質浮起或妝感不服貼",
+    qNightItch: "夜晚肌膚更癢",
+    qCreamDryFast: "擦了乳霜還是很快乾燥",
+    qSlowRecovery: "刺激後恢復緩慢",
+    s3Title: "Section 03 · 油脂與痘痘型態",
+    s3Desc: "了解油脂與痘痘型態 — 看起來油性可能其實是乾燥",
+    qOiliness: "臉部出油或油光",
+    qBlackhead: "有黑頭或白頭粉刺",
+    qInflammedAcne: "發炎性痘痘(紅腫疼痛)",
+    qAcnePain: "痘痘疼痛強度 — 發炎深度指標",
+    qAcneZone: "痘痘主要發生部位",
+    qDehydratedOily: '"乾燥但又油膩"的感覺?',
+    hintDehydratedOily: "* 看似油性的乾性肌膚判別指標",
+    s4Title: "Section 04 · 紅潮與血管反應",
+    s4Desc: "了解紅潮成因 — 大部分紅潮靠補水而非鎮靜解決",
+    qRednessEvent: "酒精、熱或情緒讓臉部泛紅",
+    qRednessLong: "泛紅持續10分鐘以上",
+    qRednessSting: "泛紅時伴隨刺痛",
+    qRednessAreas: "紅潮主要部位(可複選)",
+    qVisibleVesselType: "肌膚表面血管可見",
+    s5Title: "Section 05 · 護膚常規與習慣",
+    s5Desc: "找出當前常規中可能傷害肌膚的習慣",
+    qCleanserType: "目前使用的潔顏品類型(可複選)",
+    qCleansingMethod: "晚間清潔方式(可複選)",
+    qWaterTemp: "洗臉水溫",
+    qTonerUse: "化妝水/爽膚水使用",
+    qExfolFreq: "去角質頻率",
+    qPowderMakeup: "底妝(可複選)",
+    qSunscreenType: "防曬類型(可複選)",
+    qSunscreenHabit: "防曬補擦習慣",
+    qRoutineWill: "執行常規的決心",
+    s6Title: "Section 06 · 紫外線與色素",
+    s6Desc: "了解紫外線敏感度與色素反應 — 肌膚越薄越受紫外線影響",
+    qEasilyTan: "陽光下容易曬黑",
+    qPigmentSpot: "容易產生斑點或色素沉澱",
+    qRecentTreatment: "最近3個月內皮膚科療程",
+    hintRecentTreatment: "* 雷射與療程會在肌膚上造成微小傷口。若未完全修復,屏障可能仍處於虛弱狀態。",
+    lblTreatmentDetail: "您接受了什麼療程?",
+    phTreatmentDetail: "如:飛梭2次、皮秒雷射、CO2雷射等",
+    infoTreatment: "💡 療程後屏障虛弱 → 優先採用水分修復模式",
+    scaleLabels: ["無","輕微","普通","嚴重"],
+    scale5Left: "沒信心", scale5Right: "30天以上",
+    painLeft: "1 輕微疼痛", painRight: "5 強烈疼痛",
+    top3: ["乾燥","紅潮","痘痘","黑頭","色素沉澱","毛孔","角質","彈性流失"],
+    acneZone: ["額頭","臉頰","鼻","下巴","全臉"],
+    dehydratedOily: ["是","否","不確定"],
+    rednessAreas: ["額頭","臉頰","鼻","下巴","嘴周","蝴蝶區"],
+    vesselType: ["幾乎看不到","部分區域可見","整體透出"],
+    vesselWarn: "⚠ 屏障受損疑慮 — 補水修復優先",
+    cleanserType: ["弱酸性洗面乳","鹼性洗面乳","肥皂","只用清水","不確定"],
+    cleanserWarn: "⚠ 鹼性潔顏品 → 損害肌膚保護膜",
+    cleansingMethod: ["卸妝油/膏","卸妝水/乳","潔顏霜/肥皂","不雙重清潔"],
+    waterTemp: ["微溫水","熱水","冷水"],
+    waterWarn: "⚠ 熱水 → 引起血管擴張與乾燥,改用微溫水",
+    tonerUse: ["使用","不使用"],
+    exfolFreq: ["不做","每月1次","每週1次","每週2次以上"],
+    powderMakeup: ["不擦","BB霜","粉底","蜜粉","混合"],
+    sunscreenType: ["保濕型","控油型","混合(PA+++)","不確定/不擦"],
+    sunscreenWarn: "⚠ 控油防曬 → 引起乾燥,改用保濕型",
+    sunscreenHabit: ["不擦","只早上","每2-3小時補擦"],
+    recentTreatment: ["無","雷射","電波/音波拉皮","其他"],
+    modeTitle: "診斷模式",
+    warnTitle: "⚠ 需要立即修正",
+    missionTitle: "1個月任務",
+    morningTitle: "☀ 早晨常規",
+    eveningTitle: "🌙 晚間常規",
+    philosophy: "您的肌膚有自我修復的能力。<br>但要讓這能力運作,<br><span style='color:var(--text)'>必須先穩定肌膚的水分環境。</span>",
+    warnings: {
+      exfol: "去角質頻率過高 → 立即減至每月1次(PHA凝膠)",
+      cleanser: "鹼性潔顏品 → 需更換為弱酸性",
+      water: "熱水 → 引起血管擴張與乾燥,改用微溫水",
+      toner: "化妝水/乳液 → 停用1個月觀察反應",
+      powder: "蜜粉/粉底 → 吸收肌膚水分,建議換BB霜",
+      sunscreen: "控油防曬 → 引起乾燥,建議保濕型/混合",
+    },
+    mission: ["① 停用化妝水、乳液、精華(1個月) — 只用乳霜","② 洗臉後1分鐘內擦乳霜(食指兩節以上)","③ 防曬出門前30分鐘 + 每2-3小時補擦","④ 去角質每月1次以下(只用PHA凝膠類)","⑤ 減少蜜粉/粉底 → 改用BB霜或防曬"],
+    morning: ["弱酸性潔顏(微溫水,輕柔)","洗臉後1分鐘內乳霜食指兩節","防曬塗抹(建議保濕型)"],
+    eveningBase: ["卸妝乳2-3壓 — 溶化般輕揉","微溫水沖3-4次後弱酸性潔顏","微溫水沖10次以上","洗臉後1分鐘內乳霜"],
+    eveningNS: ["只用弱酸性潔顏(微溫水)","洗臉後1分鐘內乳霜"],
+    barrierCream: "🔵 Atobarrier 365 / 神經醯胺成分乳霜優先",
+    rednessCream: "🟠 玻尿酸/甘油集中保濕乳霜",
+    uvBoost: "⚡ UV防護:建議防曬塗2次",
+    modes: {
+      BARRIER: {label:"屏障修復模式", desc:"穩定肌膚屏障 + 水分修復為首要"},
+      DEHYDRATED_OILY: {label:"乾性-油性混合模式", desc:"乾燥引起油脂過剩 — 補水比控油更核心"},
+      REDNESS: {label:"紅潮→水分修復模式", desc:"血管收縮系統弱化 — 補水勝過鎮靜"},
+      UV_DEFENSE: {label:"UV防護模式", desc:"薄肌膚 + 色素敏感 — 必須強化防曬常規"},
+    },
+    scoreLabels: ["薄/敏感","屏障分數","痘痘型態","UV/色素"],
+    premiumTitle: "為您量身打造的指南",
+    premiumDesc: "今日的診斷數據已安全保存。結合療程師的目視與觸診評估,<b>個人化居家護理指南</b>將透過電子郵件寄送 — 僅限Premium Care賓客專享。",
+    premiumFeatures: ["✓ 月度階段性護理流程","✓ 具體產品推薦","✓ 創辦人專家建議"],
+    validation: { label:"還有未回答的項目:",
+      m: {afterWashTight:"洗臉後緊繃", easilyRed:"容易泛紅", windSting:"風寒刺痛", productSting:"產品刺痛", visibleVessel:"血管透出",
+          dryRough:"乾燥粗糙", flakyMakeup:"角質浮粉", nightItch:"夜間搔癢", creamDryFast:"乳霜後乾燥", slowRecovery:"恢復緩慢",
+          oiliness:"出油", blackhead:"黑頭粉刺", inflammedAcne:"發炎痘痘", acnePain:"痘痘疼痛強度", acneZone:"痘痘部位", dehydratedOily:"乾燥但油膩",
+          rednessEvent:"臉部泛紅", rednessLong:"泛紅持續", rednessSting:"泛紅伴隨刺痛", visibleVesselType:"血管透出程度",
+          cleanserType:"潔顏類型", waterTemp:"洗臉水溫", tonerUse:"化妝水使用", exfolFreq:"去角質頻率", sunscreenHabit:"防曬補擦", routineWill:"執行決心",
+          easilyTan:"曬黑", pigmentSpot:"色素沉澱", recentTreatment:"最近療程"} }
   }
 };
-
 function t(){ return T[lang]; }
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  EXPERT_TIPS — REMOVED from kiosk in v4.3
+//  Premium-tier expert tips are generated in a separate Laurel Studio app
+//  by Hana, combining therapist visual/tactile assessment + diagnostic data
+//  This kiosk only collects data and shows scores + modes to guests.
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  언어 시스템
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function setLang(l){
   lang = l;
-  document.getElementById('btn-ko').classList.toggle('active', l==='ko');
-  document.getElementById('btn-en').classList.toggle('active', l==='en');
+  LANG_LIST.forEach(L => {
+    const btn = document.getElementById('btn-'+L);
+    if(btn) btn.classList.toggle('active', l===L);
+  });
+  document.body.setAttribute('lang', l);
+  document.body.setAttribute('dir', RTL_LANGS.includes(l) ? 'rtl' : 'ltr');
   applyLang();
+  if(step === 0) initIntroSelectors();
   if(step > 0) initSection(step);
+  if(step === 7) buildResult();
 }
+
+function setText(id, txt){ const el=document.getElementById(id); if(el) el.innerHTML = txt; }
+function setPh(id, txt){ const el=document.getElementById(id); if(el) el.placeholder = txt; }
 
 function applyLang(){
-  document.querySelectorAll('[data-ko]').forEach(el => {
-    const txt = el.getAttribute('data-'+lang);
-    if(txt) el.innerHTML = txt;
-  });
-  document.querySelectorAll('[data-placeholder-ko]').forEach(el => {
-    el.placeholder = el.getAttribute('data-placeholder-'+lang);
-  });
+  const L = t();
+  setText('intro-line1', L.introLine1);
+  setText('intro-line2', L.introLine2);
+  setText('intro-tagline', L.introTagline);
+  setText('intro-meta', L.introMeta);
+  setText('lbl-name', L.lblName);
+  setText('lbl-email', L.lblEmail);
+  setText('lbl-nationality', L.lblNationality);
+  setText('lbl-gender', L.lblGender);
+  setText('lbl-age', L.lblAge);
+  setPh('name-input', L.phName);
+  setPh('email-input', L.phEmail);
+  setPh('nationality-input', L.phNationality);
+  setText('email-error', L.emailError);
+  setText('email-hint', L.emailHint);
+  setText('nationality-error', L.nationalityError);
+  setText('gender-error', L.genderError);
+  setText('age-error', L.ageError);
+  setText('btn-start', L.btnStart);
+  setText('btn-reset', L.btnReset);
+  setText('result-title', L.resultTitle);
+
+  const prevBtn=document.getElementById('btn-prev'); if(prevBtn) prevBtn.textContent = L.btnPrev;
+  const nextBtn=document.getElementById('next-btn'); if(nextBtn) nextBtn.textContent = (step<6?L.btnNext:L.btnResult);
+
+  // Section titles & questions
+  for(let i=1;i<=6;i++){ setText('s'+i+'-title', L['s'+i+'Title']); setText('s'+i+'-desc', L['s'+i+'Desc']); }
+  setText('q-afterWashTight', L.qAfterWashTight); setText('q-easilyRed', L.qEasilyRed);
+  setText('q-windSting', L.qWindSting); setText('q-productSting', L.qProductSting); setText('q-visibleVessel', L.qVisibleVessel);
+  setText('q-top3', L.qTop3); setText('q-dryRough', L.qDryRough); setText('q-flakyMakeup', L.qFlakyMakeup);
+  setText('q-nightItch', L.qNightItch); setText('q-creamDryFast', L.qCreamDryFast); setText('q-slowRecovery', L.qSlowRecovery);
+  setText('q-oiliness', L.qOiliness); setText('q-blackhead', L.qBlackhead); setText('q-inflammedAcne', L.qInflammedAcne);
+  setText('q-acnePain', L.qAcnePain); setText('q-acneZone', L.qAcneZone); setText('q-dehydratedOily', L.qDehydratedOily);
+  setText('hint-dehydratedOily', L.hintDehydratedOily);
+  setText('q-rednessEvent', L.qRednessEvent); setText('q-rednessLong', L.qRednessLong); setText('q-rednessSting', L.qRednessSting);
+  setText('q-rednessAreas', L.qRednessAreas); setText('q-visibleVesselType', L.qVisibleVesselType);
+  setText('q-cleanserType', L.qCleanserType); setText('q-cleansingMethod', L.qCleansingMethod);
+  setText('q-waterTemp', L.qWaterTemp); setText('q-tonerUse', L.qTonerUse); setText('q-exfolFreq', L.qExfolFreq);
+  setText('q-powderMakeup', L.qPowderMakeup); setText('q-sunscreenType', L.qSunscreenType);
+  setText('q-sunscreenHabit', L.qSunscreenHabit); setText('q-routineWill', L.qRoutineWill);
+  setText('q-easilyTan', L.qEasilyTan); setText('q-pigmentSpot', L.qPigmentSpot); setText('q-recentTreatment', L.qRecentTreatment);
+  setText('hint-recentTreatment', L.hintRecentTreatment);
+  setText('lbl-treatment-detail', L.lblTreatmentDetail);
+  setPh('treatment-detail-input', L.phTreatmentDetail);
+  setText('info-treatment', L.infoTreatment);
+  setText('philosophy', L.philosophy);
+  setText('premium-title', L.premiumTitle);
+  setText('premium-desc', L.premiumDesc);
+  const pf = document.getElementById('premium-features');
+  if(pf && L.premiumFeatures) pf.innerHTML = L.premiumFeatures.map(f=>`<span style="padding:4px 0">${f}</span>`).join('<span style="opacity:0.4">·</span>');
 }
 
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  빌더 함수
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function buildScale(cid, key, is5=false, isPain=false){
   const el=document.getElementById(cid); if(!el)return; el.innerHTML="";
   const count=is5?5:4;
@@ -832,6 +1677,7 @@ function buildScale(cid, key, is5=false, isPain=false){
     const btn=document.createElement("button");
     btn.className="scale-btn";
     btn.textContent=n;
+    if(d[key]!==undefined && d[key]===n) btn.className=`scale-btn sel-${Math.min(n,3)}`;
     btn.onclick=()=>{
       d[key]=n;
       el.querySelectorAll(".scale-btn").forEach(b=>b.className="scale-btn");
@@ -845,8 +1691,13 @@ function buildScale(cid, key, is5=false, isPain=false){
     el.appendChild(btn);
   }
   if(is5){
-    const h=document.createElement("span");h.className="scale-hint";
-    h.textContent=isPain?`${t().painLeft} → ${t().painRight}`:`${t().scale5Left} → ${t().scale5Right}`;el.appendChild(h);
+    const h=document.createElement("span"); h.className="scale-hint";
+    h.textContent=isPain?`${t().painLeft} → ${t().painRight}`:`${t().scale5Left} → ${t().scale5Right}`;
+    el.appendChild(h);
+  } else if(d[key]!==undefined){
+    const h=document.createElement("span"); h.className="scale-hint";
+    h.textContent=t().scaleLabels[d[key]];
+    el.appendChild(h);
   }
 }
 
@@ -874,14 +1725,16 @@ function buildMulti(cid, stateKey, options){
     btn.textContent=o;
     btn.onclick=()=>{
       const idx=multiState[stateKey].indexOf(o);
-      if(idx>-1)multiState[stateKey].splice(idx,1); else multiState[stateKey].push(o);
+      if(idx>-1) multiState[stateKey].splice(idx,1);
+      else multiState[stateKey].push(o);
       btn.classList.toggle("sel");
+      const L=t();
       if(stateKey==="cleanserType"){
-        const hasAlk=multiState.cleanserType.some(v=>v===t().cleanserType[1]||v===t().cleanserType[2]);
+        const hasAlk=multiState.cleanserType.some(v=>v===L.cleanserType[1]||v===L.cleanserType[2]);
         document.getElementById("cleanser-warn").classList.toggle("hidden",!hasAlk);
       }
       if(stateKey==="sunscreenType"){
-        const hasMatte=multiState.sunscreenType.some(v=>v===t().sunscreenType[1]);
+        const hasMatte=multiState.sunscreenType.some(v=>v===L.sunscreenType[1]);
         document.getElementById("sunscreen-warn").classList.toggle("hidden",!hasMatte);
       }
     };
@@ -892,33 +1745,24 @@ function buildMulti(cid, stateKey, options){
 function initSection(n){
   const L=t();
   if(n===1){
-    buildScale("s-afterWashTight","afterWashTight");
-    buildScale("s-easilyRed","easilyRed");
-    buildScale("s-windSting","windSting");
-    buildScale("s-productSting","productSting");
-    buildScale("s-visibleVessel","visibleVessel");
-    buildMulti("multi-top3","top3",L.top3);
+    buildScale("s-afterWashTight","afterWashTight"); buildScale("s-easilyRed","easilyRed");
+    buildScale("s-windSting","windSting"); buildScale("s-productSting","productSting");
+    buildScale("s-visibleVessel","visibleVessel"); buildMulti("multi-top3","top3",L.top3);
   }
   if(n===2){
-    buildScale("s-dryRough","dryRough");
-    buildScale("s-flakyMakeup","flakyMakeup");
-    buildScale("s-nightItch","nightItch");
-    buildScale("s-creamDryFast","creamDryFast");
+    buildScale("s-dryRough","dryRough"); buildScale("s-flakyMakeup","flakyMakeup");
+    buildScale("s-nightItch","nightItch"); buildScale("s-creamDryFast","creamDryFast");
     buildScale("s-slowRecovery","slowRecovery");
   }
   if(n===3){
-    buildScale("s-oiliness","oiliness");
-    buildScale("s-blackhead","blackhead");
-    buildScale("s-inflammedAcne","inflammedAcne");
-    buildScale("s-acnePain5","acnePain",true,true);
+    buildScale("s-oiliness","oiliness"); buildScale("s-blackhead","blackhead");
+    buildScale("s-inflammedAcne","inflammedAcne"); buildScale("s-acnePain5","acnePain",true,true);
     buildRadio("radio-acneZone","acneZone",L.acneZone);
     buildRadio("radio-dehydratedOily","dehydratedOily",L.dehydratedOily);
   }
   if(n===4){
-    buildScale("s-rednessEvent","rednessEvent");
-    buildScale("s-rednessLong","rednessLong");
-    buildScale("s-rednessSting","rednessSting");
-    buildMulti("multi-rednessAreas","rednessAreas",L.rednessAreas);
+    buildScale("s-rednessEvent","rednessEvent"); buildScale("s-rednessLong","rednessLong");
+    buildScale("s-rednessSting","rednessSting"); buildMulti("multi-rednessAreas","rednessAreas",L.rednessAreas);
     buildRadio("radio-visibleVesselType","visibleVesselType",L.vesselType,v=>{
       const w=document.getElementById("vessel-warn");
       w.textContent=L.vesselWarn;
@@ -943,16 +1787,16 @@ function initSection(n){
     buildScale("s-routineWill5","routineWill",true);
   }
   if(n===6){
-    buildScale("s-easilyTan","easilyTan");
-    buildScale("s-pigmentSpot","pigmentSpot");
+    buildScale("s-easilyTan","easilyTan"); buildScale("s-pigmentSpot","pigmentSpot");
     buildRadio("radio-recentTreatment","recentTreatment",L.recentTreatment,v=>{
-      document.getElementById("treatment-detail-box").classList.toggle("hidden",v===L.recentTreatment[0]||!v);
-      document.getElementById("treatment-detail-input").placeholder=lang==='ko'?"예: 프락셀 2회, 피코레이저, CO2 레이저 등":"e.g. Fraxel x2, Pico laser, CO2 laser";
+      document.getElementById("treatment-detail-box").classList.toggle("hidden", v===L.recentTreatment[0]||!v);
     });
   }
-  applyLang();
 }
 
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  ORI 알고리즘 (v4.1 그대로)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function calcScores(){
   return {
     thin:(d.afterWashTight||0)+(d.easilyRed||0)+(d.windSting||0)+(d.productSting||0)+(d.visibleVessel||0),
@@ -963,9 +1807,9 @@ function calcScores(){
 }
 
 function determineModes(sc){
-  const modes=[];
+  const modes=[]; const L=t();
   if(sc.barrier>=7||sc.thin>=7) modes.push({id:"BARRIER",color:"#4A9EAF",icon:"🔵"});
-  if((sc.barrier>=4||(d.dryRough||0)>=2)&&(sc.acne>=4||d.dehydratedOily===t().dehydratedOily[0])) modes.push({id:"DEHYDRATED_OILY",color:"#C8A96E",icon:"🟡"});
+  if((sc.barrier>=4||(d.dryRough||0)>=2)&&(sc.acne>=4||d.dehydratedOily===L.dehydratedOily[0])) modes.push({id:"DEHYDRATED_OILY",color:"#C8A96E",icon:"🟡"});
   if((d.rednessLong||0)>=2&&sc.barrier>=4) modes.push({id:"REDNESS",color:"#E07B4F",icon:"🟠"});
   if(sc.thin>=5&&sc.uv>=3) modes.push({id:"UV_DEFENSE",color:"#C25F5F",icon:"🔴"});
   if(modes.length===0) modes.push({id:"BARRIER",color:"#4A9EAF",icon:"🔵"});
@@ -973,8 +1817,7 @@ function determineModes(sc){
 }
 
 function serializeSection(secNum){
-  const sc=calcScores();
-  const modes=determineModes(sc);
+  const L=t(); const sc=calcScores(); const modes=determineModes(sc);
   const base={case_id:caseId,section:`S${secNum}`,saved_at:new Date().toISOString(),email:d.email||"",client_name:d.clientName||"",source:"instore",nationality:d.nationality||"",gender:d.gender||"",age_group:d.ageGroup||"",lang:lang};
   const sd={
     1:{after_wash_tight:d.afterWashTight??"",easily_red:d.easilyRed??"",wind_sting:d.windSting??"",product_sting:d.productSting??"",visible_vessel:d.visibleVessel??"",thin_score:sc.thin,top3_concerns:multiState.top3.join("|")},
@@ -982,7 +1825,7 @@ function serializeSection(secNum){
     3:{oiliness:d.oiliness??"",blackhead:d.blackhead??"",inflamed_acne:d.inflammedAcne??"",acne_pain:d.acnePain??"",acne_zone:d.acneZone||"",dehydrated_oily:d.dehydratedOily||"",acne_score:sc.acne},
     4:{redness_event:d.rednessEvent??"",redness_long:d.rednessLong??"",redness_sting:d.rednessSting??"",redness_areas:multiState.rednessAreas.join("|"),visible_vessel_type:d.visibleVesselType||""},
     5:{cleanser_type:multiState.cleanserType.join("|"),cleansing_method:multiState.cleansingMethod.join("|"),water_temp:d.waterTemp||"",toner_use:d.tonerUse||"",exfol_freq:d.exfolFreq||"",powder_makeup:multiState.powderMakeup.join("|"),sunscreen_type:multiState.sunscreenType.join("|"),sunscreen_habit:d.sunscreenHabit||"",routine_will:d.routineWill??""},
-    6:{easily_tan:d.easilyTan??"",pigment_spot:d.pigmentSpot??"",recent_treatment:d.recentTreatment||"",recent_treatment_detail:document.getElementById("treatment-detail-input").value||"",uv_score:sc.uv,diagnosis_modes:modes.map(m=>m.id).join("|"),diagnosis_label:modes.map(m=>t().modes[m.id].label).join(" + "),ori_tags:[sc.thin>=7?"thin_skin":"",sc.barrier>=7?"barrier_damage":"",d.dehydratedOily===t().dehydratedOily[0]?"dehydrated_oily":"",multiState.cleanserType.some(v=>v===t().cleanserType[1]||v===t().cleanserType[2])?"alkaline_cleanser":"",d.tonerUse===t().tonerUse[0]?"toner_user":"",d.recentTreatment&&d.recentTreatment!==t().recentTreatment[0]?"post_treatment":""].filter(Boolean).join("|")}
+    6:{easily_tan:d.easilyTan??"",pigment_spot:d.pigmentSpot??"",recent_treatment:d.recentTreatment||"",recent_treatment_detail:document.getElementById("treatment-detail-input").value||"",uv_score:sc.uv,diagnosis_modes:modes.map(m=>m.id).join("|"),diagnosis_label:modes.map(m=>L.modes[m.id].label).join(" + "),ori_tags:[sc.thin>=7?"thin_skin":"",sc.barrier>=7?"barrier_damage":"",d.dehydratedOily===L.dehydratedOily[0]?"dehydrated_oily":"",multiState.cleanserType.some(v=>v===L.cleanserType[1]||v===L.cleanserType[2])?"alkaline_cleanser":"",d.tonerUse===L.tonerUse[0]?"toner_user":"",d.recentTreatment&&d.recentTreatment!==L.recentTreatment[0]?"post_treatment":""].filter(Boolean).join("|")}
   };
   return {...base,...(sd[secNum]||{})};
 }
@@ -994,17 +1837,19 @@ async function sendToSheets(payload){
   }catch{return "error";}
 }
 
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  UI 업데이트 & 네비게이션
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function updateUI(){
   for(let i=0;i<=7;i++) document.getElementById(`page-${i}`).classList.toggle("hidden",i!==step);
   document.getElementById("nav-bar").classList.toggle("hidden",step===0||step===7);
-  const nb=document.getElementById("next-btn").querySelector("span")||document.getElementById("next-btn");
-  if(step<6) nb.setAttribute("data-ko","다음 →"),nb.setAttribute("data-en","Next →");
-  else nb.setAttribute("data-ko","진단 결과 보기"),nb.setAttribute("data-en","See Results");
+  const nb=document.getElementById("next-btn");
+  if(nb) nb.textContent = step<6 ? t().btnNext : t().btnResult;
   const pct=step===0?0:step>=7?100:Math.round(step/6*100);
   document.getElementById("progress-fill").style.width=pct+"%";
   const ptEl=document.getElementById("progress-text");
-  if(step>0&&step<7) ptEl.textContent=pct+"% "+(lang==='ko'?'완료':'done');
-  else if(step===7) ptEl.textContent=lang==='ko'?'진단 완료':'Complete';
+  if(step>0&&step<7) ptEl.textContent=pct+t().progressDone;
+  else if(step===7) ptEl.textContent=t().progressComplete;
   else ptEl.textContent="";
   const dotsEl=document.getElementById("section-dots");
   dotsEl.classList.toggle("hidden",step===0||step===7);
@@ -1017,11 +1862,10 @@ function updateUI(){
   const badge=document.getElementById("nav-badge");
   const prevSt=sectionStatus[step-1];
   if(prevSt){
-    const map={saving:{c:"#C8A96E",t:lang==='ko'?"저장 중…":"Saving…"},saved:{c:"#4CAF87",t:"✓ "+(lang==='ko'?"저장됨":"Saved")},error:{c:"#C25F5F",t:"⚠ "+(lang==='ko'?"실패":"Failed")}};
+    const map={saving:{c:"#C8A96E",t:t().saving},saved:{c:"#4CAF87",t:t().saved},error:{c:"#C25F5F",t:t().saveFailed}};
     const m=map[prevSt]||{};
     badge.innerHTML=`<span class="save-badge" style="background:${m.c}15;border:1px solid ${m.c}40;color:${m.c}">${m.t||""}</span>`;
   } else badge.innerHTML="";
-  applyLang();
 }
 
 function startDiagnosis(){
@@ -1044,63 +1888,48 @@ function startDiagnosis(){
   const dateStr=today.getFullYear()+String(today.getMonth()+1).padStart(2,"0")+String(today.getDate()).padStart(2,"0");
   caseId="ORI-"+email.split("@")[0]+"-"+dateStr;
   step=1; initSection(1); updateUI();
+  applyLang();
 }
 
 function validateSection(n){
-  const L=t();
-  const missing=[];
+  const L=t(); const missing=[];
+  const check = (cond, key) => { if(cond) missing.push(L.validation.m[key]); };
   if(n===1){
-    if(d.afterWashTight===undefined) missing.push("세안 후 당김");
-    if(d.easilyRed===undefined) missing.push("쉽게 붉어짐");
-    if(d.windSting===undefined) missing.push("바람·추위 따가움");
-    if(d.productSting===undefined) missing.push("제품 따끔");
-    if(d.visibleVessel===undefined) missing.push("혈관 비침");
+    check(d.afterWashTight===undefined,'afterWashTight'); check(d.easilyRed===undefined,'easilyRed');
+    check(d.windSting===undefined,'windSting'); check(d.productSting===undefined,'productSting');
+    check(d.visibleVessel===undefined,'visibleVessel');
   }
   if(n===2){
-    if(d.dryRough===undefined) missing.push("건조·거침");
-    if(d.flakyMakeup===undefined) missing.push("각질·메이크업 뜸");
-    if(d.nightItch===undefined) missing.push("밤 가려움");
-    if(d.creamDryFast===undefined) missing.push("크림 후 건조");
-    if(d.slowRecovery===undefined) missing.push("회복 느림");
+    check(d.dryRough===undefined,'dryRough'); check(d.flakyMakeup===undefined,'flakyMakeup');
+    check(d.nightItch===undefined,'nightItch'); check(d.creamDryFast===undefined,'creamDryFast');
+    check(d.slowRecovery===undefined,'slowRecovery');
   }
   if(n===3){
-    if(d.oiliness===undefined) missing.push("번들거림");
-    if(d.blackhead===undefined) missing.push("블랙헤드");
-    if(d.inflammedAcne===undefined) missing.push("염증성 여드름");
-    if(d.acnePain===undefined) missing.push("트러블 통증 강도");
-    if(!d.acneZone) missing.push("트러블 발생 부위");
-    if(!d.dehydratedOily) missing.push("건조+기름진 느낌");
+    check(d.oiliness===undefined,'oiliness'); check(d.blackhead===undefined,'blackhead');
+    check(d.inflammedAcne===undefined,'inflammedAcne'); check(d.acnePain===undefined,'acnePain');
+    check(!d.acneZone,'acneZone'); check(!d.dehydratedOily,'dehydratedOily');
   }
   if(n===4){
-    if(d.rednessEvent===undefined) missing.push("얼굴 붉어짐");
-    if(d.rednessLong===undefined) missing.push("붉어짐 지속");
-    if(d.rednessSting===undefined) missing.push("붉어질 때 따가움");
-    if(!d.visibleVesselType) missing.push("혈관 비침 정도");
+    check(d.rednessEvent===undefined,'rednessEvent'); check(d.rednessLong===undefined,'rednessLong');
+    check(d.rednessSting===undefined,'rednessSting'); check(!d.visibleVesselType,'visibleVesselType');
   }
   if(n===5){
-    if(multiState.cleanserType.length===0) missing.push("세안제 타입");
-    if(!d.waterTemp) missing.push("세안 물 온도");
-    if(!d.tonerUse) missing.push("토너 사용 여부");
-    if(!d.exfolFreq) missing.push("각질 제거 빈도");
-    if(!d.sunscreenHabit) missing.push("선크림 덧바름");
-    if(d.routineWill===undefined) missing.push("루틴 이행 의지");
+    check(multiState.cleanserType.length===0,'cleanserType'); check(!d.waterTemp,'waterTemp');
+    check(!d.tonerUse,'tonerUse'); check(!d.exfolFreq,'exfolFreq');
+    check(!d.sunscreenHabit,'sunscreenHabit'); check(d.routineWill===undefined,'routineWill');
   }
   if(n===6){
-    if(d.easilyTan===undefined) missing.push("햇빛에 탐");
-    if(d.pigmentSpot===undefined) missing.push("잡티·색소침착");
-    if(!d.recentTreatment) missing.push("최근 피부과 시술");
+    check(d.easilyTan===undefined,'easilyTan'); check(d.pigmentSpot===undefined,'pigmentSpot');
+    check(!d.recentTreatment,'recentTreatment');
   }
   return missing;
 }
 
 function showValidationError(missing){
-  const old=document.getElementById("validation-error-box");
-  if(old) old.remove();
-  const box=document.createElement("div");
-  box.id="validation-error-box";
+  const old=document.getElementById("validation-error-box"); if(old) old.remove();
+  const box=document.createElement("div"); box.id="validation-error-box";
   box.style.cssText="margin-top:16px;padding:14px 18px;background:#C25F5F12;border:1px solid #C25F5F40;border-radius:2px;font-size:13px;color:#C25F5F;line-height:1.8;";
-  const label=lang==='ko'?"아직 답변하지 않은 항목이 있습니다:":"Please answer all questions:";
-  box.innerHTML=`<div style="font-weight:600;margin-bottom:6px">⚠ ${label}</div>`+missing.map(m=>`<div style="padding:2px 0">· ${m}</div>`).join("");
+  box.innerHTML=`<div style="font-weight:600;margin-bottom:6px">⚠ ${t().validation.label}</div>`+missing.map(m=>`<div style="padding:2px 0">· ${m}</div>`).join("");
   const nav=document.getElementById("nav-bar");
   nav.parentNode.insertBefore(box, nav.nextSibling);
   box.scrollIntoView({behavior:"smooth", block:"center"});
@@ -1112,8 +1941,7 @@ async function goNext(){
     const missing=validateSection(step);
     if(missing.length>0){ showValidationError(missing); return; }
   }
-  const old=document.getElementById("validation-error-box");
-  if(old) old.remove();
+  const old=document.getElementById("validation-error-box"); if(old) old.remove();
   if(step>=1&&step<=6){
     sectionStatus[step]="saving"; updateUI();
     const result=await sendToSheets(serializeSection(step));
@@ -1122,11 +1950,11 @@ async function goNext(){
   step=step<6?step+1:7;
   if(step<=6) initSection(step);
   if(step===7) buildResult();
-  updateUI(); window.scrollTo(0,0);
+  updateUI(); applyLang(); window.scrollTo(0,0);
 }
 
 function goPrev(){
-  if(step>1){step--;initSection(step);updateUI();window.scrollTo(0,0);}
+  if(step>1){ step--; initSection(step); updateUI(); applyLang(); window.scrollTo(0,0); }
 }
 
 function resetApp(){
@@ -1135,15 +1963,15 @@ function resetApp(){
   document.getElementById("nationality-input").value="";
   document.getElementById("email-input").value="";
   document.getElementById("name-input").value="";
-  document.getElementById("nationality-input").classList.remove("error");
-  document.getElementById("nationality-error").style.display="none";
-  document.getElementById("email-error").style.display="none";
-  document.getElementById("gender-error").style.display="none";
-  document.getElementById("age-error").style.display="none";
-  initIntroSelectors();
-  updateUI();
+  ["nationality","email","gender","age"].forEach(k=>{
+    const e=document.getElementById(k+"-error"); if(e) e.style.display="none";
+  });
+  initIntroSelectors(); applyLang(); updateUI();
 }
 
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  결과 빌더
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function buildResult(){
   const sc=calcScores(); const modes=determineModes(sc); const L=t();
   const emailDisplay=document.getElementById("result-case-id");
@@ -1178,43 +2006,60 @@ function buildResult(){
       </div>
     </div>`).join("");
 
-  const warnings=[];
-  if(d.exfolFreq===L.exfolFreq[2]||d.exfolFreq===L.exfolFreq[3]) warnings.push(L.warnings.exfol);
-  if(multiState.cleanserType.some(v=>v===L.cleanserType[1]||v===L.cleanserType[2])) warnings.push(L.warnings.cleanser);
-  if(d.waterTemp===L.waterTemp[1]) warnings.push(L.warnings.water);
-  if(d.tonerUse===L.tonerUse[0]) warnings.push(L.warnings.toner);
-  if(multiState.powderMakeup.some(v=>v===L.powderMakeup[2]||v===L.powderMakeup[3])) warnings.push(L.warnings.powder);
-  if(multiState.sunscreenType.some(v=>v===L.sunscreenType[1])) warnings.push(L.warnings.sunscreen);
-  const wc=document.getElementById("warn-card");
-  if(warnings.length>0){wc.classList.remove("hidden");wc.innerHTML=`<div class="sec-title">${L.warnTitle}</div>`+warnings.map(w=>`<div class="warn-box" style="margin-top:8px">${w}</div>`).join("");}
+  // ✨ v4.3: 미션/루틴/경고/전문가팁은 Premium Care 전용으로 분리
+  //   - 키오스크 결과 페이지에는 점수 + 모드 + Premium Care 안내만 표시
+  //   - 모든 진단 데이터는 구글시트에 그대로 저장됨 (테라피스트가 봄)
+  //   - 전문가 팁 생성은 핫짱의 별도 웹앱에서 처리
+}
 
-  document.getElementById("mission-card").innerHTML=`<div class="sec-title">${L.missionTitle}</div>`+L.mission.map((m,i)=>`<div style="padding:11px 0;border-bottom:${i<L.mission.length-1?"1px solid #2A2F45":"none"};font-size:14px;line-height:1.6">${m}</div>`).join("");
+function buildExpertTips(sc){ /* v4.3: 키오스크에서 비활성화. 전문가 팁은 프리미엄 전용 별도 앱에서 생성 */ }
 
-  const mIds=modes.map(m=>m.id);
-  const morning=[...L.morning];
-  if(mIds.includes("UV_DEFENSE")) morning.push(L.uvBoost);
-  const hasSunscreen=d.sunscreenHabit&&d.sunscreenHabit!==L.sunscreenHabit[0];
-  const evening=[...(hasSunscreen?L.eveningBase:L.eveningNS)];
-  if(mIds.includes("BARRIER")) evening.push(L.barrierCream);
-  if(mIds.includes("REDNESS")) evening.push(L.rednessCream);
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  인트로 성별/연령 선택자 (9개 언어)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function initIntroSelectors(){
+  const L=t();
+  const genderEl=document.getElementById("intro-gender");
+  if(!genderEl) return;
+  genderEl.innerHTML="";
+  L.genders.forEach(g=>{
+    const btn=document.createElement("button");
+    btn.textContent=g;
+    btn.style.cssText="flex:1;padding:10px 8px;border:1px solid #2A2F45;border-radius:1px;background:transparent;color:#7A8099;cursor:pointer;font-size:14px;font-family:inherit;transition:all 0.15s;";
+    if(d.gender===g){ btn.style.borderColor="#C8A96E";btn.style.background="#C8A96E18";btn.style.color="#C8A96E"; }
+    btn.onclick=()=>{
+      d.gender=g;
+      genderEl.querySelectorAll("button").forEach(b=>{
+        b.style.borderColor="#2A2F45";b.style.background="transparent";b.style.color="#7A8099";
+      });
+      btn.style.borderColor="#C8A96E";btn.style.background="#C8A96E18";btn.style.color="#C8A96E";
+      document.getElementById("gender-error").style.display="none";
+    };
+    genderEl.appendChild(btn);
+  });
 
-  document.getElementById("routine-grid").innerHTML=[
-    {label:L.morningTitle,items:morning},
-    {label:L.eveningTitle,items:evening}
-  ].map(({label,items})=>`
-    <div class="card">
-      <div class="sec-title">${label}</div>
-      ${items.map((r,i)=>`<div style="font-size:13px;color:#7A8099;padding:7px 0;border-bottom:${i<items.length-1?"1px solid #2A2F45":"none"};line-height:1.5"><span style="color:#C8A96E;margin-right:6px">${i+1}.</span>${r}</div>`).join("")}
-    </div>`).join("");
-
-  // ✨ 전문가 팁 (v4.1)
-  buildExpertTips(sc);
-
-  applyLang();
+  const ageEl=document.getElementById("intro-age");
+  if(!ageEl) return;
+  ageEl.innerHTML="";
+  L.ages.forEach(a=>{
+    const btn=document.createElement("button");
+    btn.textContent=a;
+    btn.style.cssText="padding:8px 14px;border:1px solid #2A2F45;border-radius:1px;background:transparent;color:#7A8099;cursor:pointer;font-size:13px;font-family:inherit;transition:all 0.15s;";
+    if(d.ageGroup===a){ btn.style.borderColor="#C8A96E";btn.style.background="#C8A96E18";btn.style.color="#C8A96E"; }
+    btn.onclick=()=>{
+      d.ageGroup=a;
+      ageEl.querySelectorAll("button").forEach(b=>{
+        b.style.borderColor="#2A2F45";b.style.background="transparent";b.style.color="#7A8099";
+      });
+      btn.style.borderColor="#C8A96E";btn.style.background="#C8A96E18";btn.style.color="#C8A96E";
+      document.getElementById("age-error").style.display="none";
+    };
+    ageEl.appendChild(btn);
+  });
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-//  테라피스트 시스템
+//  테라피스트 패널 (한국어 전용 — v4.1 그대로)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const TP_PASSWORD = "laurel2024";
 let tpMulti = { treatmentType:[], reactionType:[], revisitPeriod:[], nextTreatment:[] };
@@ -1252,12 +2097,12 @@ function buildTpMulti(cid, stateKey, options){
   const el=document.getElementById(cid); if(!el)return; el.innerHTML="";
   options.forEach(o=>{
     const btn=document.createElement("button");
-    btn.className="opt-btn"+(tpMulti[stateKey].includes(o)?" sel":"");
     btn.textContent=o;
     btn.style.cssText="padding:7px 14px;border:1px solid #2A2F45;border-radius:1px;background:transparent;color:#7A8099;cursor:pointer;font-size:13px;font-family:'Cormorant Garamond',serif;transition:all 0.15s;";
+    if(tpMulti[stateKey].includes(o)){ btn.style.borderColor="#C8A96E";btn.style.color="#C8A96E";btn.style.background="#C8A96E18"; }
     btn.onclick=()=>{
       const idx=tpMulti[stateKey].indexOf(o);
-      if(idx>-1)tpMulti[stateKey].splice(idx,1); else tpMulti[stateKey].push(o);
+      if(idx>-1) tpMulti[stateKey].splice(idx,1); else tpMulti[stateKey].push(o);
       btn.style.borderColor=tpMulti[stateKey].includes(o)?"#C8A96E":"#2A2F45";
       btn.style.color=tpMulti[stateKey].includes(o)?"#C8A96E":"#7A8099";
       btn.style.background=tpMulti[stateKey].includes(o)?"#C8A96E18":"transparent";
@@ -1287,9 +2132,7 @@ function buildTpVisualScores(){
         btn.style.cssText=`width:34px;height:34px;border:1px solid #2A2F45;border-radius:2px;background:transparent;color:#7A8099;cursor:pointer;font-size:13px;font-weight:600;transition:all 0.15s;`;
         btn.onclick=()=>{
           tpScores[key]=i;
-          container.querySelectorAll("button").forEach(b=>{
-            b.style.borderColor="#2A2F45";b.style.background="transparent";b.style.color="#7A8099";
-          });
+          container.querySelectorAll("button").forEach(b=>{ b.style.borderColor="#2A2F45";b.style.background="transparent";b.style.color="#7A8099"; });
           btn.style.borderColor=color;btn.style.background=color+"22";btn.style.color=color;
         };
         container.appendChild(btn);
@@ -1349,50 +2192,9 @@ async function saveTherapistNote(){
   }
 }
 
-function initIntroSelectors(){
-  const genderEl=document.getElementById("intro-gender");
-  if(!genderEl) return;
-  const genders=lang==='ko'?["여성","남성","기타"]:["Female","Male","Other"];
-  genderEl.innerHTML="";
-  genders.forEach(g=>{
-    const btn=document.createElement("button");
-    btn.className="opt-btn"+(d.gender===g?" sel":"");
-    btn.textContent=g;
-    btn.style.cssText="flex:1;padding:10px 8px;border:1px solid #2A2F45;border-radius:1px;background:transparent;color:#7A8099;cursor:pointer;font-size:14px;font-family:'Cormorant Garamond',serif;transition:all 0.15s;";
-    btn.onclick=()=>{
-      d.gender=g;
-      genderEl.querySelectorAll("button").forEach(b=>{
-        b.style.borderColor="#2A2F45";b.style.background="transparent";b.style.color="#7A8099";
-      });
-      btn.style.borderColor="#C8A96E";btn.style.background="#C8A96E18";btn.style.color="#C8A96E";
-      document.getElementById("gender-error").style.display="none";
-    };
-    genderEl.appendChild(btn);
-  });
-
-  const ageEl=document.getElementById("intro-age");
-  if(!ageEl) return;
-  const ages=lang==='ko'
-    ?["19–24세","25–29세","30–34세","35–39세","40–44세","45–49세","50–54세","55세 이상"]
-    :["19–24","25–29","30–34","35–39","40–44","45–49","50–54","55+"];
-  ageEl.innerHTML="";
-  ages.forEach(a=>{
-    const btn=document.createElement("button");
-    btn.className="opt-btn"+(d.ageGroup===a?" sel":"");
-    btn.textContent=a;
-    btn.style.cssText="padding:8px 14px;border:1px solid #2A2F45;border-radius:1px;background:transparent;color:#7A8099;cursor:pointer;font-size:13px;font-family:'Cormorant Garamond',serif;transition:all 0.15s;";
-    btn.onclick=()=>{
-      d.ageGroup=a;
-      ageEl.querySelectorAll("button").forEach(b=>{
-        b.style.borderColor="#2A2F45";b.style.background="transparent";b.style.color="#7A8099";
-      });
-      btn.style.borderColor="#C8A96E";btn.style.background="#C8A96E18";btn.style.color="#C8A96E";
-      document.getElementById("age-error").style.display="none";
-    };
-    ageEl.appendChild(btn);
-  });
-}
-
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  초기화
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 initIntroSelectors();
 applyLang();
 updateUI();
